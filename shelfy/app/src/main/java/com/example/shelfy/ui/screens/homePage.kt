@@ -119,7 +119,7 @@ fun HomePage(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                IconButton(onClick = {}) {
+                IconButton(onClick = {navController.navigate("SEARCH_SCREEN")}) {
                     Icon(
                         painter = painterResource(id = R.drawable.search_outline_1024x1024),
                         contentDescription = "Search",
@@ -132,7 +132,7 @@ fun HomePage(
                 IconButton(onClick = {}) {
                     Icon(
                         painter = painterResource(id = R.drawable.home_1024x919),
-                        contentDescription = "Search",
+                        contentDescription = "Home",
                         tint = BlueText,
                         modifier = Modifier
                             .weight(1f)

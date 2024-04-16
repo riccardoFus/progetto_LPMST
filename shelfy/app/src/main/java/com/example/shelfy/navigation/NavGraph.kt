@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.shelfy.ui.BookHomePageViewModel
 import com.example.shelfy.ui.screens.HomePage
 import com.example.shelfy.ui.screens.Profilo
+import com.example.shelfy.ui.screens.Search
 
 @Composable
 fun NavGraph(appViewModel: BookHomePageViewModel = viewModel()){
@@ -19,6 +20,9 @@ fun NavGraph(appViewModel: BookHomePageViewModel = viewModel()){
         }
         composable(Screens.PROFILE_SCREEN){
             Profilo(viewModel = appViewModel, navController = navController)
+        }
+        composable(Screens.SEARCH_SCREEN){
+            Search(viewModel = appViewModel, navController = navController)
         }
 
         /*
