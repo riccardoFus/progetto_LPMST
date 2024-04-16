@@ -12,11 +12,27 @@ import com.example.shelfy.util.RetrofitInstance
 import kotlinx.coroutines.launch
 
 class BookHomePageViewModel : ViewModel(){
-    var booksUiState : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
-    public fun getBooks(query : String){
+    var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+    var booksUiStateRecommendation2 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+    var booksUiStateRecommendation3 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+    public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
-            booksUiState = Resource.Success<Books>(books)
+            booksUiStateRecommendation1 = Resource.Success<Books>(books)
+        }
+    }
+
+    public fun getBooksRecommendation2(query : String){
+        viewModelScope.launch{
+            val books = RetrofitInstance.provideBooksApi().getBooks(query)
+            booksUiStateRecommendation2 = Resource.Success<Books>(books)
+        }
+    }
+
+    public fun getBooksRecommendation3(query : String){
+        viewModelScope.launch{
+            val books = RetrofitInstance.provideBooksApi().getBooks(query)
+            booksUiStateRecommendation3 = Resource.Success<Books>(books)
         }
     }
 
@@ -29,7 +45,9 @@ class BookHomePageViewModel : ViewModel(){
         }
     }
     init{
-        getBooks("roberto+battiti")
+        getBooksRecommendation1("giallo")
+        getBooksRecommendation2("horror")
+        getBooksRecommendation3("fantasy")
         getBook("eu3REAAAQBAJ")
     }
 }
