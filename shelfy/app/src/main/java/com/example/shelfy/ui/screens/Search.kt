@@ -85,7 +85,7 @@ fun Search(
 
             ){
                 var text by remember { mutableStateOf("Cerca...") }
-                TextField(value = text, onValueChange ={newText -> text=newText},
+                TextField(value = text, onValueChange ={newText -> text=newText} ,
                     modifier = Modifier
                     .clip(RoundedCornerShape(24.dp))
                     .widthIn(400.dp),
@@ -119,7 +119,7 @@ fun Search(
                         .size(30.dp)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navController.navigate("PROFILE_SCREEN")}) {
                 Icon(
                     painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
                     contentDescription = "Search",
