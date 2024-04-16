@@ -112,12 +112,7 @@ fun HomePage(
             }
 
         }
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .background(color = BlackBar),
-            contentAlignment = Alignment.Center
-        ){
+
             Row (
                 modifier = Modifier
                     .background(color = BlackBar)
@@ -144,7 +139,7 @@ fun HomePage(
                             .size(30.dp)
                     )
                 }
-                IconButton(onClick = {}) {
+                IconButton(onClick = {navController.navigate("PROFILE_SCREEN")}) {
                     Icon(
                         painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
                         contentDescription = "Search",
@@ -153,7 +148,6 @@ fun HomePage(
                             .weight(1f)
                             .size(30.dp)
                     )
-                }
             }
         }
     }
