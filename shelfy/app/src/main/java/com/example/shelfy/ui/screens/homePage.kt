@@ -96,7 +96,18 @@ fun HomePage(
                     )
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("https://"+viewModel.booksUiState.data?.items?.get(0)?.volumeInfo?.imageLinks?.thumbnail?.substring(7))
+                            .data("https://"+viewModel.booksUiState.data?.items?.get(2)?.volumeInfo?.imageLinks?.thumbnail?.substring(7))
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .width(200.dp)
+                            .height(300.dp)
+                    )
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data("https://"+viewModel.booksUiState.data?.items?.get(3)?.volumeInfo?.imageLinks?.thumbnail?.substring(7))
                             .crossfade(true)
                             .build(),
                         contentDescription = null,
