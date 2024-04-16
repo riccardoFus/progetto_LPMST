@@ -22,9 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.shelfy.R
 import com.example.shelfy.ui.BookHomePageViewModel
 import com.example.shelfy.ui.theme.BlackBar
@@ -88,7 +90,7 @@ fun Profilo(
                 Spacer(modifier = Modifier.width(15.dp))
 
                 IconButton(
-                    onClick = {System.out.println("Aggiungi")}
+                    onClick = {}
                 ){
                     Icon(
                         painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
@@ -99,8 +101,7 @@ fun Profilo(
 
                 }
                 IconButton(
-                    onClick = {}
-
+                    onClick = {navController.navigate("SEARCH_SCREEN")}
                 ){
                     Icon(
                         painter = painterResource(id = R.drawable.search_outline_1024x1024),
@@ -131,7 +132,7 @@ fun Profilo(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ){
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navController.navigate("SEARCH_SCREEN")}) {
                 Icon(
                     painter = painterResource(id = R.drawable.search_outline_1024x1024),
                     contentDescription = "Search",
@@ -151,7 +152,7 @@ fun Profilo(
                         .size(30.dp)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navController.navigate("PROFILE_SCREEN")}) {
                 Icon(
                     painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
                     contentDescription = "Search",
@@ -163,4 +164,10 @@ fun Profilo(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun Preview(){
+    Profilo(viewModel = BookHomePageViewModel(), navController = rememberNavController())
 }
