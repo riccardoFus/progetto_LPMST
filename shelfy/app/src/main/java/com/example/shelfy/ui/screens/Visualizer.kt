@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -22,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +36,7 @@ import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
+
 
 @Composable
 fun Visualizer(
@@ -98,11 +102,15 @@ fun Visualizer(
 
                     }
 
-                    Text(
-                        text = "Aggiungi alla libreria",
-                        fontFamily = fonts,
-                        fontSize = 22.sp,
-                        color = BlueText
+                    ClickableText(
+                        text = AnnotatedString("Aggiungi alla libreria"),
+                        style = TextStyle(
+                            fontFamily = fonts,
+                            fontSize = 22.sp,
+                            color = BlueText
+                        ),
+                        onClick = {}
+
                     )
 
                 }
@@ -122,11 +130,12 @@ fun Visualizer(
 
                     }
 
-                        Text(
-                            text = "Aggiungi a una readlist",
-                            fontFamily = fonts,
+                        ClickableText(
+                            text = AnnotatedString("Aggiungi a una readlist"),
+                            style = TextStyle(fontFamily = fonts,
                             fontSize = 22.sp,
-                            color = BlueText
+                            color = BlueText),
+                            onClick = {}
                     )
 
                 }
@@ -143,11 +152,13 @@ fun Visualizer(
                                 .size(28.dp))
 
                     }
-                    Text(
-                        text = "Aggiungi una recensione",
-                        fontFamily = fonts,
+                    ClickableText(
+                        text = AnnotatedString("Aggiungi una recensione"),
+                        style = TextStyle(fontFamily = fonts,
                         fontSize = 22.sp,
                         color = BlueText
+                        ),
+                        onClick = {}
                     )
                 }
 
