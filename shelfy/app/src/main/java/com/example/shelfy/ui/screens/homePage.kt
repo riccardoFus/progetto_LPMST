@@ -1,6 +1,8 @@
 package com.example.shelfy.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -138,37 +141,42 @@ fun HomePage(
                 }
             }
         }
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .background(color = BlackBar),
-            contentAlignment = Alignment.Center
-        ){
-            Row {
-                Icon(
-                    painter = painterResource(id = R.drawable.search_outline_1024x1024),
-                    contentDescription = "Search",
-                    tint = BlueText,
-                    modifier = Modifier
-                        .weight(1f)
-                        .size(30.dp)
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.home_1024x919),
-                    contentDescription = "Search",
-                    tint = BlueText,
-                    modifier = Modifier
-                        .weight(1f)
-                        .size(30.dp)
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                    contentDescription = "Search",
-                    tint = BlueText,
-                    modifier = Modifier
-                        .weight(1f)
-                        .size(30.dp)
-                )
+
+            Row (
+                modifier = Modifier
+                    .background(color = BlackBar)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ){
+                IconButton(onClick = {navController.navigate("SEARCH_SCREEN")}) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.search_outline_1024x1024),
+                        contentDescription = "Search",
+                        tint = BlueText,
+                        modifier = Modifier
+                            .weight(1f)
+                            .size(30.dp)
+                    )
+                }
+                IconButton(onClick = {}) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.home_1024x919),
+                        contentDescription = "Home",
+                        tint = BlueText,
+                        modifier = Modifier
+                            .weight(1f)
+                            .size(30.dp)
+                    )
+                }
+                IconButton(onClick = {navController.navigate("PROFILE_SCREEN")}) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
+                        contentDescription = "Search",
+                        tint = BlueText,
+                        modifier = Modifier
+                            .weight(1f)
+                            .size(30.dp)
+                    )
             }
         }
     }
