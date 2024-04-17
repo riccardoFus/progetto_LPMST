@@ -24,6 +24,9 @@ fun NavGraph(appViewModel: BookHomePageViewModel = viewModel()){
         composable(Screens.SEARCH_SCREEN){
             Search(viewModel = appViewModel, navController = navController)
         }
+        composable(Screens.VISUALIZER_SCREEN){
+            Search(viewModel = appViewModel, navController = navController)
+        }
 
         /*
         composable("${Routes.WELCOME_SCREEN}/{${Routes.USER_NAME}}/{${Routes.ANIMAL_SELECTED}}",
