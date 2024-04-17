@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -79,19 +80,25 @@ fun HomePage(
                         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.height(300.dp).width(200.dp).padding(8.dp)) {
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
-                                    .data("https://"+item.volumeInfo.imageLinks.thumbnail.substring(7))
+                                    .data(
+                                        ("https://" + (item?.volumeInfo?.imageLinks?.thumbnail?.substring(
+                                            7
+                                        ) ?: "store.bookbaby.com/BookShop/CommonControls/BookshopThemes/bookshop/OnePageBookCoverImage.jpg?BookID=BK00014296&abOnly=False&ImageType=Back"))
+                                    )
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .weight(0.85f)
+                                    .height(250.dp)
+                                    .width(180.dp)
                                     .clip(RoundedCornerShape(
                                         8.dp
-                                    ))
+                                    )),
+                                contentScale = ContentScale.Crop
                             )
-                            Text(text = item.volumeInfo.title, color = WhiteText, fontSize = 14.sp,
-                                modifier = Modifier.weight(0.15f).padding(top = 2.dp), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                                textAlign = TextAlign.Center)
+                            Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 14.sp,
+                                modifier = Modifier.padding(top = 2.dp), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
+                                textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 }
@@ -101,19 +108,25 @@ fun HomePage(
                         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.height(300.dp).width(200.dp).padding(8.dp)) {
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
-                                    .data("https://"+item.volumeInfo.imageLinks.thumbnail.substring(7))
+                                    .data(
+                                        ("https://" + (item?.volumeInfo?.imageLinks?.thumbnail?.substring(
+                                            7
+                                        ) ?: "store.bookbaby.com/BookShop/CommonControls/BookshopThemes/bookshop/OnePageBookCoverImage.jpg?BookID=BK00014296&abOnly=False&ImageType=Back"))
+                                    )
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .weight(0.85f)
+                                    .height(250.dp)
+                                    .width(180.dp)
                                     .clip(RoundedCornerShape(
                                         8.dp
-                                    ))
+                                    )),
+                                contentScale = ContentScale.Crop
                             )
-                            Text(text = item.volumeInfo.title, color = WhiteText, fontSize = 14.sp,
-                                modifier = Modifier.weight(0.15f).padding(top = 2.dp), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                                textAlign = TextAlign.Center)
+                            Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 14.sp,
+                                modifier = Modifier.padding(top = 2.dp), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
+                                textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 }
@@ -123,19 +136,25 @@ fun HomePage(
                         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.height(300.dp).width(200.dp).padding(8.dp)) {
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
-                                    .data("https://"+item.volumeInfo.imageLinks.thumbnail.substring(7))
+                                    .data(
+                                        ("https://" + (item?.volumeInfo?.imageLinks?.thumbnail?.substring(
+                                            7
+                                        ) ?: "store.bookbaby.com/BookShop/CommonControls/BookshopThemes/bookshop/OnePageBookCoverImage.jpg?BookID=BK00014296&abOnly=False&ImageType=Back"))
+                                    )
                                     .crossfade(true)
                                     .build(),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .weight(0.85f)
+                                    .height(250.dp)
+                                    .width(180.dp)
                                     .clip(RoundedCornerShape(
                                         8.dp
-                                    ))
+                                    )),
+                                contentScale = ContentScale.Crop
                             )
-                            Text(text = item.volumeInfo.title, color = WhiteText, fontSize = 14.sp,
-                                modifier = Modifier.weight(0.15f).padding(top = 2.dp), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                                textAlign = TextAlign.Center)
+                            Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 14.sp,
+                                modifier = Modifier.padding(top = 2.dp), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
+                                textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 }

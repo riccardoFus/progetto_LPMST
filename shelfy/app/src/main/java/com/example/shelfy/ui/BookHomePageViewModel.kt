@@ -44,6 +44,14 @@ class BookHomePageViewModel : ViewModel(){
             bookUiState = Resource.Success<Item>(book)
         }
     }
+
+    var booksSearchUiState : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+    public fun getBooksByQuery(query : String){
+        viewModelScope.launch {
+            val book = RetrofitInstance.provideBooksApi().getBooks(query)
+            booksSearchUiState = Resource.Success<Books>(book)
+        }
+    }
     init{
         getBooksRecommendation1("giallo")
         getBooksRecommendation2("horror")
