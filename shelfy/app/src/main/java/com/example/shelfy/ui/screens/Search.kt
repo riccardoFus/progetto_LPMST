@@ -2,6 +2,7 @@ package com.example.shelfy.ui.screens
 
 import android.content.SearchRecentSuggestionsProvider
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -79,9 +80,9 @@ fun Search(
     ) {
         Box(
             modifier = Modifier
-                .background(color = BlackBar)
-                .weight(0.9f)
-                .fillMaxWidth(),
+                .weight(1f)
+                .background(color = BlackBar),
+            contentAlignment = Alignment.Center
         ){
             Text(
                 text = "SHELFY",
@@ -162,6 +163,10 @@ fun Search(
                                             8.dp
                                         )
                                     )
+                                    .clickable(onClick = {
+                                        viewModel.getBook(item?.id.toString())
+                                        navController.navigate("VISUALIZER_SCREEN")
+                                    })
                             )
                             Column(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
                                 Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 15.sp,

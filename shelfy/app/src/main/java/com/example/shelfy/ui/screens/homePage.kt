@@ -1,6 +1,7 @@
 package com.example.shelfy.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,7 @@ import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
+import kotlinx.coroutines.delay
 
 @Composable
 fun HomePage(
@@ -93,7 +95,11 @@ fun HomePage(
                                     .width(180.dp)
                                     .clip(RoundedCornerShape(
                                         8.dp
-                                    )),
+                                    ))
+                                    .clickable(onClick = {
+                                        viewModel.getBook(item?.id.toString())
+                                        navController.navigate("VISUALIZER_SCREEN")
+                                    }),
                                 contentScale = ContentScale.Crop
                             )
                             Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 14.sp,
@@ -121,7 +127,11 @@ fun HomePage(
                                     .width(180.dp)
                                     .clip(RoundedCornerShape(
                                         8.dp
-                                    )),
+                                    ))
+                                    .clickable(onClick = {
+                                        viewModel.getBook(item?.id.toString())
+                                        navController.navigate("VISUALIZER_SCREEN")
+                                    }),
                                 contentScale = ContentScale.Crop
                             )
                             Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 14.sp,
@@ -149,7 +159,11 @@ fun HomePage(
                                     .width(180.dp)
                                     .clip(RoundedCornerShape(
                                         8.dp
-                                    )),
+                                    ))
+                                    .clickable(onClick = {
+                                        viewModel.getBook(item?.id.toString())
+                                        navController.navigate("VISUALIZER_SCREEN")
+                                    }),
                                 contentScale = ContentScale.Crop
                             )
                             Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 14.sp,

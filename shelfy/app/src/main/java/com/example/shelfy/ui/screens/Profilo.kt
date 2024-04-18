@@ -47,10 +47,8 @@ fun Profilo(
     ) {
         Box(
             modifier = Modifier
-                .weight(0.9f)
-                .background(color = BlackBar)
-                .fillMaxWidth()
-                .fillMaxHeight(),
+                .weight(1f)
+                .background(color = BlackBar),
             contentAlignment = Alignment.Center
         ){
             Text(
