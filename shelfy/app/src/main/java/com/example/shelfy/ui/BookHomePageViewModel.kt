@@ -9,6 +9,7 @@ import com.example.shelfy.data.remote.responses.Books
 import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class BookHomePageViewModel : ViewModel(){
@@ -56,6 +57,6 @@ class BookHomePageViewModel : ViewModel(){
         getBooksRecommendation1("giallo")
         getBooksRecommendation2("horror")
         getBooksRecommendation3("fantasy")
-        getBook("eu3REAAAQBAJ")
+        // getBook("eu3REAAAQBAJ")
     }
 }
