@@ -164,7 +164,7 @@ fun Search(
                                     )
                             )
                             Column(modifier = Modifier.fillMaxWidth().padding(start = 8.dp)) {
-                                Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 20.sp,
+                                Text(text = (item?.volumeInfo?.title ?: "No Titolo"), color = WhiteText, fontSize = 15.sp,
                                     modifier = Modifier
                                         .padding(top = 2.dp), fontWeight = FontWeight.SemiBold, fontFamily = fonts)
                                 Text(
