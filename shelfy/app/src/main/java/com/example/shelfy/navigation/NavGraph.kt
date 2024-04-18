@@ -10,6 +10,7 @@ import com.example.shelfy.ui.BookHomePageViewModel
 import com.example.shelfy.ui.screens.HomePage
 import com.example.shelfy.ui.screens.Profilo
 import com.example.shelfy.ui.screens.Search
+import com.example.shelfy.ui.screens.Visualizer
 
 @Composable
 fun NavGraph(appViewModel: BookHomePageViewModel = viewModel()){
@@ -25,7 +26,7 @@ fun NavGraph(appViewModel: BookHomePageViewModel = viewModel()){
             Search(viewModel = appViewModel, navController = navController)
         }
         composable(Screens.VISUALIZER_SCREEN){
-            Search(viewModel = appViewModel, navController = navController)
+            Visualizer(viewModel = appViewModel, navController = navController)
         }
 
         /*
