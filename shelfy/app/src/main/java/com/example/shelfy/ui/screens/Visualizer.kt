@@ -150,7 +150,7 @@ fun Visualizer(
 
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, "Test")
+                        putExtra(Intent.EXTRA_TEXT, viewModel.bookUiState.data?.volumeInfo?.infoLink)
                         type = "text/plain"
                     }
                     val shareIntent = android.content.Intent.createChooser(sendIntent, null); val context = androidx.compose.ui.platform.LocalContext.current;
@@ -166,7 +166,7 @@ fun Visualizer(
                     }
                 }
                 var showTrama by remember {mutableStateOf(false)}
-                Text(text = "Trama : " +(viewModel.bookUiState.data?.volumeInfo?.description ?: "No trama"), color = WhiteText, fontSize = 16.sp,
+                Text(text = "Trama: " +(viewModel.bookUiState.data?.volumeInfo?.description ?: "No trama"), color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth()
