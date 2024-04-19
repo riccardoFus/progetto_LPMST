@@ -1,5 +1,6 @@
 package com.example.shelfy.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -146,14 +147,21 @@ fun Visualizer(
                                 .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
                             textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis)
                     }
-                    IconButton(onClick = {navController.navigate("")}) {
+
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, "Test")
+                        type = "text/plain"
+                    }
+                    val shareIntent = android.content.Intent.createChooser(sendIntent, null); val context = androidx.compose.ui.platform.LocalContext.current;
+                    IconButton(onClick = { context.startActivity(shareIntent) }) {
                         Icon(
                             painter = painterResource(id = R.drawable.share_1024x896),
                             contentDescription = "Share",
                             tint = BlueText,
                             modifier = Modifier
                                 .weight(1f)
-                                .size(30.dp)
+                                .size(25.dp)
                         )
                     }
                 }
