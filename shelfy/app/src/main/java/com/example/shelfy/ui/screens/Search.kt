@@ -116,7 +116,7 @@ fun Search(
                 TextField(
                     singleLine = true,
                     value = text,
-                    placeholder = { Text(text = "Che libro vuoi leggere?") },
+                    placeholder = { Text(text = "Cerca libro...") },
                     onValueChange = { newText -> text = newText },
                     modifier = Modifier
                         .padding(8.dp)

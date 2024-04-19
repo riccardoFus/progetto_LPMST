@@ -32,6 +32,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -127,18 +128,19 @@ fun Visualizer(
                         ),
                     contentScale = ContentScale.Crop,
                 )
+
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)) {
                     Column (
                         modifier = Modifier.weight(1f)
                     ){
-                        Text(text = (viewModel.bookUiState.data?.volumeInfo?.title ?: "No Titolo"), color = BlueText, fontSize = 22.sp,
+                        Text(text = (viewModel.bookUiState.data?.volumeInfo?.title ?: "No Titolo"), color = BlueText, fontSize = 25.sp,
                             modifier = Modifier
                                 .padding(top = 2.dp)
                                 .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
                             textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis)
-                        Text(text = (viewModel.bookUiState.data?.volumeInfo?.authors.toString().replace("[","").replace("]","")), color = WhiteText, fontSize = 16.sp,
+                        Text(text = (viewModel.bookUiState.data?.volumeInfo?.authors.toString().replace("[","").replace("]","")), color = WhiteText, fontSize = 12.sp,
                             modifier = Modifier
                                 .padding(top = 2.dp)
                                 .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
@@ -155,12 +157,16 @@ fun Visualizer(
                         )
                     }
                 }
-
+                var showTrama by remember {mutableStateOf(false)}
                 Text(text = "Trama : " +(viewModel.bookUiState.data?.volumeInfo?.description ?: "No trama"), color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
-                        .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                    textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis)
+                        .fillMaxWidth()
+                        .clickable {showTrama = !showTrama},
+                    fontWeight = FontWeight.SemiBold, fontFamily = fonts,
+                    textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
+                    maxLines = if (showTrama) Int.MAX_VALUE else 7)
+
 
                 Text(text = "Numero ratings - Media ratings", color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
