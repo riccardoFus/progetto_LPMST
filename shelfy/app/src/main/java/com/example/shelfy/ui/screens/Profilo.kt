@@ -120,8 +120,6 @@ fun Profilo(
                             .size(28.dp)
                     )
                 }
-
-
             }
         }
         Row (

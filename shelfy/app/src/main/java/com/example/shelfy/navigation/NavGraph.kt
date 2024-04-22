@@ -11,11 +11,13 @@ import com.example.shelfy.ui.screens.HomePage
 import com.example.shelfy.ui.screens.Profilo
 import com.example.shelfy.ui.screens.Search
 import com.example.shelfy.ui.screens.Visualizer
+import com.example.shelfy.ui.screens.Login
+import com.example.shelfy.ui.screens.SignIn
 
 @Composable
 fun NavGraph(appViewModel: BookHomePageViewModel = viewModel()){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screens.HOME_SCREEN){
+    NavHost(navController = navController, startDestination = Screens.LOGIN_SCREEN){
         composable(Screens.HOME_SCREEN){
             HomePage(viewModel = appViewModel, navController = navController)
         }
@@ -27,6 +29,12 @@ fun NavGraph(appViewModel: BookHomePageViewModel = viewModel()){
         }
         composable(Screens.VISUALIZER_SCREEN){
             Visualizer(viewModel = appViewModel, navController = navController)
+        }
+        composable(Screens.LOGIN_SCREEN){
+            Login(viewModel = appViewModel, navController = navController)
+        }
+        composable(Screens.SIGNIN_SCREEN){
+            SignIn(viewModel = appViewModel, navController = navController)
         }
 
         /*
