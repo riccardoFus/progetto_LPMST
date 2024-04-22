@@ -196,7 +196,7 @@ fun SignIn(
                 Text(text = "", fontSize = 27.sp, fontFamily = fonts, color = BlueText, modifier = Modifier.padding(20.dp))
 
                 Button(onClick = {navController.navigate("LOGIN_SCREEN")}, modifier = Modifier
-                    .padding(top = 100.dp)
+                    .padding(top = 70.dp)
                     .widthIn(185.dp),
                     content = {
                         Text(text = "Sei già un utente?", modifier = Modifier
