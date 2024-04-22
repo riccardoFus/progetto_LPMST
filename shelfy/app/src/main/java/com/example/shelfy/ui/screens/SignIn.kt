@@ -102,7 +102,7 @@ fun SignIn(
                 Text(
                     text = "Sign In",
                     color = BlueText,
-                    modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 11.dp),
+                    modifier = Modifier.padding(start = 8.dp, bottom = 11.dp),
                     fontSize = 40.sp,
                     fontFamily = fonts
                 )
