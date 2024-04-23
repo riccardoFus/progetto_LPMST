@@ -1,7 +1,9 @@
 package com.example.shelfy.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -21,14 +23,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -92,7 +97,8 @@ fun SignIn(
         Box(
             modifier = Modifier
                 .weight(10f)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.Center
         ) {
             Column (modifier = Modifier
                 .fillMaxWidth()
@@ -108,70 +114,146 @@ fun SignIn(
                 )
                 var user by rememberSaveable { mutableStateOf("") }
                 Box() {
-                    Row(modifier = Modifier) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                            contentDescription = "Profilo",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(50.dp)
-                                .align(Alignment.CenterVertically),
-                            tint = BlueText
-                        )
-                        OutlinedTextField(
-                            value = user,
-                            onValueChange = { newText -> user = newText },
-                            placeholder = { Text(text = "Username o Email")},
-                            modifier = Modifier.background(Color.White),
-                            textStyle = TextStyle(fontSize = 20.sp)
-                        )
-                    }
+                    OutlinedTextField(
+                        value = user,
+                        onValueChange = { newText -> user = newText },
+                        placeholder = { Text(text = "Username")},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = BlueText
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedTextColor = BlueText,
+                            unfocusedBorderColor = BlueText,
+                            unfocusedLabelColor = BlueText,
+                            unfocusedLeadingIconColor = BlueText,
+                            focusedTextColor = BlueText,
+                            focusedBorderColor = BlueText,
+                            focusedLabelColor = BlueText,
+                            focusedLeadingIconColor = BlueText,
+                            cursorColor = BlueText,
+                            unfocusedPlaceholderColor = BlueText,
+                            focusedPlaceholderColor = BlueText
+                        ),
+                    )
+                }
+
+                var email by rememberSaveable { mutableStateOf("") }
+                Box(modifier = Modifier.padding(top = 20.dp)) {
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { newText -> email = newText },
+                        placeholder = { Text(text = "Email")},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.email_icon_126),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = BlueText
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedTextColor = BlueText,
+                            unfocusedBorderColor = BlueText,
+                            unfocusedLabelColor = BlueText,
+                            unfocusedLeadingIconColor = BlueText,
+                            focusedTextColor = BlueText,
+                            focusedBorderColor = BlueText,
+                            focusedLabelColor = BlueText,
+                            focusedLeadingIconColor = BlueText,
+                            cursorColor = BlueText,
+                            unfocusedPlaceholderColor = BlueText,
+                            focusedPlaceholderColor = BlueText
+                        ),
+                    )
                 }
 
                 var password by rememberSaveable { mutableStateOf("") }
                 Box(modifier = Modifier.padding(top = 20.dp)) {
-                    Row(){
-                        Icon(
-                            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                            contentDescription = "Profilo",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(50.dp)
-                                .align(Alignment.CenterVertically),
-                            tint = BlueText
-                        )
-                        OutlinedTextField(
-                            value = password,
-                            onValueChange = { newText -> password = newText},
-                            modifier = Modifier.background(Color.White),
-                            visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp)
-                        )
-                    }
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { newText -> password = newText },
+                        placeholder = { Text(text = "Password")},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = BlueText
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedTextColor = BlueText,
+                            unfocusedBorderColor = BlueText,
+                            unfocusedLabelColor = BlueText,
+                            unfocusedLeadingIconColor = BlueText,
+                            focusedTextColor = BlueText,
+                            focusedBorderColor = BlueText,
+                            focusedLabelColor = BlueText,
+                            focusedLeadingIconColor = BlueText,
+                            cursorColor = BlueText,
+                            unfocusedPlaceholderColor = BlueText,
+                            focusedPlaceholderColor = BlueText
+                        ),
+                        visualTransformation = PasswordVisualTransformation()
+                    )
                 }
-                var password2 by rememberSaveable { mutableStateOf("Password") }
+                var password2 by rememberSaveable { mutableStateOf("") }
                 Box(modifier = Modifier.padding(top = 20.dp)) {
-                    Row(){
-                        Icon(
-                            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                            contentDescription = "Profilo",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(50.dp)
-                                .align(Alignment.CenterVertically),
-                            tint = BlueText
-                        )
-                        OutlinedTextField(
-                            value = password2,
-                            onValueChange = { newText -> password2 = newText},
-                            modifier = Modifier.background(Color.White),
-                            visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp)
-                        )
-                    }
+                    OutlinedTextField(
+                        value = password2,
+                        onValueChange = { newText -> password2 = newText },
+                        placeholder = { Text(text = "Ripeti password")},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = BlueText
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedTextColor = BlueText,
+                            unfocusedBorderColor = BlueText,
+                            unfocusedLabelColor = BlueText,
+                            unfocusedLeadingIconColor = BlueText,
+                            focusedTextColor = BlueText,
+                            focusedBorderColor = BlueText,
+                            focusedLabelColor = BlueText,
+                            focusedLeadingIconColor = BlueText,
+                            cursorColor = BlueText,
+                            unfocusedPlaceholderColor = BlueText,
+                            focusedPlaceholderColor = BlueText
+                        ),
+                        visualTransformation = PasswordVisualTransformation()
+                    )
                 }
 
-                Button(onClick = {}, modifier = Modifier
+                OutlinedButton(onClick = {}, modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
                     content = {
@@ -179,9 +261,13 @@ fun SignIn(
                             .align(Alignment.CenterVertically),
                             fontSize = 20.sp,
                             fontFamily = fonts,
-                            textAlign = TextAlign.Center)}
+                            textAlign = TextAlign.Center,
+                            color = WhiteText)},
+                    border = BorderStroke(1.dp, Color.Transparent),
+                    colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),
                 )
 
+                /*
                 Button(onClick = {}, modifier = Modifier, colors = ButtonDefaults.buttonColors(containerColor = Color.White)){
                     Icon(painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
                         contentDescription = "Profilo",
@@ -192,18 +278,20 @@ fun SignIn(
                         tint = BlackPage)
                     Text(text = "Sign In con Google", fontSize = 20.sp, fontFamily = fonts, color = Color.Black)
                 }
+                */
 
-                Text(text = "", fontSize = 27.sp, fontFamily = fonts, color = BlueText, modifier = Modifier.padding(20.dp))
 
-                Button(onClick = {navController.navigate("LOGIN_SCREEN")}, modifier = Modifier
-                    .padding(top = 70.dp)
+                OutlinedButton(onClick = {navController.navigate("LOGIN_SCREEN")}, modifier = Modifier
                     .widthIn(185.dp),
                     content = {
                         Text(text = "Sei già un utente?", modifier = Modifier
                             .align(Alignment.CenterVertically),
                             fontSize = 19.sp,
                             fontFamily = fonts,
-                            textAlign = TextAlign.Center)}
+                            textAlign = TextAlign.Center,
+                            color = BlueText)
+                    },
+                    border = BorderStroke(1.dp, BlueText)
                 )
             }
         }
