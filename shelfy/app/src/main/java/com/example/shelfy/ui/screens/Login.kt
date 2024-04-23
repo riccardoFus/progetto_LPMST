@@ -2,6 +2,7 @@ package com.example.shelfy.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -107,6 +109,7 @@ fun Login(
                         fontFamily = fonts
                     )
                 var user by rememberSaveable { mutableStateOf("") }
+                var userEmpty by remember { mutableStateOf(false)}
                     Box() {
                         Row(modifier = Modifier) {
                             Icon(
@@ -118,16 +121,19 @@ fun Login(
                                     .align(Alignment.CenterVertically),
                                 tint = BlueText
                             )
-                            OutlinedTextField(
+                            TextField(
                                 value = user,
-                                onValueChange = { newText -> user = newText },
+                                onValueChange = { newText -> user = newText; if (user == "") userEmpty = true else userEmpty = false },
                                 placeholder = {Text(text = "Username o Email")},
-                                modifier = Modifier.background(Color.White),
+                                modifier = Modifier
+                                    .background(Color.White)
+                                    .border(width = 1.dp, color = if (userEmpty) Color.Red else Color.Black ),
                                 textStyle = TextStyle(fontSize = 20.sp))
                         }
 
                     }
                 var password by rememberSaveable { mutableStateOf("") }
+                var passwordEmpty by remember {mutableStateOf(false)}
                 Box(modifier = Modifier.padding(top = 20.dp)) {
                     Row(){
                         Icon(
@@ -139,10 +145,12 @@ fun Login(
                                 .align(Alignment.CenterVertically),
                             tint = BlueText
                         )
-                        OutlinedTextField(
+                        TextField(
                             value = password,
-                            onValueChange = { newText -> password = newText},
-                            modifier = Modifier.background(Color.White),
+                            onValueChange = { newText -> password = newText; if (password == "") passwordEmpty = true else passwordEmpty = false },
+                            modifier = Modifier
+                                .background(Color.White)
+                                .border(width = 1.dp, color = if(passwordEmpty) Color.Red else Color.Black),
                             visualTransformation = PasswordVisualTransformation(),
                             textStyle = TextStyle(fontSize = 20.sp)
                         )
@@ -160,7 +168,7 @@ fun Login(
                             textAlign = TextAlign.Start)}
                         )
 
-                Button(onClick = {}, modifier = Modifier, colors = ButtonDefaults.buttonColors(containerColor = Color.White)){
+                /* Button(onClick = {}, modifier = Modifier, colors = ButtonDefaults.buttonColors(containerColor = Color.White)){
                     Icon(painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
                     contentDescription = "Profilo",
                     modifier = Modifier
@@ -168,7 +176,7 @@ fun Login(
                         .size(30.dp)
                         .align(Alignment.CenterVertically))
                     Text(text = "Login con Google", fontSize = 20.sp, fontFamily = fonts, color = Color.Black)
-                }
+                }*/
 
                 Button(onClick = {navController.navigate("SIGNIN_SCREEN")}, modifier = Modifier
                     .padding(top = 200.dp)
