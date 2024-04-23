@@ -37,7 +37,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -109,34 +108,12 @@ fun SignIn(
                 Text(
                     text = "Sign In",
                     color = BlueText,
-                    modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 11.dp),
+                    modifier = Modifier.padding(start = 8.dp, bottom = 11.dp),
                     fontSize = 40.sp,
                     fontFamily = fonts
                 )
                 var user by rememberSaveable { mutableStateOf("") }
-                var userEmpty by remember { mutableStateOf(false) }
                 Box() {
-                    Row(modifier = Modifier) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                            contentDescription = "Profilo",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(50.dp)
-                                .align(Alignment.CenterVertically),
-                            tint = BlueText
-                        )
-                        TextField(
-                            value = user,
-                            onValueChange = { newText -> user = newText; if (user == "") userEmpty=true else false },
-                            placeholder = { Text(text = "Username o Email", fontFamily = fonts)},
-                            modifier = Modifier
-                                .background(Color.White)
-                                .border(width = 1.dp, color = if(userEmpty) Color.Red else Color.Black),
-                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
-                        )
-
-                    }
                     OutlinedTextField(
                         value = user,
                         onValueChange = { newText -> user = newText },
@@ -202,62 +179,11 @@ fun SignIn(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
+                    )
                 }
 
                 var password by rememberSaveable { mutableStateOf("") }
-                var passwordEmpty by remember { mutableStateOf(false) }
-
                 Box(modifier = Modifier.padding(top = 20.dp)) {
-                    Row(){
-                        Icon(
-                            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                            contentDescription = "Profilo",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(50.dp)
-                                .align(Alignment.CenterVertically),
-                            tint = BlueText
-                        )
-                        TextField(
-                            value = password,
-                            onValueChange = { newText -> password = newText; if (password == "") passwordEmpty = true else passwordEmpty = false},
-                            placeholder = {Text(text = "Password", fontFamily = fonts)},
-                            modifier = Modifier
-                                .background(Color.White)
-                                .border(width = 1.dp, color = if(passwordEmpty) Color.Red else Color.Black),
-                            visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
-                        )
-                    }
-                }
-                var password2 by rememberSaveable { mutableStateOf("") }
-                var password2Empty by remember { mutableStateOf(false) }
-
-                Box(modifier = Modifier.padding(top = 20.dp)) {
-                    Row(){
-                        Icon(
-                            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                            contentDescription = "Profilo",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(50.dp)
-                                .align(Alignment.CenterVertically),
-                            tint = BlueText
-                        )
-                        TextField(
-                            value = password2,
-                            onValueChange = { newText -> password2 = newText; if (password2 == "") password2Empty = true else password2Empty = false},
-                            placeholder = {Text(text = "Conferma password", fontFamily = fonts)},
-                            modifier = Modifier
-                                .background(Color.White)
-                                .border(width = 1.dp, color = if(password2Empty) Color.Red else Color.Black),
-                            visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
-                        )
-                    }
-                }
-
-                Button(onClick = {if (!passwordEmpty || !password2Empty || userEmpty){} }, modifier = Modifier
                     OutlinedTextField(
                         value = password,
                         onValueChange = { newText -> password = newText },
@@ -340,8 +266,7 @@ fun SignIn(
                     border = BorderStroke(1.dp, Color.Transparent),
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),
                 )
-                /* Button(onClick = {}, modifier = Modifier, colors = ButtonDefaults.buttonColors(containerColor = Color.White)){
-=======
+
                 /*
                 Button(onClick = {}, modifier = Modifier, colors = ButtonDefaults.buttonColors(containerColor = Color.White)){
                     Icon(painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
@@ -352,12 +277,6 @@ fun SignIn(
                             .align(Alignment.CenterVertically),
                         tint = BlackPage)
                     Text(text = "Sign In con Google", fontSize = 20.sp, fontFamily = fonts, color = Color.Black)
-
-                } */
-
-                Button(onClick = {navController.navigate("LOGIN_SCREEN")}, modifier = Modifier
-                    .padding(top = 20.dp)
-=======
                 }
                 */
 
@@ -424,4 +343,3 @@ fun preview6(){
     SignIn(viewModel = BookHomePageViewModel(),
         navController = rememberNavController())
 }
-
