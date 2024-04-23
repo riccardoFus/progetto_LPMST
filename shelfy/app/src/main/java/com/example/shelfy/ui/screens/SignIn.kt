@@ -124,7 +124,7 @@ fun SignIn(
                         TextField(
                             value = user,
                             onValueChange = { newText -> user = newText; if (user == "") userEmpty=true else false },
-                            placeholder = { Text(text = "Username o Email")},
+                            placeholder = { Text(text = "Username o Email", fontFamily = fonts)},
                             modifier = Modifier
                                 .background(Color.White)
                                 .border(width = 1.dp, color = if(userEmpty) Color.Red else Color.Black),
@@ -151,6 +151,7 @@ fun SignIn(
                         TextField(
                             value = password,
                             onValueChange = { newText -> password = newText; if (password == "") passwordEmpty = true else passwordEmpty = false},
+                            placeholder = {Text(text = "Password", fontFamily = fonts)},
                             modifier = Modifier
                                 .background(Color.White)
                                 .border(width = 1.dp, color = if(passwordEmpty) Color.Red else Color.Black),
@@ -176,6 +177,7 @@ fun SignIn(
                         TextField(
                             value = password2,
                             onValueChange = { newText -> password2 = newText; if (password2 == "") password2Empty = true else password2Empty = false},
+                            placeholder = {Text(text = "Conferma password", fontFamily = fonts)},
                             modifier = Modifier
                                 .background(Color.White)
                                 .border(width = 1.dp, color = if(password2Empty) Color.Red else Color.Black),
