@@ -3,7 +3,6 @@ package com.example.shelfy.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +34,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -105,17 +103,14 @@ fun Login(
                 .padding(15.dp),
                 horizontalAlignment = Alignment.CenterHorizontally){
 
-                    Text(
-                        text = "Login",
-                        color = BlueText,
-                        modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 11.dp),
-                        fontSize = 40.sp,
-                        fontFamily = fonts
-                    )
+                Text(
+                    text = "Login",
+                    color = BlueText,
+                    modifier = Modifier.padding(start = 8.dp, top = 8.dp, bottom = 11.dp),
+                    fontSize = 40.sp,
+                    fontFamily = fonts
+                )
                 var user by rememberSaveable { mutableStateOf("") }
-                var userEmpty by remember { mutableStateOf(false)}
-                    Box() {
-                        Row(modifier = Modifier) {
                 Box() {
                     OutlinedTextField(
                         value = user,
@@ -133,15 +128,6 @@ fun Login(
                                     .size(20.dp),
                                 tint = BlueText
                             )
-                            TextField(
-                                value = user,
-                                onValueChange = { newText -> user = newText; if (user == "") userEmpty = true else userEmpty = false },
-                                placeholder = {Text(text = "Username o Email", fontFamily = fonts)},
-                                modifier = Modifier
-                                    .background(Color.White)
-                                    .border(width = 1.dp, color = if (userEmpty) Color.Red else Color.Black ),
-                                textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts))
-                        }
                         },
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
@@ -160,29 +146,7 @@ fun Login(
                 }
 
                 var password by rememberSaveable { mutableStateOf("") }
-                var passwordEmpty by remember {mutableStateOf(false)}
                 Box(modifier = Modifier.padding(top = 20.dp)) {
-                    Row(){
-                        Icon(
-                            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                            contentDescription = "Profilo",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(50.dp)
-                                .align(Alignment.CenterVertically),
-                            tint = BlueText
-                        )
-                        TextField(
-                            value = password,
-                            onValueChange = { newText -> password = newText; if (password == "") passwordEmpty = true else passwordEmpty = false },
-                            placeholder = {Text(text = "Password", fontFamily = fonts)},
-                            modifier = Modifier
-                                .background(Color.White)
-                                .border(width = 1.dp, color = if(passwordEmpty) Color.Red else Color.Black),
-                            visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
-                        )
-                    }
                     OutlinedTextField(
                         value = password,
                         onValueChange = { newText -> password = newText },
@@ -217,20 +181,18 @@ fun Login(
                     )
                 }
 
-                    OutlinedButton(onClick = {}, modifier = Modifier
-                        .padding(20.dp)
-                        .widthIn(120.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),
-                        border = BorderStroke(1.dp, color = Color.Transparent),
-                        content = {
-                            Text(text = "Login", modifier = Modifier
-                                .align(Alignment.CenterVertically),
+                OutlinedButton(onClick = {}, modifier = Modifier
+                    .padding(20.dp)
+                    .widthIn(120.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),
+                    border = BorderStroke(1.dp, color = Color.Transparent),
+                    content = {
+                        Text(text = "Login", modifier = Modifier
+                            .align(Alignment.CenterVertically),
                             fontSize = 20.sp,
                             fontFamily = fonts,  color = WhiteText,
                             textAlign = TextAlign.Start)}
-                        )
-                /* Button(onClick = {}, modifier = Modifier, colors = ButtonDefaults.buttonColors(containerColor = Color.White)){
-=======
+                )
                 /*
                 Button(onClick = {}, modifier = Modifier, colors = ButtonDefaults.buttonColors(containerColor = Color.White)){
                     Icon(painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
@@ -240,7 +202,7 @@ fun Login(
                         .size(30.dp)
                         .align(Alignment.CenterVertically))
                     Text(text = "Login con Google", fontSize = 20.sp, fontFamily = fonts, color = Color.Black)
-                }*/
+                }
 
                  */
 
@@ -257,7 +219,7 @@ fun Login(
                 )
             }
         }
-        
+
         Row(
             modifier = Modifier
                 .background(color = BlackBar)
@@ -303,6 +265,5 @@ fun Login(
 @Composable
 fun preview0(){
     Login(viewModel = BookHomePageViewModel(),
-    navController = rememberNavController())
+        navController = rememberNavController())
 }
-
