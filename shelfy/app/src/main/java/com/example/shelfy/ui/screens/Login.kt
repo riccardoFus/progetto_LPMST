@@ -128,7 +128,7 @@ fun Login(
                                 modifier = Modifier
                                     .background(Color.White)
                                     .border(width = 1.dp, color = if (userEmpty) Color.Red else Color.Black ),
-                                textStyle = TextStyle(fontSize = 20.sp))
+                                textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts))
                         }
 
                     }
@@ -152,7 +152,7 @@ fun Login(
                                 .background(Color.White)
                                 .border(width = 1.dp, color = if(passwordEmpty) Color.Red else Color.Black),
                             visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp)
+                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
                         )
                     }
                 }

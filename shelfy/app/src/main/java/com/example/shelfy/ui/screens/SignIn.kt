@@ -128,7 +128,7 @@ fun SignIn(
                             modifier = Modifier
                                 .background(Color.White)
                                 .border(width = 1.dp, color = if(userEmpty) Color.Red else Color.Black),
-                            textStyle = TextStyle(fontSize = 20.sp)
+                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
                         )
 
                     }
@@ -155,11 +155,11 @@ fun SignIn(
                                 .background(Color.White)
                                 .border(width = 1.dp, color = if(passwordEmpty) Color.Red else Color.Black),
                             visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp)
+                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
                         )
                     }
                 }
-                var password2 by rememberSaveable { mutableStateOf("Password") }
+                var password2 by rememberSaveable { mutableStateOf("") }
                 var password2Empty by remember { mutableStateOf(false) }
 
                 Box(modifier = Modifier.padding(top = 20.dp)) {
@@ -180,7 +180,7 @@ fun SignIn(
                                 .background(Color.White)
                                 .border(width = 1.dp, color = if(password2Empty) Color.Red else Color.Black),
                             visualTransformation = PasswordVisualTransformation(),
-                            textStyle = TextStyle(fontSize = 20.sp)
+                            textStyle = TextStyle(fontSize = 20.sp, fontFamily = fonts)
                         )
                     }
                 }
