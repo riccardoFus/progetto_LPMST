@@ -246,7 +246,7 @@ fun Login(
                         .size(30.dp)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navController.navigate("HOME_SCREEN")}) {
                 Icon(
                     painter = painterResource(id = R.drawable.home_1024x919),
                     contentDescription = "Home",
