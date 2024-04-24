@@ -50,6 +50,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -226,7 +227,7 @@ fun SignIn(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
-                        visualTransformation = PasswordVisualTransformation()
+                        visualTransformation = if(passwordPresses) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
                 var password2 by rememberSaveable { mutableStateOf("") }
@@ -268,7 +269,7 @@ fun SignIn(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
-                        visualTransformation = PasswordVisualTransformation()
+                        visualTransformation = if(password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
 
