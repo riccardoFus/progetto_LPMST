@@ -253,7 +253,10 @@ fun SignIn(
                     )
                 }
 
-                OutlinedButton(onClick = {}, modifier = Modifier
+                OutlinedButton(
+                    onClick = {
+                              viewModel.createUserInFirebase(email, password, username = user)
+                    }, modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
                     content = {
