@@ -233,7 +233,6 @@ fun Visualizer(
                                     modifier = Modifier
                                         .size(32.dp)
                                 )
-
                             }
                             Text(
                                 text = AnnotatedString("Aggiungi alla libreria"),
@@ -248,7 +247,6 @@ fun Visualizer(
                                     .padding(7.dp)
                             )
                         }
-
                         Row() {
                             IconButton(
                                 onClick = {},
@@ -260,7 +258,6 @@ fun Visualizer(
                                     modifier = Modifier
                                         .size(32.dp)
                                 )
-
                             }
                             Text(
                                 text = AnnotatedString("Aggiungi a una readlist"),
@@ -280,54 +277,25 @@ fun Visualizer(
                         Row() {
                             IconButton(
                                 onClick = {
-                                    noteEnabled = true
                                 },
                             ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                    contentDescription = "Aggiungi libro",
+                                    contentDescription = "Aggiungi una nota",
                                     tint = BlueText,
                                     modifier = Modifier
                                         .size(32.dp)
                                 )
-
                             }
-                            Text(
+                            ClickableText(
                                 text = AnnotatedString("Aggiungi una nota"),
+                                onClick = {noteEnabled = true},
                                 style = TextStyle(
                                     fontFamily = fonts,
                                     fontSize = 20.sp,
-                                    color = BlueText
+                                    color = BlueText,
+                                    textAlign = TextAlign.Justify,
                                 ),
-                                textAlign = TextAlign.Justify,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(7.dp)
-                            )
-                        }
-
-                        Row() {
-                            IconButton(
-                                onClick = {
-                                },
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                    contentDescription = "Aggiungi libro",
-                                    tint = BlueText,
-                                    modifier = Modifier
-                                        .size(32.dp)
-                                )
-
-                            }
-                            Text(
-                                text = AnnotatedString("Aggiungi una nota"),
-                                style = TextStyle(
-                                    fontFamily = fonts,
-                                    fontSize = 20.sp,
-                                    color = BlueText
-                                ),
-                                textAlign = TextAlign.Justify,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(7.dp)
@@ -335,7 +303,7 @@ fun Visualizer(
                         }
                         var note by remember { mutableStateOf("") }
                         if (noteEnabled) {
-                            Dialog(onDismissRequest = {}) {
+                            Dialog(onDismissRequest = {noteEnabled = false}) {
                                 TextField(singleLine = false,
                                     value = note,
                                     placeholder = {
@@ -352,7 +320,7 @@ fun Visualizer(
                                     shape = RoundedCornerShape(30.dp),
                                     colors = TextFieldDefaults.colors(
                                         focusedIndicatorColor = Color.Transparent,
-                                        unfocusedIndicatorColor = Color.Transparent
+                                        unfocusedIndicatorColor = Color.Transparent,
                                     ),
                                     trailingIcon = {
                                         IconButton(onClick = { noteEnabled = false }) {
@@ -367,23 +335,36 @@ fun Visualizer(
                                     })
                             }
                         }
+                        Row(){
+                            IconButton(
+                                onClick = {
+                                },
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                    contentDescription = "Aggiungi libro",
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                )
+                            }
+                            ClickableText(
+                                text = AnnotatedString("Aggiungi una recensione"),
+                                onClick = {},
+                                style = TextStyle(
+                                    fontFamily = fonts,
+                                    fontSize = 20.sp,
+                                    color = BlueText,
+                                    textAlign = TextAlign.Justify,
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(7.dp)
+                            )
+                        }
                     }
-
                 }
-                Text(
-                    text = AnnotatedString("Aggiungi una recensione"),
-                    style = TextStyle(
-                        fontFamily = fonts,
-                        fontSize = 20.sp,
-                        color = BlueText
-                    ),
-                    textAlign = TextAlign.Justify,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(7.dp)
-                )
             }
-
         }
         Row(
             modifier = Modifier
