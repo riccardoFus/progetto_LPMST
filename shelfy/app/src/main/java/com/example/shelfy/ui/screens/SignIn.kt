@@ -37,6 +37,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -49,6 +50,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -102,7 +104,7 @@ fun SignIn(
         ) {
             Column (modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(11.dp),
                 horizontalAlignment = Alignment.CenterHorizontally){
 
                 Text(
@@ -113,14 +115,14 @@ fun SignIn(
                     fontFamily = fonts
                 )
                 var user by rememberSaveable { mutableStateOf("") }
+                var userEmpty by remember { mutableStateOf(false) }
                 Box() {
                     OutlinedTextField(
                         value = user,
-                        onValueChange = { newText -> user = newText },
+                        onValueChange = { newText -> user = newText; if (user.isNullOrBlank()) userEmpty = true else userEmpty = false },
                         placeholder = { Text(text = "Username")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         leadingIcon = {
                             Icon(
@@ -131,6 +133,7 @@ fun SignIn(
                                 tint = BlueText
                             )
                         },
+                        supportingText = {if (userEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -148,14 +151,14 @@ fun SignIn(
                 }
 
                 var email by rememberSaveable { mutableStateOf("") }
-                Box(modifier = Modifier.padding(top = 20.dp)) {
+                var emailEmpty by remember { mutableStateOf(false) }
+                Box(modifier = Modifier.padding(top = 15.dp)) {
                     OutlinedTextField(
                         value = email,
-                        onValueChange = { newText -> email = newText },
+                        onValueChange = { newText -> email = newText; if (email.isNullOrBlank()) emailEmpty = true else emailEmpty = false },
                         placeholder = { Text(text = "Email")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         leadingIcon = {
                             Icon(
@@ -166,6 +169,7 @@ fun SignIn(
                                 tint = BlueText
                             )
                         },
+                        supportingText = {if (emailEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -183,24 +187,30 @@ fun SignIn(
                 }
 
                 var password by rememberSaveable { mutableStateOf("") }
-                Box(modifier = Modifier.padding(top = 20.dp)) {
+                var passwordEmpty by remember { mutableStateOf(false) }
+                var passwordPressed by remember { mutableStateOf(false) }
+                Box(modifier = Modifier.padding(top = 15.dp)) {
                     OutlinedTextField(
                         value = password,
-                        onValueChange = { newText -> password = newText },
+                        onValueChange = { newText -> password = newText; if (password.isNullOrBlank()) passwordEmpty = true else passwordEmpty = false },
                         placeholder = { Text(text = "Password")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp),
-                                tint = BlueText
-                            )
+                            IconButton(
+                                onClick = {passwordPressed = !passwordPressed}
+                            ){
+                                Icon(
+                                    painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(20.dp),
+                                    tint = BlueText
+                                )
+                            }
                         },
+                        supportingText = {if (passwordEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -214,28 +224,34 @@ fun SignIn(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
-                        visualTransformation = PasswordVisualTransformation()
+                        visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
                 var password2 by rememberSaveable { mutableStateOf("") }
-                Box(modifier = Modifier.padding(top = 20.dp)) {
+                var password2Empty by remember { mutableStateOf(false) }
+                var password2Pressed by remember { mutableStateOf(false)}
+                Box(modifier = Modifier.padding(top = 15.dp)) {
                     OutlinedTextField(
                         value = password2,
-                        onValueChange = { newText -> password2 = newText },
+                        onValueChange = { newText -> password2 = newText; if (password2.isNullOrBlank()) password2Empty = true else password2Empty = false },
                         placeholder = { Text(text = "Ripeti password")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp),
-                                tint = BlueText
-                            )
+                            IconButton(
+                                onClick = {password2Pressed = !password2Pressed}
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(20.dp),
+                                    tint = BlueText
+                                )
+                            }
                         },
+                        supportingText = {if (password2Empty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -249,15 +265,17 @@ fun SignIn(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
-                        visualTransformation = PasswordVisualTransformation()
+                        visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
 
-                OutlinedButton(
-                    onClick = {
-                              viewModel.createUserInFirebase(email, password, username = user)
-                    }, modifier = Modifier
-                    .padding(20.dp)
+                OutlinedButton(onClick = {
+                    if (user.isNullOrBlank()) userEmpty = true
+                    if (password.isNullOrBlank()) passwordEmpty = true
+                    if(email.isNullOrBlank()) emailEmpty = true
+                    if(password2.isNullOrBlank()) password2Empty = true
+                                         viewModel.createUserInFirebase(email, password, password2, user)}, modifier = Modifier
+                    .padding(2.dp)
                     .widthIn(120.dp),
                     content = {
                         Text(text = "Sign In", modifier = Modifier
@@ -285,7 +303,8 @@ fun SignIn(
 
 
                 OutlinedButton(onClick = {navController.navigate("LOGIN_SCREEN")}, modifier = Modifier
-                    .widthIn(185.dp),
+                    .widthIn(185.dp)
+                    .padding(20.dp),
                     content = {
                         Text(text = "Sei già un utente?", modifier = Modifier
                             .align(Alignment.CenterVertically),
@@ -315,7 +334,7 @@ fun SignIn(
                         .size(30.dp)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navController.navigate("HOME_SCREEN")}) {
                 Icon(
                     painter = painterResource(id = R.drawable.home_1024x919),
                     contentDescription = "Home",

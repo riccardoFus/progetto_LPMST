@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +57,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -170,7 +172,7 @@ fun Visualizer(
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth()
-                        .clickable {showTrama = !showTrama},
+                        .clickable { showTrama = !showTrama },
                     fontWeight = FontWeight.SemiBold, fontFamily = fonts,
                     textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
                     maxLines = if (showTrama) Int.MAX_VALUE else 7)
@@ -237,10 +239,37 @@ fun Visualizer(
                                     .fillMaxWidth()
                                     .padding(7.dp))
                         }
+                        var noteEnabled by remember {mutableStateOf(false)}
+                        Row(){
+                            IconButton(
+                                onClick = {
+                                    noteEnabled = true
+                                },
+                            ){
+                                Icon(
+                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                    contentDescription = "Aggiungi libro",
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .size(32.dp))
+
+                            }
+                            Text(text = AnnotatedString("Aggiungi una nota"),
+                                style = TextStyle(fontFamily = fonts,
+                                    fontSize = 20.sp,
+                                    color = BlueText
+                                ),
+                                textAlign = TextAlign.Justify,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(7.dp))
+                        }
 
                         Row(){
                             IconButton(
-                                onClick = {},
+                                onClick = {
+
+                                },
                             ){
                                 Icon(
                                     painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
@@ -260,14 +289,38 @@ fun Visualizer(
                                     .fillMaxWidth()
                                     .padding(7.dp))
                         }
-
-
+                        var note by remember { mutableStateOf("") }
+                        if(noteEnabled){
+                            Dialog(onDismissRequest = {}){
+                                TextField(singleLine = false,
+                                    value = note,
+                                    placeholder = { Text(text = "Inserisci note...", fontFamily = fonts, fontSize = 20.sp) },
+                                    onValueChange = { newText -> note = newText },
+                                    textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
+                                    modifier = Modifier
+                                        .height(100.dp),
+                                    shape = RoundedCornerShape(30.dp),
+                                    colors = TextFieldDefaults.colors(
+                                        focusedIndicatorColor = Color.Transparent,
+                                        unfocusedIndicatorColor = Color.Transparent
+                                    ),
+                                    trailingIcon = {
+                                        IconButton(onClick = { noteEnabled = false }) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                                contentDescription = "Search",
+                                                tint = BlueText,
+                                                modifier = Modifier
+                                                    .size(30.dp)
+                                            )
+                                        }
+                                    })}
+                        }
                     }
+
                 }
             }
-
         }
-
 
         Row (
             modifier = Modifier
@@ -307,6 +360,9 @@ fun Visualizer(
             }
         }
     }
+
+
+
 }
 
 @Preview
