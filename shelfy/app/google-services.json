@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "925051287267",
+    "project_id": "shelfy-6a267",
+    "storage_bucket": "shelfy-6a267.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925051287267:android:7a383236335aab594ff7d6",
+        "android_client_info": {
+          "package_name": "com.example.shelfy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4dhJ1zMNIMJlrAMqveAZ7irvzOwP2nnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

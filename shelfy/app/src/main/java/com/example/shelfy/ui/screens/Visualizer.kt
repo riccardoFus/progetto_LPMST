@@ -240,6 +240,7 @@ fun Visualizer(
                                     .padding(7.dp))
                         }
                         var noteEnabled by remember {mutableStateOf(false)}
+
                         Row(){
                             IconButton(
                                 onClick = {
@@ -268,7 +269,6 @@ fun Visualizer(
                         Row(){
                             IconButton(
                                 onClick = {
-
                                 },
                             ){
                                 Icon(
@@ -279,7 +279,7 @@ fun Visualizer(
                                         .size(32.dp))
 
                             }
-                            Text(text = AnnotatedString("Aggiungi una recensione"),
+                            Text(text = AnnotatedString("Aggiungi una nota"),
                                 style = TextStyle(fontFamily = fonts,
                                     fontSize = 20.sp,
                                     color = BlueText
@@ -318,10 +318,48 @@ fun Visualizer(
                             }
                         }
 
+                            }
+                            Text(text = AnnotatedString("Aggiungi una recensione"),
+                                style = TextStyle(fontFamily = fonts,
+                                    fontSize = 20.sp,
+                                    color = BlueText
+                                ),
+                                textAlign = TextAlign.Justify,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(7.dp))
+                        }
+                        var note by remember { mutableStateOf("") }
+                        if(noteEnabled){
+                            Dialog(onDismissRequest = {}){
+                                TextField(singleLine = false,
+                                    value = note,
+                                    placeholder = { Text(text = "Inserisci note...", fontFamily = fonts, fontSize = 20.sp) },
+                                    onValueChange = { newText -> note = newText },
+                                    textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
+                                    modifier = Modifier
+                                        .height(100.dp),
+                                    shape = RoundedCornerShape(30.dp),
+                                    colors = TextFieldDefaults.colors(
+                                        focusedIndicatorColor = Color.Transparent,
+                                        unfocusedIndicatorColor = Color.Transparent
+                                    ),
+                                    trailingIcon = {
+                                        IconButton(onClick = { noteEnabled = false }) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                                contentDescription = "Search",
+                                                tint = BlueText,
+                                                modifier = Modifier
+                                                    .size(30.dp)
+                                            )
+                                        }
+                                    })}
+                        }
                     }
+
                 }
             }
-
         Row (
             modifier = Modifier
                 .background(color = BlackBar)

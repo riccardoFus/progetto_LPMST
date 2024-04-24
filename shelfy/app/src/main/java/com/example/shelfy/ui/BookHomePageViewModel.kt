@@ -5,11 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shelfy.data.db.Utente
 import com.example.shelfy.data.remote.responses.Books
 import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
-import kotlinx.coroutines.async
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class BookHomePageViewModel : ViewModel(){
@@ -53,6 +57,53 @@ class BookHomePageViewModel : ViewModel(){
             booksSearchUiState = Resource.Success<Books>(book)
         }
     }
+    
+
+    fun createUserInFirebase(
+        email: String,
+        password: String,
+        confirmPassword: String = "",
+        username: String = ""
+    ){
+        FirebaseAuth.getInstance()
+            .createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener{
+            }
+            .addOnFailureListener{
+            }
+        addUser(username, email, password)
+    }
+
+    fun logout(){
+        val firebaseAuth = FirebaseAuth.getInstance()
+
+        firebaseAuth.signOut()
+
+    }
+
+    fun login(email: String, password: String){
+        FirebaseAuth
+            .getInstance()
+            .signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+            }
+            .addOnFailureListener {
+            }
+    }
+
+    fun addUser(username: String, email: String, password: String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbUsers: CollectionReference = dB.collection("Users")
+
+        val user = Utente(username, email, password)
+
+        dbUsers.add(user).addOnSuccessListener {
+        }.addOnFailureListener {
+        }
+    }
+
+
+
     init{
         getBooksRecommendation1("giallo")
         getBooksRecommendation2("horror")

@@ -268,8 +268,13 @@ fun SignIn(
                         visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
-
-                OutlinedButton(onClick = {if (user.isNullOrBlank()) userEmpty = true; if (password.isNullOrBlank()) passwordEmpty = true; if(email.isNullOrBlank()) emailEmpty = true; if(password2.isNullOrBlank()) password2Empty = true}, modifier = Modifier
+                
+                OutlinedButton(onClick = {
+                    if (user.isNullOrBlank()) userEmpty = true
+                    if (password.isNullOrBlank()) passwordEmpty = true
+                    if(email.isNullOrBlank()) emailEmpty = true
+                    if(password2.isNullOrBlank()) password2Empty = true
+                                         viewModel.createUserInFirebase(email, password, password2, user)}, modifier = Modifier
                     .padding(2.dp)
                     .widthIn(120.dp),
                     content = {
