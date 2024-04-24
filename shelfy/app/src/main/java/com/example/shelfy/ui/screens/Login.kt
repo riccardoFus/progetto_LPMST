@@ -34,6 +34,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -111,10 +112,11 @@ fun Login(
                     fontFamily = fonts
                 )
                 var user by rememberSaveable { mutableStateOf("") }
+                var userEmpty by remember { mutableStateOf(false) }
                 Box() {
                     OutlinedTextField(
                         value = user,
-                        onValueChange = { newText -> user = newText },
+                        onValueChange = { newText -> user = newText; if (user.isNullOrBlank()) userEmpty = true else userEmpty = false },
                         placeholder = { Text(text = "Username")},
                         modifier = Modifier
                             .fillMaxWidth()
@@ -142,27 +144,34 @@ fun Login(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
+                        supportingText = {if (userEmpty) Text(text = "Campo obbligatorio", color = Color.Red)}
                     )
                 }
 
                 var password by rememberSaveable { mutableStateOf("") }
+                var passwordEmpty by remember { mutableStateOf(false) }
+                var passwordPressed by remember { mutableStateOf(false) }
                 Box(modifier = Modifier.padding(top = 20.dp)) {
                     OutlinedTextField(
                         value = password,
-                        onValueChange = { newText -> password = newText },
+                        onValueChange = { newText -> password = newText; if (password.isNullOrBlank()) passwordEmpty = true else passwordEmpty = false },
                         placeholder = { Text(text = "Password")},
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(10.dp),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp),
-                                tint = BlueText
-                            )
+                            IconButton(
+                                onClick = {passwordPressed = !passwordPressed }
+                            ){
+                                Icon(
+                                    painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(20.dp),
+                                    tint = BlueText,
+                                )
+                            }
                         },
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
@@ -177,11 +186,12 @@ fun Login(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
-                        visualTransformation = PasswordVisualTransformation()
+                        supportingText = {if (passwordEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
+                        visualTransformation = if (!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
 
-                OutlinedButton(onClick = {}, modifier = Modifier
+                OutlinedButton(onClick = {if (user.isNullOrBlank()) userEmpty = true; if (password.isNullOrBlank()) passwordEmpty = true}, modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),
@@ -236,7 +246,7 @@ fun Login(
                         .size(30.dp)
                 )
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {navController.navigate("HOME_SCREEN")}) {
                 Icon(
                     painter = painterResource(id = R.drawable.home_1024x919),
                     contentDescription = "Home",
