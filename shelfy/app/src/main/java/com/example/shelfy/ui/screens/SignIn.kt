@@ -37,6 +37,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -113,10 +114,11 @@ fun SignIn(
                     fontFamily = fonts
                 )
                 var user by rememberSaveable { mutableStateOf("") }
+                var userEmpty by remember { mutableStateOf(false) }
                 Box() {
                     OutlinedTextField(
                         value = user,
-                        onValueChange = { newText -> user = newText },
+                        onValueChange = { newText -> user = newText; if (user.isNullOrBlank()) userEmpty = true else userEmpty = false },
                         placeholder = { Text(text = "Username")},
                         modifier = Modifier
                             .fillMaxWidth()
@@ -131,6 +133,7 @@ fun SignIn(
                                 tint = BlueText
                             )
                         },
+                        supportingText = {if (userEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -148,10 +151,11 @@ fun SignIn(
                 }
 
                 var email by rememberSaveable { mutableStateOf("") }
+                var emailEmpty by remember { mutableStateOf(false) }
                 Box(modifier = Modifier.padding(top = 20.dp)) {
                     OutlinedTextField(
                         value = email,
-                        onValueChange = { newText -> email = newText },
+                        onValueChange = { newText -> email = newText; if (email.isNullOrBlank()) emailEmpty = true else emailEmpty = false },
                         placeholder = { Text(text = "Email")},
                         modifier = Modifier
                             .fillMaxWidth()
@@ -166,6 +170,7 @@ fun SignIn(
                                 tint = BlueText
                             )
                         },
+                        supportingText = {if (emailEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -183,10 +188,11 @@ fun SignIn(
                 }
 
                 var password by rememberSaveable { mutableStateOf("") }
+                var passwordEmpty by remember { mutableStateOf(false) }
                 Box(modifier = Modifier.padding(top = 20.dp)) {
                     OutlinedTextField(
                         value = password,
-                        onValueChange = { newText -> password = newText },
+                        onValueChange = { newText -> password = newText; if (password.isNullOrBlank()) passwordEmpty = true else passwordEmpty = false },
                         placeholder = { Text(text = "Password")},
                         modifier = Modifier
                             .fillMaxWidth()
@@ -201,6 +207,7 @@ fun SignIn(
                                 tint = BlueText
                             )
                         },
+                        supportingText = {if (passwordEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -218,10 +225,11 @@ fun SignIn(
                     )
                 }
                 var password2 by rememberSaveable { mutableStateOf("") }
+                var password2Empty by remember { mutableStateOf(false) }
                 Box(modifier = Modifier.padding(top = 20.dp)) {
                     OutlinedTextField(
                         value = password2,
-                        onValueChange = { newText -> password2 = newText },
+                        onValueChange = { newText -> password2 = newText; if (password2.isNullOrBlank()) password2Empty = true else password2Empty = false },
                         placeholder = { Text(text = "Ripeti password")},
                         modifier = Modifier
                             .fillMaxWidth()
@@ -236,6 +244,7 @@ fun SignIn(
                                 tint = BlueText
                             )
                         },
+                        supportingText = {if (password2Empty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
                             unfocusedTextColor = BlueText,
                             unfocusedBorderColor = BlueText,
@@ -253,7 +262,7 @@ fun SignIn(
                     )
                 }
 
-                OutlinedButton(onClick = {}, modifier = Modifier
+                OutlinedButton(onClick = {if (user.isNullOrBlank()) userEmpty = true; if (password.isNullOrBlank()) passwordEmpty = true; if(email.isNullOrBlank()) emailEmpty = true; if(password2.isNullOrBlank()) password2Empty = true}, modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
                     content = {
