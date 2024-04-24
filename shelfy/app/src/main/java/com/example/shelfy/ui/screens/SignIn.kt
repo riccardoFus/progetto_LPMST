@@ -189,6 +189,7 @@ fun SignIn(
 
                 var password by rememberSaveable { mutableStateOf("") }
                 var passwordEmpty by remember { mutableStateOf(false) }
+                var passwordPressed by remember { mutableStateOf(false) }
                 Box(modifier = Modifier.padding(top = 20.dp)) {
                     OutlinedTextField(
                         value = password,
@@ -199,13 +200,17 @@ fun SignIn(
                             .padding(10.dp),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp),
-                                tint = BlueText
-                            )
+                            IconButton(
+                                onClick = {passwordPressed = !passwordPressed}
+                            ){
+                                Icon(
+                                    painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(20.dp),
+                                    tint = BlueText
+                                )
+                            }
                         },
                         supportingText = {if (passwordEmpty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(
@@ -226,6 +231,7 @@ fun SignIn(
                 }
                 var password2 by rememberSaveable { mutableStateOf("") }
                 var password2Empty by remember { mutableStateOf(false) }
+                var password2Pressed by remember { mutableStateOf(false)}
                 Box(modifier = Modifier.padding(top = 20.dp)) {
                     OutlinedTextField(
                         value = password2,
@@ -236,13 +242,17 @@ fun SignIn(
                             .padding(10.dp),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp),
-                                tint = BlueText
-                            )
+                            IconButton(
+                                onClick = {password2Pressed = !password2Pressed}
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(20.dp),
+                                    tint = BlueText
+                                )
+                            }
                         },
                         supportingText = {if (password2Empty) Text(text = "Campo obbligatorio", color = Color.Red)},
                         colors = OutlinedTextFieldDefaults.colors(

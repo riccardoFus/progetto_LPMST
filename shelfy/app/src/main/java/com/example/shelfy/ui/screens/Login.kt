@@ -162,7 +162,7 @@ fun Login(
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
                             IconButton(
-                                onClick = {if (passwordPressed) passwordPressed = false else passwordPressed = true }
+                                onClick = {passwordPressed = !passwordPressed }
                             ){
                                 Icon(
                                     painter = painterResource(id = R.drawable.eye_password_show_svgrepo_com),
