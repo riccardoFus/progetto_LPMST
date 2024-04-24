@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -59,6 +60,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    implementation("com.google.firebase:firebase-functions-ktx:20.4.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.11.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -75,4 +79,20 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    // Import the Firebase BoM
+
+    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+
+    implementation("com.google.firebase:firebase-analytics")
+
+
+    // Add the dependencies for any other desired Firebase products
+
+    // https://firebase.google.com/docs/android/setup#available-libraries
+
+
 }
