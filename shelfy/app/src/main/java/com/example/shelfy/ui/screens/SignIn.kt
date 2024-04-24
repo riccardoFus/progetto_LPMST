@@ -104,7 +104,7 @@ fun SignIn(
         ) {
             Column (modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(11.dp),
                 horizontalAlignment = Alignment.CenterHorizontally){
 
                 Text(
@@ -122,8 +122,7 @@ fun SignIn(
                         onValueChange = { newText -> user = newText; if (user.isNullOrBlank()) userEmpty = true else userEmpty = false },
                         placeholder = { Text(text = "Username")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         leadingIcon = {
                             Icon(
@@ -153,14 +152,13 @@ fun SignIn(
 
                 var email by rememberSaveable { mutableStateOf("") }
                 var emailEmpty by remember { mutableStateOf(false) }
-                Box(modifier = Modifier.padding(top = 20.dp)) {
+                Box(modifier = Modifier.padding(top = 15.dp)) {
                     OutlinedTextField(
                         value = email,
                         onValueChange = { newText -> email = newText; if (email.isNullOrBlank()) emailEmpty = true else emailEmpty = false },
                         placeholder = { Text(text = "Email")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         leadingIcon = {
                             Icon(
@@ -191,14 +189,13 @@ fun SignIn(
                 var password by rememberSaveable { mutableStateOf("") }
                 var passwordEmpty by remember { mutableStateOf(false) }
                 var passwordPressed by remember { mutableStateOf(false) }
-                Box(modifier = Modifier.padding(top = 20.dp)) {
+                Box(modifier = Modifier.padding(top = 15.dp)) {
                     OutlinedTextField(
                         value = password,
                         onValueChange = { newText -> password = newText; if (password.isNullOrBlank()) passwordEmpty = true else passwordEmpty = false },
                         placeholder = { Text(text = "Password")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
                             IconButton(
@@ -233,14 +230,13 @@ fun SignIn(
                 var password2 by rememberSaveable { mutableStateOf("") }
                 var password2Empty by remember { mutableStateOf(false) }
                 var password2Pressed by remember { mutableStateOf(false)}
-                Box(modifier = Modifier.padding(top = 20.dp)) {
+                Box(modifier = Modifier.padding(top = 15.dp)) {
                     OutlinedTextField(
                         value = password2,
                         onValueChange = { newText -> password2 = newText; if (password2.isNullOrBlank()) password2Empty = true else password2Empty = false },
                         placeholder = { Text(text = "Ripeti password")},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
+                            .fillMaxWidth(),
                         textStyle = TextStyle(fontSize = 20.sp, color = BlueText),
                         trailingIcon = {
                             IconButton(
@@ -274,7 +270,7 @@ fun SignIn(
                 }
 
                 OutlinedButton(onClick = {if (user.isNullOrBlank()) userEmpty = true; if (password.isNullOrBlank()) passwordEmpty = true; if(email.isNullOrBlank()) emailEmpty = true; if(password2.isNullOrBlank()) password2Empty = true}, modifier = Modifier
-                    .padding(20.dp)
+                    .padding(2.dp)
                     .widthIn(120.dp),
                     content = {
                         Text(text = "Sign In", modifier = Modifier
@@ -302,7 +298,8 @@ fun SignIn(
 
 
                 OutlinedButton(onClick = {navController.navigate("LOGIN_SCREEN")}, modifier = Modifier
-                    .widthIn(185.dp),
+                    .widthIn(185.dp)
+                    .padding(20.dp),
                     content = {
                         Text(text = "Sei già un utente?", modifier = Modifier
                             .align(Alignment.CenterVertically),
