@@ -227,7 +227,7 @@ fun SignIn(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
-                        visualTransformation = if(passwordPressed) PasswordVisualTransformation() else VisualTransformation.None
+                        visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
                 var password2 by rememberSaveable { mutableStateOf("") }
@@ -269,7 +269,7 @@ fun SignIn(
                             unfocusedPlaceholderColor = BlueText,
                             focusedPlaceholderColor = BlueText
                         ),
-                        visualTransformation = if(password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
+                        visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
 
