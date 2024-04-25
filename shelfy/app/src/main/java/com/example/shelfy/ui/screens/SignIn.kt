@@ -274,7 +274,10 @@ fun SignIn(
                     if (password.isNullOrBlank()) passwordEmpty = true
                     if(email.isNullOrBlank()) emailEmpty = true
                     if(password2.isNullOrBlank()) password2Empty = true
-                                         viewModel.createUserInFirebase(email, password, password2, user)}, modifier = Modifier
+                    if(!userEmpty && !emailEmpty && !passwordEmpty && !password2Empty){
+                        viewModel.createUserInFirebase(email, password, password2, user)
+                    }},
+                    modifier = Modifier
                     .padding(2.dp)
                     .widthIn(120.dp),
                     content = {
