@@ -87,7 +87,7 @@ fun Visualizer(
                 .weight(1f)
                 .background(color = BlackBar),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             Text(
                 text = "SHELFY",
                 color = BlueText,
@@ -105,18 +105,20 @@ fun Visualizer(
                 .weight(10f)
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState()),
-        ){
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(8.dp)
-                    .fillMaxWidth()) {
+                    .fillMaxWidth()
+            ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(
                             ("https://" + (viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.substring(
                                 7
-                            ) ?: "store.bookbaby.com/BookShop/CommonControls/BookshopThemes/bookshop/OnePageBookCoverImage.jpg?BookID=BK00014296&abOnly=False&ImageType=Back"))
+                            )
+                                ?: "store.bookbaby.com/BookShop/CommonControls/BookshopThemes/bookshop/OnePageBookCoverImage.jpg?BookID=BK00014296&abOnly=False&ImageType=Back"))
                         )
                         .crossfade(true)
                         .build(),
@@ -132,30 +134,51 @@ fun Visualizer(
                     contentScale = ContentScale.Crop,
                 )
 
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)) {
-                    Column (
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Column(
                         modifier = Modifier.weight(1f)
-                    ){
-                        Text(text = (viewModel.bookUiState.data?.volumeInfo?.title ?: "No Titolo"), color = BlueText, fontSize = 25.sp,
+                    ) {
+                        Text(
+                            text = (viewModel.bookUiState.data?.volumeInfo?.title ?: "No Titolo"),
+                            color = BlueText,
+                            fontSize = 25.sp,
                             modifier = Modifier
                                 .padding(top = 2.dp)
-                                .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                            textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis)
-                        Text(text = (viewModel.bookUiState.data?.volumeInfo?.authors.toString().replace("[","").replace("]","")), color = WhiteText, fontSize = 12.sp,
+                                .fillMaxWidth(),
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = fonts,
+                            textAlign = TextAlign.Left,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = (viewModel.bookUiState.data?.volumeInfo?.authors.toString()
+                                .replace("[", "").replace("]", "")),
+                            color = WhiteText,
+                            fontSize = 12.sp,
                             modifier = Modifier
                                 .padding(top = 2.dp)
-                                .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                            textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis)
+                                .fillMaxWidth(),
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = fonts,
+                            textAlign = TextAlign.Left,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
 
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, viewModel.bookUiState.data?.volumeInfo?.infoLink)
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            viewModel.bookUiState.data?.volumeInfo?.infoLink
+                        )
                         type = "text/plain"
                     }
-                    val shareIntent = android.content.Intent.createChooser(sendIntent, null); val context = androidx.compose.ui.platform.LocalContext.current;
+                    val shareIntent = android.content.Intent.createChooser(sendIntent, null);
+                    val context = androidx.compose.ui.platform.LocalContext.current;
                     IconButton(onClick = { context.startActivity(shareIntent) }) {
                         Icon(
                             painter = painterResource(id = R.drawable.share_1024x896),
@@ -167,22 +190,27 @@ fun Visualizer(
                         )
                     }
                 }
-                var showTrama by remember {mutableStateOf(false)}
-                Text(text = "Trama: " +(viewModel.bookUiState.data?.volumeInfo?.description ?: "No trama"), color = WhiteText, fontSize = 16.sp,
+                var showTrama by remember { mutableStateOf(false) }
+                Text(
+                    text = "Trama: " + (viewModel.bookUiState.data?.volumeInfo?.description
+                        ?: "No trama"), color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth()
                         .clickable { showTrama = !showTrama },
                     fontWeight = FontWeight.SemiBold, fontFamily = fonts,
                     textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
-                    maxLines = if (showTrama) Int.MAX_VALUE else 7)
+                    maxLines = if (showTrama) Int.MAX_VALUE else 7
+                )
 
 
-                Text(text = "Numero ratings - Media ratings", color = WhiteText, fontSize = 16.sp,
+                Text(
+                    text = "Numero ratings - Media ratings", color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                    textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis)
+                    textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
+                )
 
 
                 Box(
@@ -191,110 +219,100 @@ fun Visualizer(
                         .padding(10.dp)
                         .background(color = BlackPage),
                     contentAlignment = Alignment.TopStart
-                ){
+                ) {
                     Column(
-                    ){
-                        Row(){
+                    ) {
+                        Row() {
                             IconButton(
                                 onClick = {},
-                            ){
+                            ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
                                     contentDescription = "Aggiungi libro",
                                     tint = BlueText,
                                     modifier = Modifier
-                                        .size(32.dp))
-
+                                        .size(32.dp)
+                                )
                             }
-                            Text(text = AnnotatedString("Aggiungi alla libreria"),
-                                style = TextStyle(fontFamily = fonts,
+                            Text(
+                                text = AnnotatedString("Aggiungi alla libreria"),
+                                style = TextStyle(
+                                    fontFamily = fonts,
                                     fontSize = 20.sp,
                                     color = BlueText
                                 ),
                                 textAlign = TextAlign.Justify,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(7.dp))
+                                    .padding(7.dp)
+                            )
                         }
-
-                        Row(){
+                        Row() {
                             IconButton(
                                 onClick = {},
-                            ){
+                            ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
                                     contentDescription = "Aggiungi libro",
                                     tint = BlueText,
                                     modifier = Modifier
-                                        .size(32.dp))
-
+                                        .size(32.dp)
+                                )
                             }
-                            Text(text = AnnotatedString("Aggiungi a una readlist"),
-                                style = TextStyle(fontFamily = fonts,
+                            Text(
+                                text = AnnotatedString("Aggiungi a una readlist"),
+                                style = TextStyle(
+                                    fontFamily = fonts,
                                     fontSize = 20.sp,
                                     color = BlueText
                                 ),
                                 textAlign = TextAlign.Justify,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(7.dp))
+                                    .padding(7.dp)
+                            )
                         }
-                        var noteEnabled by remember {mutableStateOf(false)}
+                        var noteEnabled by remember { mutableStateOf(false) }
 
-                        Row(){
-                            IconButton(
-                                onClick = {
-                                          noteEnabled = true
-                                },
-                            ){
-                                Icon(
-                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                    contentDescription = "Aggiungi libro",
-                                    tint = BlueText,
-                                    modifier = Modifier
-                                        .size(32.dp))
-
-                            }
-                            Text(text = AnnotatedString("Aggiungi una nota"),
-                                style = TextStyle(fontFamily = fonts,
-                                    fontSize = 20.sp,
-                                    color = BlueText
-                                ),
-                                textAlign = TextAlign.Justify,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(7.dp))
-                        }
-
-                        Row(){
+                        Row() {
                             IconButton(
                                 onClick = {
                                 },
-                            ){
+                            ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                    contentDescription = "Aggiungi libro",
+                                    contentDescription = "Aggiungi una nota",
                                     tint = BlueText,
                                     modifier = Modifier
-                                        .size(32.dp))
-
+                                        .size(32.dp)
+                                )
                             }
-                            Text(text = AnnotatedString("Aggiungi una nota"),
-                                style = TextStyle(fontFamily = fonts,
+                            ClickableText(
+                                text = AnnotatedString("Aggiungi una nota"),
+                                onClick = {noteEnabled = true},
+                                style = TextStyle(
+                                    fontFamily = fonts,
                                     fontSize = 20.sp,
-                                    color = BlueText
+                                    color = BlueText,
+                                    textAlign = TextAlign.Justify,
                                 ),
-                                textAlign = TextAlign.Justify,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(7.dp))
+                                    .padding(7.dp)
+                            )
                         }
                         var note by remember { mutableStateOf("") }
-                        if(noteEnabled){
-                            Dialog(onDismissRequest = {}){
+                        if (noteEnabled) {
+                            Dialog(onDismissRequest = {noteEnabled = false}) {
                                 TextField(singleLine = false,
                                     value = note,
-                                    placeholder = { Text(text = "Inserisci note...", fontFamily = fonts, fontSize = 20.sp) },
+                                    placeholder = {
+                                        Text(
+                                            text = "Inserisci note...",
+                                            fontFamily = fonts,
+                                            fontSize = 20.sp
+                                        )
+                                    },
                                     onValueChange = { newText -> note = newText },
                                     textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
                                     modifier = Modifier
@@ -302,7 +320,7 @@ fun Visualizer(
                                     shape = RoundedCornerShape(30.dp),
                                     colors = TextFieldDefaults.colors(
                                         focusedIndicatorColor = Color.Transparent,
-                                        unfocusedIndicatorColor = Color.Transparent
+                                        unfocusedIndicatorColor = Color.Transparent,
                                     ),
                                     trailingIcon = {
                                         IconButton(onClick = { noteEnabled = false }) {
@@ -314,59 +332,47 @@ fun Visualizer(
                                                     .size(30.dp)
                                             )
                                         }
-                                    })}
+                                    })
                             }
                         }
-
+                        Row(){
+                            IconButton(
+                                onClick = {
+                                },
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                    contentDescription = "Aggiungi libro",
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                )
                             }
-                            Text(text = AnnotatedString("Aggiungi una recensione"),
-                                style = TextStyle(fontFamily = fonts,
+                            ClickableText(
+                                text = AnnotatedString("Aggiungi una recensione"),
+                                onClick = {},
+                                style = TextStyle(
+                                    fontFamily = fonts,
                                     fontSize = 20.sp,
-                                    color = BlueText
+                                    color = BlueText,
+                                    textAlign = TextAlign.Justify,
                                 ),
-                                textAlign = TextAlign.Justify,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(7.dp))
-                        }
-                        var note by remember { mutableStateOf("") }
-                        if(noteEnabled){
-                            Dialog(onDismissRequest = {}){
-                                TextField(singleLine = false,
-                                    value = note,
-                                    placeholder = { Text(text = "Inserisci note...", fontFamily = fonts, fontSize = 20.sp) },
-                                    onValueChange = { newText -> note = newText },
-                                    textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
-                                    modifier = Modifier
-                                        .height(100.dp),
-                                    shape = RoundedCornerShape(30.dp),
-                                    colors = TextFieldDefaults.colors(
-                                        focusedIndicatorColor = Color.Transparent,
-                                        unfocusedIndicatorColor = Color.Transparent
-                                    ),
-                                    trailingIcon = {
-                                        IconButton(onClick = { noteEnabled = false }) {
-                                            Icon(
-                                                painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                                contentDescription = "Search",
-                                                tint = BlueText,
-                                                modifier = Modifier
-                                                    .size(30.dp)
-                                            )
-                                        }
-                                    })}
+                                    .padding(7.dp)
+                            )
                         }
                     }
-
                 }
             }
-        Row (
+        }
+        Row(
             modifier = Modifier
                 .background(color = BlackBar)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
-        ){
-            IconButton(onClick = {navController.navigate("SEARCH_SCREEN")}) {
+        ) {
+            IconButton(onClick = { navController.navigate("SEARCH_SCREEN") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.search_outline_1024x1024),
                     contentDescription = "Search",
@@ -376,7 +382,7 @@ fun Visualizer(
                         .size(30.dp)
                 )
             }
-            IconButton(onClick = {navController.navigate("HOME_SCREEN")}) {
+            IconButton(onClick = { navController.navigate("HOME_SCREEN") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.home_1024x919),
                     contentDescription = "Search",
@@ -386,7 +392,7 @@ fun Visualizer(
                         .size(30.dp)
                 )
             }
-            IconButton(onClick = {navController.navigate("PROFILE_SCREEN")}) {
+            IconButton(onClick = { navController.navigate("PROFILE_SCREEN") }) {
                 Icon(
                     painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
                     contentDescription = "Search",
@@ -397,10 +403,7 @@ fun Visualizer(
                 )
             }
         }
-        }
-
-
-
+    }
 }
 
 @Preview
