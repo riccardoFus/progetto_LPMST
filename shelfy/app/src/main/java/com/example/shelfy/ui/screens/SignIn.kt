@@ -268,7 +268,7 @@ fun SignIn(
                         visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
                     )
                 }
-
+                
                 OutlinedButton(onClick = {
                     if (user.isNullOrBlank()) userEmpty = true
                     if (password.isNullOrBlank()) passwordEmpty = true
