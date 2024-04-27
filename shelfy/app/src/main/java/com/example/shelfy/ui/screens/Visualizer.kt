@@ -168,7 +168,6 @@ fun Visualizer(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(
@@ -191,9 +190,16 @@ fun Visualizer(
                     }
                 }
                 var showTrama by remember { mutableStateOf(false) }
+                var text = viewModel.bookUiState.data?.volumeInfo?.description
+                    ?: "Trama non disponibile"
+                text = text.replace("<p>","")
+                text = text.replace("</p>", "")
+                text = text.replace("<br>", "")
+                text = text.replace("</br>", "")
+                text = text.replace("<b>", "")
+                text = text.replace("</b>", "")
                 Text(
-                    text = "Trama: " + (viewModel.bookUiState.data?.volumeInfo?.description
-                        ?: "No trama"), color = WhiteText, fontSize = 16.sp,
+                    text = text, color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth()
@@ -202,8 +208,6 @@ fun Visualizer(
                     textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
                     maxLines = if (showTrama) Int.MAX_VALUE else 7
                 )
-
-
                 Text(
                     text = "Numero ratings - Media ratings", color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
@@ -211,8 +215,6 @@ fun Visualizer(
                         .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
                     textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
                 )
-
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -349,7 +351,7 @@ fun Visualizer(
                                     IconButton(onClick = {review = 1}){
                                         Icon(
                                             painter = painterResource(id = if (review > 0) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr) ,
-                                            contentDescription = "Search",
+                                            contentDescription = "1 stella",
                                             tint = Color.Yellow,
                                             modifier = Modifier
                                                 .size(50.dp)
@@ -359,7 +361,7 @@ fun Visualizer(
                                     IconButton(onClick = {review = 2}){
                                         Icon(
                                             painter = painterResource(id = if (review > 1) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
-                                            contentDescription = "Search",
+                                            contentDescription = "2 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier
                                                 .size(50.dp)
@@ -369,7 +371,7 @@ fun Visualizer(
                                     IconButton(onClick = {review = 3}){
                                         Icon(
                                             painter = painterResource(id = if (review > 2) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
-                                            contentDescription = "Search",
+                                            contentDescription = "3 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier
                                                 .size(50.dp)
@@ -379,7 +381,7 @@ fun Visualizer(
                                     IconButton(onClick = {review = 4}){
                                         Icon(
                                             painter = painterResource(id = if (review > 3 ) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
-                                            contentDescription = "Search",
+                                            contentDescription = "4 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier
                                                 .size(50.dp)
@@ -389,7 +391,7 @@ fun Visualizer(
                                     IconButton(onClick = {review = 5}){
                                         Icon(
                                             painter = painterResource(id = if (review > 4) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
-                                            contentDescription = "Search",
+                                            contentDescription = "5 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier
                                                 .size(50.dp)
