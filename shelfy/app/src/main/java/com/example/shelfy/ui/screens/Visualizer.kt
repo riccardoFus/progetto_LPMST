@@ -277,6 +277,7 @@ fun Visualizer(
                         Row() {
                             IconButton(
                                 onClick = {
+                                          noteEnabled = true
                                 },
                             ) {
                                 Icon(
@@ -308,7 +309,7 @@ fun Visualizer(
                                     value = note,
                                     placeholder = {
                                         Text(
-                                            text = "Inserisci note...",
+                                            text = "Inserisci nota...",
                                             fontFamily = fonts,
                                             fontSize = 20.sp
                                         )
@@ -335,6 +336,75 @@ fun Visualizer(
                                     })
                             }
                         }
+                        var reviewEnabled by remember { mutableStateOf(false) }
+                        var review by remember {mutableStateOf(0)}
+                        if (reviewEnabled) {
+                            Dialog(onDismissRequest = { reviewEnabled = false }) {
+                                Column(modifier = Modifier
+                                    .background(Color.Transparent)
+                                    .width(300.dp)
+                                    .height(300.dp)
+                                    .fillMaxWidth()){
+                                Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
+                                    IconButton(onClick = {review = 1}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 0) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr) ,
+                                            contentDescription = "Search",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 2}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 1) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            contentDescription = "Search",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 3}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 2) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            contentDescription = "Search",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 4}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 3 ) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            contentDescription = "Search",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 5}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 4) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            contentDescription = "Search",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                }
+                                    IconButton(onClick = {reviewEnabled = false}, modifier = Modifier
+                                        .padding(11.dp)
+                                        .align(Alignment.CenterHorizontally)){
+                                        Icon(painter = painterResource(R.drawable.add_circle_plus_1024x1024), contentDescription = "Aggiungi", tint = BlueText, modifier = Modifier.size(30.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
                         Row(){
                             IconButton(
                                 onClick = {
@@ -350,7 +420,7 @@ fun Visualizer(
                             }
                             ClickableText(
                                 text = AnnotatedString("Aggiungi una recensione"),
-                                onClick = {},
+                                onClick = {reviewEnabled = true},
                                 style = TextStyle(
                                     fontFamily = fonts,
                                     fontSize = 20.sp,

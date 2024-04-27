@@ -116,7 +116,7 @@ fun Search(
                 TextField(
                     singleLine = true,
                     value = text,
-                    placeholder = { Text(text = "Cerca libro...") },
+                    placeholder = { Text(text = "Cerca libro...", fontFamily = fonts, fontSize = 20.sp) },
                     onValueChange = { newText -> text = newText },
                     modifier = Modifier
                         .padding(8.dp)
@@ -130,6 +130,7 @@ fun Search(
                             }
                             true
                         },
+
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = {
                         query = text.replace(" ", "+")
