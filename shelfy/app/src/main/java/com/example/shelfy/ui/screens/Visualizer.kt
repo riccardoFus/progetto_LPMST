@@ -98,7 +98,6 @@ fun Visualizer(
                     .padding(8.dp)
             )
         }
-
         Box(
             modifier = Modifier
                 .background(color = BlackPage)
