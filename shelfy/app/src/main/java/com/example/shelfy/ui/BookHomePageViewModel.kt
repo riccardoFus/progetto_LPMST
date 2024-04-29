@@ -112,8 +112,10 @@ class BookHomePageViewModel : ViewModel(){
         }
     }
 
+
     fun addReview(id: String, stars: Int, text: String){
-        val dbRecensioni  = FirebaseDatabase.getInstance().getReference("https://shelfy-6a267-default-rtdb.europe-west1.firebasedatabase.app")
+        val dB: FirebaseDatabase = FirebaseDatabase.getInstance("https://shelfy-6a267-default-rtdb.europe-west1.firebasedatabase.app")
+        val dbRecensioni  = FirebaseDatabase.getInstance().getReference("https://shelfy-6a267-default-rtdb.europe-west1.firebasedatabase.app/Recensioni")
         val reviewId: String? = dbRecensioni.push().key
         val review = Recensione(reviewId, id, stars, text)
         dbRecensioni.setValue(reviewId).addOnSuccessListener {
