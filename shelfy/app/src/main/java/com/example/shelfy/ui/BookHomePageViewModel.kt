@@ -118,7 +118,7 @@ class BookHomePageViewModel : ViewModel(){
         val dbRecensioni  = dB.getReference("Recensioni")
         val reviewId = dbRecensioni.push().key!!
         val review = Recensione(reviewId, id, stars, text)
-        dbRecensioni.child(reviewId).setValue(reviewId).addOnSuccessListener {
+        dbRecensioni.child(reviewId).setValue(review).addOnSuccessListener {
         }.addOnFailureListener {
         }
     }
