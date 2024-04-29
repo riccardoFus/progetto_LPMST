@@ -198,7 +198,7 @@ fun Visualizer(
                 text = text.replace("<b>", "")
                 text = text.replace("</b>", "")
                 text = text.replace("<i>", "")
-                text = text.replace("<i>", "")
+                text = text.replace("</i>", "")
                 Text(
                     text = text, color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
@@ -352,47 +352,47 @@ fun Visualizer(
                                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
                                     IconButton(onClick = {review = 1}){
                                         Icon(
-                                            painter = painterResource(id = if (review > 0) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr) ,
+                                            painter = painterResource(id = if (review > 0) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24) ,
                                             contentDescription = "1 stella",
                                             tint = Color.Yellow,
                                             modifier = Modifier
-                                                .size(50.dp)
+                                                .size(70.dp)
                                         )
                                     }
                                     Spacer(modifier = Modifier.width(11.dp))
                                     IconButton(onClick = {review = 2}){
                                         Icon(
-                                            painter = painterResource(id = if (review > 1) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            painter = painterResource(id = if (review > 1) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
                                             contentDescription = "2 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier
-                                                .size(50.dp)
+                                                .size(70.dp)
                                         )
                                     }
                                     Spacer(modifier = Modifier.width(11.dp))
                                     IconButton(onClick = {review = 3}){
                                         Icon(
-                                            painter = painterResource(id = if (review > 2) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            painter = painterResource(id = if (review > 2) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
                                             contentDescription = "3 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier
-                                                .size(50.dp)
+                                                .size(70.dp)
                                         )
                                     }
                                     Spacer(modifier = Modifier.width(11.dp))
                                     IconButton(onClick = {review = 4}){
                                         Icon(
-                                            painter = painterResource(id = if (review > 3 ) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            painter = painterResource(id = if (review > 3 ) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
                                             contentDescription = "4 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier
-                                                .size(50.dp)
+                                                .size(70.dp)
                                         )
                                     }
                                     Spacer(modifier = Modifier.width(11.dp))
                                     IconButton(onClick = {review = 5}){
                                         Icon(
-                                            painter = painterResource(id = if (review > 4) R.drawable.add_circle_plus_1024x1024 else R.drawable.profile_icon_512x512_w0uaq4yr),
+                                            painter = painterResource(id = if (review > 4) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
                                             contentDescription = "5 stelle",
                                             tint = Color.Yellow,
                                             modifier = Modifier

@@ -13,6 +13,7 @@ import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -80,7 +81,6 @@ class BookHomePageViewModel : ViewModel(){
         stars : Int,
         text: String = "",
     ){
-        FirebaseFirestore.getInstance()
         addReview(id, stars, text)
     }
 
@@ -113,12 +113,11 @@ class BookHomePageViewModel : ViewModel(){
     }
 
     fun addReview(id: String, stars: Int, text: String){
-        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val dbRecensioni: CollectionReference = dB.collection("Recensioni")
-
-        val review = Recensione(id, stars, text)
-
-        dbRecensioni.add(review).addOnSuccessListener {
+        val dB: FirebaseDatabase = FirebaseDatabase.getInstance("https://shelfy-6a267-default-rtdb.europe-west1.firebasedatabase.app/")
+        val dbRecensioni  = FirebaseDatabase.getInstance().getReference("Recensioni")
+        val reviewId: String? = dbRecensioni.push().key
+        val review = Recensione(reviewId, id, stars, text)
+        dbRecensioni.setValue(reviewId).addOnSuccessListener {
         }.addOnFailureListener {
         }
     }
