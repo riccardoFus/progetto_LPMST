@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shelfy.data.db.Recensione
 import com.example.shelfy.data.db.Utente
 import com.example.shelfy.data.remote.responses.Books
 import com.example.shelfy.data.remote.responses.Item
@@ -74,6 +75,15 @@ class BookHomePageViewModel : ViewModel(){
         addUser(username, email, password)
     }
 
+    fun createReviewInFirebase(
+        id : String,
+        stars : Int,
+        text: String = "",
+    ){
+        FirebaseFirestore.getInstance()
+        addReview(id, stars, text)
+    }
+
     fun logout(){
         val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -98,6 +108,17 @@ class BookHomePageViewModel : ViewModel(){
         val user = Utente(username, email, password)
 
         dbUsers.add(user).addOnSuccessListener {
+        }.addOnFailureListener {
+        }
+    }
+
+    fun addReview(id: String, stars: Int, text: String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbRecensioni: CollectionReference = dB.collection("Recensioni")
+
+        val review = Recensione(id, stars, text)
+
+        dbRecensioni.add(review).addOnSuccessListener {
         }.addOnFailureListener {
         }
     }

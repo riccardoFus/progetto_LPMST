@@ -197,6 +197,8 @@ fun Visualizer(
                 text = text.replace("</br>", "")
                 text = text.replace("<b>", "")
                 text = text.replace("</b>", "")
+                text = text.replace("<i>", "")
+                text = text.replace("<i>", "")
                 Text(
                     text = text, color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
@@ -339,12 +341,13 @@ fun Visualizer(
                         }
                         var reviewEnabled by remember { mutableStateOf(false) }
                         var review by remember {mutableStateOf(0)}
+                        var id = viewModel.bookUiState.data?.id
                         if (reviewEnabled) {
                             Dialog(onDismissRequest = { reviewEnabled = false }) {
                                 Column(modifier = Modifier
                                     .background(Color.Transparent)
                                     .width(300.dp)
-                                    .height(300.dp)
+                                    .height(500.dp)
                                     .fillMaxWidth()){
                                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
                                     IconButton(onClick = {review = 1}){
@@ -397,7 +400,24 @@ fun Visualizer(
                                         )
                                     }
                                 }
-                                    IconButton(onClick = {reviewEnabled = false}, modifier = Modifier
+                                    var text by rememberSaveable { mutableStateOf("") }
+                                    TextField(value = text,
+                                        placeholder = { Text(text = "Testo recensione...", fontFamily = fonts, fontSize = 20.sp) },
+                                        onValueChange = { newText -> text = newText },
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .clip(RoundedCornerShape(20.dp))
+                                            .height(100.dp),
+                                        colors = TextFieldDefaults.colors(
+                                            focusedIndicatorColor = Color.Transparent
+                                        ),
+                                        textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp))
+                                    IconButton(onClick = {
+                                        reviewEnabled = false
+                                        if (id != null) {
+                                            viewModel.createReviewInFirebase(id, review, text)
+                                        }
+                                    }, modifier = Modifier
                                         .padding(11.dp)
                                         .align(Alignment.CenterHorizontally)){
                                         Icon(painter = painterResource(R.drawable.add_circle_plus_1024x1024), contentDescription = "Aggiungi", tint = BlueText, modifier = Modifier.size(30.dp)
