@@ -209,8 +209,13 @@ fun Visualizer(
                     textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
                     maxLines = if (showTrama) Int.MAX_VALUE else 7
                 )
+                var id = viewModel.bookUiState.data?.id
+                var reviews = Pair<Int, Double>(1,1.0)
+                if(id != null) {
+                    reviews = viewModel.getReviews(id)
+                }
                 Text(
-                    text = "Numero ratings - Media ratings", color = WhiteText, fontSize = 16.sp,
+                    text = reviews.first.toString() + "-" + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
@@ -341,7 +346,6 @@ fun Visualizer(
                         }
                         var reviewEnabled by remember { mutableStateOf(false) }
                         var review by remember {mutableStateOf(0)}
-                        var id = viewModel.bookUiState.data?.id
                         if (reviewEnabled) {
                             Dialog(onDismissRequest = { reviewEnabled = false }) {
                                 Column(modifier = Modifier
