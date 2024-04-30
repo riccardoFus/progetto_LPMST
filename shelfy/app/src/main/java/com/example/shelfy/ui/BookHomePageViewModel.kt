@@ -1,6 +1,5 @@
 package com.example.shelfy.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,19 +12,23 @@ import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
+
 class BookHomePageViewModel : ViewModel(){
     var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation2 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation3 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+    var sum: Int? = 0
+    var total = 0;
+    var chiamate = 0
     public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -128,27 +131,28 @@ class BookHomePageViewModel : ViewModel(){
     }
 
     fun getReviews(bookId : String): Pair<Int, Double>{
-        var tot = Pair<Int, Double>(0, 0.0)
         val dB: FirebaseDatabase = FirebaseDatabase.getInstance("https://shelfy-6a267-default-rtdb.europe-west1.firebasedatabase.app")
         val dbRecensioni  = dB.getReference("Recensioni")
-        val reviews = dbRecensioni.child(bookId)
-        var sum: Int? = 0
-        var total = 0;
-        val valueEventListener = object : ValueEventListener{
+        val query: Query = dbRecensioni.orderByChild("bookId").equalTo(bookId)
+        query.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
+                chiamate++
                 for(ds in snapshot.children){
                     total++
                     sum = sum?.plus(ds.child("stars").getValue(Int::class.java)!!)
-                    System.out.println("Ciao " + total.toString() + " " + sum)
+                    System.out.println("Ciao " + total.toString() + " " + sum + " stavo cercando le recensioni per " + bookId + " e ho trovato " + ds.child("desc").getValue(String::class.java) + " e questa è la chiamata numero " + chiamate)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
+        })
+        var tot = Pair<Int, Double>(0,0.0)
+        if(sum != 0) {
+            tot = Pair<Int, Double>(total, sum!!.toDouble() / total)
         }
-        dbRecensioni.addValueEventListener(valueEventListener)
-        tot = Pair<Int, Double>(total, sum!!.toDouble() / total)
+        total = 0
+        sum = 0
         return tot
     }
 

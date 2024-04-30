@@ -210,7 +210,7 @@ fun Visualizer(
                     maxLines = if (showTrama) Int.MAX_VALUE else 7
                 )
                 var id = viewModel.bookUiState.data?.id
-                var reviews = Pair<Int, Double>(1,1.0)
+                var reviews = Pair<Int, Double>(0,0.0)
                 if(id != null) {
                     reviews = viewModel.getReviews(id)
                 }
