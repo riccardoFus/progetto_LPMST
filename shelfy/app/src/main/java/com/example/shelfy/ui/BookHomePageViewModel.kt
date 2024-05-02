@@ -31,7 +31,7 @@ class BookHomePageViewModel : ViewModel(){
     var sum: Int? = 0
     var total = 0;
     var chiamate = 0
-    var userId: String = ""
+    var userId: String by mutableStateOf("")
     public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
