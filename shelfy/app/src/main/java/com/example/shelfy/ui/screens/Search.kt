@@ -47,6 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -116,7 +117,7 @@ fun Search(
                 TextField(
                     singleLine = true,
                     value = text,
-                    placeholder = { Text(text = "Cerca libro...") },
+                    placeholder = { Text(text = "Cerca libro...", fontFamily = fonts, fontSize = 20.sp) },
                     onValueChange = { newText -> text = newText },
                     modifier = Modifier
                         .padding(8.dp)
@@ -130,6 +131,7 @@ fun Search(
                             }
                             true
                         },
+                    textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = {
                         query = text.replace(" ", "+")
