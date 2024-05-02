@@ -1,22 +1,18 @@
 package com.example.shelfy.ui
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shelfy.data.db.Recensione
-import com.example.shelfy.data.db.Utente
+import com.example.shelfy.data.db.Review
+import com.example.shelfy.data.db.User
 import com.example.shelfy.data.remote.responses.Books
 import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -26,9 +22,8 @@ class BookHomePageViewModel : ViewModel(){
     var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation2 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation3 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
-    var sum: Int? = 0
-    var total = 0;
-    var chiamate = 0
+    var sum : Int by mutableIntStateOf(0)
+    var tot : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
     public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -112,7 +107,7 @@ class BookHomePageViewModel : ViewModel(){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbUsers: CollectionReference = dB.collection("Users")
 
-        val user = Utente(username, email, password)
+        val user = User(username, email, password)
 
         dbUsers.add(user).addOnSuccessListener {
         }.addOnFailureListener {
@@ -123,15 +118,35 @@ class BookHomePageViewModel : ViewModel(){
     fun addReview(id: String, stars: Int, text: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbRecensioni  = dB.collection("Reviews")
-        val review = Recensione(null, id, stars, text)
+        val review = Review(id, stars, text)
         dbRecensioni.add(review).addOnSuccessListener {
         }.addOnFailureListener {
         }
     }
 
-    fun getReviews(bookId : String): Pair<Int, Double>{
+    fun getReviews(bookId : String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val dbRecensioni  = dB.collection("Recensioni")
+        val dbReviews  = dB.collection("Reviews")
+        dbReviews.get()
+            .addOnSuccessListener {
+                if(!it.isEmpty){
+                    val list = it.documents
+                    var conta = 0
+                    for(document in list){
+                        val review : Review? = document.toObject(Review::class.java)
+                        if (review != null && review.bookId == bookId) {
+                            sum = sum.plus(review.stars)
+                            conta++
+                        }
+                    }
+                    if(sum != 0) {
+                        tot = Pair<Int, Double>(conta, sum.toDouble() / conta.toDouble())
+                    }else{
+                        tot = Pair<Int, Double>(0, 0.0)
+                    }
+                    sum = 0
+                }
+            }
         /*val query: Query = dbRecensioni.orderByChild("bookId").equalTo(bookId)
         query.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -146,13 +161,6 @@ class BookHomePageViewModel : ViewModel(){
                 TODO("Not yet implemented")
             }
         })*/
-        var tot = Pair<Int, Double>(0,0.0)
-        if(sum != 0) {
-            tot = Pair<Int, Double>(total, sum!!.toDouble() / total)
-        }
-        total = 0
-        sum = 0
-        return tot
     }
 
 

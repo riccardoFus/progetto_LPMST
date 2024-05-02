@@ -210,9 +210,9 @@ fun Visualizer(
                     maxLines = if (showTrama) Int.MAX_VALUE else 7
                 )
                 var id = viewModel.bookUiState.data?.id
-                var reviews = Pair<Int, Double>(0,0.0)
+                var reviews = viewModel.tot
                 if(id != null) {
-                    reviews = viewModel.getReviews(id)
+                    viewModel.getReviews(id)
                 }
                 Text(
                     text = reviews.first.toString() + "-" + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
