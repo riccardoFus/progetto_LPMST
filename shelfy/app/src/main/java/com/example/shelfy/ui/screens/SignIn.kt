@@ -274,8 +274,10 @@ fun SignIn(
                     if (password.isNullOrBlank()) passwordEmpty = true
                     if(email.isNullOrBlank()) emailEmpty = true
                     if(password2.isNullOrBlank()) password2Empty = true
-                    if(!userEmpty && !emailEmpty && !passwordEmpty && !password2Empty){
-                        viewModel.createUserInFirebase(email, password, password2, user)
+                    if(!userEmpty && !emailEmpty && !passwordEmpty && !password2Empty && password == password2){
+                        viewModel.createUserInFirebase(email, password, password2, user); if(viewModel.getLoginValue()){
+                            navController.navigate("HOME_SCREEN")
+                        }
                     }},
                     modifier = Modifier
                     .padding(2.dp)
