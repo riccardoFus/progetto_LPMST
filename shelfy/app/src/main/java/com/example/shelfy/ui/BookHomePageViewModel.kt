@@ -121,19 +121,18 @@ class BookHomePageViewModel : ViewModel(){
 
 
     fun addReview(id: String, stars: Int, text: String){
-        val dB: FirebaseDatabase = FirebaseDatabase.getInstance("https://shelfy-6a267-default-rtdb.europe-west1.firebasedatabase.app")
-        val dbRecensioni  = dB.getReference("Recensioni")
-        val reviewId = dbRecensioni.push().key!!
-        val review = Recensione(reviewId, id, stars, text)
-        dbRecensioni.child(reviewId).setValue(review).addOnSuccessListener {
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbRecensioni  = dB.collection("Reviews")
+        val review = Recensione(null, id, stars, text)
+        dbRecensioni.add(review).addOnSuccessListener {
         }.addOnFailureListener {
         }
     }
 
     fun getReviews(bookId : String): Pair<Int, Double>{
-        val dB: FirebaseDatabase = FirebaseDatabase.getInstance("https://shelfy-6a267-default-rtdb.europe-west1.firebasedatabase.app")
-        val dbRecensioni  = dB.getReference("Recensioni")
-        val query: Query = dbRecensioni.orderByChild("bookId").equalTo(bookId)
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbRecensioni  = dB.collection("Recensioni")
+        /*val query: Query = dbRecensioni.orderByChild("bookId").equalTo(bookId)
         query.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 chiamate++
@@ -146,7 +145,7 @@ class BookHomePageViewModel : ViewModel(){
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
-        })
+        })*/
         var tot = Pair<Int, Double>(0,0.0)
         if(sum != 0) {
             tot = Pair<Int, Double>(total, sum!!.toDouble() / total)
