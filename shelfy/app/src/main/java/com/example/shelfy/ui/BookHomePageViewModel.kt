@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shelfy.data.db.Note
 import com.example.shelfy.data.db.Review
 import com.example.shelfy.data.db.User
 import com.example.shelfy.data.remote.responses.Books
@@ -22,6 +23,7 @@ class BookHomePageViewModel : ViewModel(){
     var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation2 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation3 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+    var userId: String by mutableStateOf("")
     var sum : Int by mutableIntStateOf(0)
     var tot : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
     public fun getBooksRecommendation1(query : String){
@@ -112,6 +114,12 @@ class BookHomePageViewModel : ViewModel(){
         dbUsers.add(user).addOnSuccessListener {
         }.addOnFailureListener {
         }
+
+        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
+            for (document in documents) {
+                userId = document.id
+            }
+        }
     }
 
 
@@ -122,6 +130,20 @@ class BookHomePageViewModel : ViewModel(){
         dbRecensioni.add(review).addOnSuccessListener {
         }.addOnFailureListener {
         }
+    }
+    fun addNota(userId: String, text: String, bookId: String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbRecensioni  = dB.collection("Notes")
+        val note = Note(userId, text, bookId)
+        if (userId != "") {
+            dbRecensioni.add(note).addOnSuccessListener {
+            }.addOnFailureListener {
+            }
+        }
+    }
+
+    fun getUser(): String {
+        return userId
     }
 
     fun getReviews(bookId : String){
