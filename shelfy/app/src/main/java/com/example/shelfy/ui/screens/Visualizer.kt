@@ -98,7 +98,6 @@ fun Visualizer(
                     .padding(8.dp)
             )
         }
-
         Box(
             modifier = Modifier
                 .background(color = BlackPage)
@@ -168,7 +167,6 @@ fun Visualizer(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(
@@ -191,9 +189,18 @@ fun Visualizer(
                     }
                 }
                 var showTrama by remember { mutableStateOf(false) }
+                var text = viewModel.bookUiState.data?.volumeInfo?.description
+                    ?: "Trama non disponibile"
+                text = text.replace("<p>","")
+                text = text.replace("</p>", "")
+                text = text.replace("<br>", "")
+                text = text.replace("</br>", "")
+                text = text.replace("<b>", "")
+                text = text.replace("</b>", "")
+                text = text.replace("<i>", "")
+                text = text.replace("</i>", "")
                 Text(
-                    text = "Trama: " + (viewModel.bookUiState.data?.volumeInfo?.description
-                        ?: "No trama"), color = WhiteText, fontSize = 16.sp,
+                    text = text, color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth()
@@ -202,17 +209,18 @@ fun Visualizer(
                     textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
                     maxLines = if (showTrama) Int.MAX_VALUE else 7
                 )
-
-
+                var id = viewModel.bookUiState.data?.id
+                var reviews = Pair<Int, Double>(0,0.0)
+                if(id != null) {
+                    reviews = viewModel.getReviews(id)
+                }
                 Text(
-                    text = "Numero ratings - Media ratings", color = WhiteText, fontSize = 16.sp,
+                    text = reviews.first.toString() + "-" + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
                     textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
                 )
-
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -277,6 +285,7 @@ fun Visualizer(
                         Row() {
                             IconButton(
                                 onClick = {
+                                          noteEnabled = true
                                 },
                             ) {
                                 Icon(
@@ -308,7 +317,7 @@ fun Visualizer(
                                     value = note,
                                     placeholder = {
                                         Text(
-                                            text = "Inserisci note...",
+                                            text = "Inserisci nota...",
                                             fontFamily = fonts,
                                             fontSize = 20.sp
                                         )
@@ -335,6 +344,92 @@ fun Visualizer(
                                     })
                             }
                         }
+                        var reviewEnabled by remember { mutableStateOf(false) }
+                        var review by remember {mutableStateOf(0)}
+                        if (reviewEnabled) {
+                            Dialog(onDismissRequest = { reviewEnabled = false }) {
+                                Column(modifier = Modifier
+                                    .background(Color.Transparent)
+                                    .width(300.dp)
+                                    .height(500.dp)
+                                    .fillMaxWidth()){
+                                Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
+                                    IconButton(onClick = {review = 1}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 0) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24) ,
+                                            contentDescription = "1 stella",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(70.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 2}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 1) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
+                                            contentDescription = "2 stelle",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(70.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 3}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 2) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
+                                            contentDescription = "3 stelle",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(70.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 4}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 3 ) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
+                                            contentDescription = "4 stelle",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(70.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(11.dp))
+                                    IconButton(onClick = {review = 5}){
+                                        Icon(
+                                            painter = painterResource(id = if (review > 4) R.drawable.baseline_star_24 else R.drawable.baseline_star_border_24),
+                                            contentDescription = "5 stelle",
+                                            tint = Color.Yellow,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                }
+                                    var text by rememberSaveable { mutableStateOf("") }
+                                    TextField(value = text,
+                                        placeholder = { Text(text = "Testo recensione...", fontFamily = fonts, fontSize = 20.sp) },
+                                        onValueChange = { newText -> text = newText },
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .clip(RoundedCornerShape(20.dp))
+                                            .height(100.dp),
+                                        colors = TextFieldDefaults.colors(
+                                            focusedIndicatorColor = Color.Transparent
+                                        ),
+                                        textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp))
+                                    IconButton(onClick = {
+                                        reviewEnabled = false
+                                        if (id != null) {
+                                            viewModel.createReviewInFirebase(id, review, text)
+                                        }
+                                    }, modifier = Modifier
+                                        .padding(11.dp)
+                                        .align(Alignment.CenterHorizontally)){
+                                        Icon(painter = painterResource(R.drawable.add_circle_plus_1024x1024), contentDescription = "Aggiungi", tint = BlueText, modifier = Modifier.size(30.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
                         Row(){
                             IconButton(
                                 onClick = {
@@ -350,7 +445,7 @@ fun Visualizer(
                             }
                             ClickableText(
                                 text = AnnotatedString("Aggiungi una recensione"),
-                                onClick = {},
+                                onClick = {reviewEnabled = true},
                                 style = TextStyle(
                                     fontFamily = fonts,
                                     fontSize = 20.sp,
