@@ -1,6 +1,7 @@
 package com.example.shelfy.ui
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -22,10 +23,9 @@ class BookHomePageViewModel : ViewModel(){
     var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation2 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     var booksUiStateRecommendation3 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
-    var sum: Int? = 0
-    var total = 0;
-    var chiamate = 0
     var userId: String by mutableStateOf("")
+    var sum : Int by mutableIntStateOf(0)
+    var tot : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
     public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -146,9 +146,29 @@ class BookHomePageViewModel : ViewModel(){
         return userId
     }
 
-    fun getReviews(bookId : String): Pair<Int, Double>{
+    fun getReviews(bookId : String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val dbRecensioni  = dB.collection("Recensioni")
+        val dbReviews  = dB.collection("Reviews")
+        dbReviews.get()
+            .addOnSuccessListener {
+                if(!it.isEmpty){
+                    val list = it.documents
+                    var conta = 0
+                    for(document in list){
+                        val review : Review? = document.toObject(Review::class.java)
+                        if (review != null && review.bookId == bookId) {
+                            sum = sum.plus(review.stars)
+                            conta++
+                        }
+                    }
+                    if(sum != 0) {
+                        tot = Pair<Int, Double>(conta, sum.toDouble() / conta.toDouble())
+                    }else{
+                        tot = Pair<Int, Double>(0, 0.0)
+                    }
+                    sum = 0
+                }
+            }
         /*val query: Query = dbRecensioni.orderByChild("bookId").equalTo(bookId)
         query.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -163,13 +183,6 @@ class BookHomePageViewModel : ViewModel(){
                 TODO("Not yet implemented")
             }
         })*/
-        var tot = Pair<Int, Double>(0,0.0)
-        if(sum != 0) {
-            tot = Pair<Int, Double>(total, sum!!.toDouble() / total)
-        }
-        total = 0
-        sum = 0
-        return tot
     }
 
 
