@@ -1,6 +1,6 @@
 package com.example.shelfy.data.db
 
-data class Recensione(
+data class Review(
     val bookId : String,
     val stars : Int,
     val desc : String

@@ -5,20 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shelfy.data.db.Nota
-import com.example.shelfy.data.db.Recensione
-import com.example.shelfy.data.db.Utente
+import com.example.shelfy.data.db.Note
+import com.example.shelfy.data.db.Review
+import com.example.shelfy.data.db.User
 import com.example.shelfy.data.remote.responses.Books
 import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -115,7 +109,7 @@ class BookHomePageViewModel : ViewModel(){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbUsers: CollectionReference = dB.collection("Users")
 
-        val user = Utente(username, email, password)
+        val user = User(username, email, password)
 
         dbUsers.add(user).addOnSuccessListener {
         }.addOnFailureListener {
@@ -132,7 +126,7 @@ class BookHomePageViewModel : ViewModel(){
     fun addReview(id: String, stars: Int, text: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbRecensioni  = dB.collection("Reviews")
-        val review = Recensione(id, stars, text)
+        val review = Review(id, stars, text)
         dbRecensioni.add(review).addOnSuccessListener {
         }.addOnFailureListener {
         }
@@ -140,9 +134,11 @@ class BookHomePageViewModel : ViewModel(){
     fun addNota(userId: String, text: String, bookId: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbRecensioni  = dB.collection("Notes")
-        val note = Nota(userId, text, bookId)
-        dbRecensioni.add(note).addOnSuccessListener {
-        }.addOnFailureListener {
+        val note = Note(userId, text, bookId)
+        if (userId != "") {
+            dbRecensioni.add(note).addOnSuccessListener {
+            }.addOnFailureListener {
+            }
         }
     }
 
