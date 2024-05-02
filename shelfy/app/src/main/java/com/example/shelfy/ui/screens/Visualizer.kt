@@ -332,10 +332,10 @@ fun Visualizer(
                                         unfocusedIndicatorColor = Color.Transparent,
                                     ),
                                     trailingIcon = {
-                                        IconButton(onClick = { noteEnabled = false }) {
+                                        IconButton(onClick = { noteEnabled = false; viewModel.addNota(viewModel.getUser(), note, id!!) }) {
                                             Icon(
                                                 painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                                contentDescription = "Search",
+                                                contentDescription = "Aggiungi nota",
                                                 tint = BlueText,
                                                 modifier = Modifier
                                                     .size(30.dp)

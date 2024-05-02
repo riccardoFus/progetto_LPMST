@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shelfy.data.db.Nota
 import com.example.shelfy.data.db.Recensione
 import com.example.shelfy.data.db.Utente
 import com.example.shelfy.data.remote.responses.Books
@@ -12,6 +13,7 @@ import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -29,6 +31,7 @@ class BookHomePageViewModel : ViewModel(){
     var sum: Int? = 0
     var total = 0;
     var chiamate = 0
+    var userId: String = ""
     public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -117,16 +120,34 @@ class BookHomePageViewModel : ViewModel(){
         dbUsers.add(user).addOnSuccessListener {
         }.addOnFailureListener {
         }
+
+        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
+            for (document in documents) {
+                userId = document.id
+            }
+        }
     }
 
 
     fun addReview(id: String, stars: Int, text: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbRecensioni  = dB.collection("Reviews")
-        val review = Recensione(null, id, stars, text)
+        val review = Recensione(id, stars, text)
         dbRecensioni.add(review).addOnSuccessListener {
         }.addOnFailureListener {
         }
+    }
+    fun addNota(userId: String, text: String, bookId: String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbRecensioni  = dB.collection("Notes")
+        val note = Nota(userId, text, bookId)
+        dbRecensioni.add(note).addOnSuccessListener {
+        }.addOnFailureListener {
+        }
+    }
+
+    fun getUser(): String {
+        return userId
     }
 
     fun getReviews(bookId : String): Pair<Int, Double>{
