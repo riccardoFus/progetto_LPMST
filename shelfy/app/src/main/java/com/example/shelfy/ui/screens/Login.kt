@@ -191,7 +191,8 @@ fun Login(
                     )
                 }
 
-                OutlinedButton(onClick = {if (user.isNullOrBlank()) userEmpty = true; if (password.isNullOrBlank()) passwordEmpty = true}, modifier = Modifier
+                OutlinedButton(onClick = {if (user.isNullOrBlank()) userEmpty = true; if (password.isNullOrBlank()) passwordEmpty = true;
+                    if (!userEmpty && !passwordEmpty) {viewModel.login(user, password); if(viewModel.getLoginValue()){ navController.navigate("HOME_SCREEN") }}}, modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),

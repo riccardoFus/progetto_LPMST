@@ -26,6 +26,7 @@ class BookHomePageViewModel : ViewModel(){
     var userId: String by mutableStateOf("")
     var sum : Int by mutableIntStateOf(0)
     var tot : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
+    var login : Boolean by mutableStateOf(false)
     public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -77,7 +78,10 @@ class BookHomePageViewModel : ViewModel(){
             }
             .addOnFailureListener{
             }
-        addUser(username, email, password)
+        if (!checkEmailAlreadyExists(email) && !checkUsernameAlreadyExists(username)){
+            addUser(username, email, password)
+            login(email, password)
+        }
     }
 
     fun createReviewInFirebase(
@@ -90,35 +94,73 @@ class BookHomePageViewModel : ViewModel(){
 
     fun logout(){
         val firebaseAuth = FirebaseAuth.getInstance()
-
         firebaseAuth.signOut()
-
+        userId = ""
+        login = false
     }
 
     fun login(email: String, password: String){
-        FirebaseAuth
-            .getInstance()
-            .signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-            }
-            .addOnFailureListener {
-            }
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        System.out.println("Sono arrivato qua")
+        val dbUsers: CollectionReference = dB.collection("Users")
+        if(email.contains("@")) {
+            dB.collection("Users").whereEqualTo("email", email).get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        if (document.get("password") == password) {
+                            FirebaseAuth
+                                .getInstance()
+                                .signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener {
+                                }
+                                .addOnFailureListener {
+                                }
+                            dB.collection("Users").whereEqualTo("email", email).get()
+                                .addOnSuccessListener { documents1 ->
+                                    for (document2 in documents1) {
+                                        userId = document.id
+                                    }
+                                }
+                            login = true
+                        }
+                    }
+                }
+        }
+        else {
+            dB.collection("Users").whereEqualTo("username", email).get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        if (document.get("password") == password) {
+                            FirebaseAuth
+                                .getInstance()
+                                .signInWithEmailAndPassword(email, password)
+
+                                .addOnCompleteListener {
+                                }
+                                .addOnFailureListener {
+                                }
+                            dB.collection("Users").whereEqualTo("username", email).get()
+                                .addOnSuccessListener { documents1 ->
+                                    for (document2 in documents1) {
+                                        userId = document.id
+                                    }
+                                }
+                            login = true
+                        }
+                    }
+                }
+        }
     }
 
+    fun getLoginValue(): Boolean{
+        return login
+    }
     fun addUser(username: String, email: String, password: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbUsers: CollectionReference = dB.collection("Users")
-
         val user = User(username, email, password)
-
         dbUsers.add(user).addOnSuccessListener {
         }.addOnFailureListener {
-        }
-
-        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
-            for (document in documents) {
-                userId = document.id
-            }
         }
     }
 
@@ -140,6 +182,27 @@ class BookHomePageViewModel : ViewModel(){
             }.addOnFailureListener {
             }
         }
+    }
+    fun checkEmailAlreadyExists(email: String): Boolean{
+        var result = false
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbRecensioni  = dB.collection("Users")
+
+        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
+            if(documents.isEmpty) result = true
+        }
+        return result
+    }
+
+    fun checkUsernameAlreadyExists(username: String): Boolean{
+        var result = false
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbRecensioni  = dB.collection("Users")
+
+        dB.collection("Users").whereEqualTo("username", username).get().addOnSuccessListener {documents ->
+            if(documents.isEmpty) result = true
+        }
+        return result
     }
 
     fun getUser(): String {
@@ -169,20 +232,6 @@ class BookHomePageViewModel : ViewModel(){
                     sum = 0
                 }
             }
-        /*val query: Query = dbRecensioni.orderByChild("bookId").equalTo(bookId)
-        query.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                chiamate++
-                for(ds in snapshot.children){
-                    total++
-                    sum = sum?.plus(ds.child("stars").getValue(Int::class.java)!!)
-                    System.out.println("Ciao " + total.toString() + " " + sum + " stavo cercando le recensioni per " + bookId + " e ho trovato " + ds.child("desc").getValue(String::class.java) + " e questa è la chiamata numero " + chiamate)
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })*/
     }
 
 
