@@ -62,6 +62,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.shelfy.ui.BookHomePageViewModel
 import com.example.shelfy.R
+import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
@@ -274,10 +275,10 @@ fun SignIn(
                     if (password.isNullOrBlank()) passwordEmpty = true
                     if(email.isNullOrBlank()) emailEmpty = true
                     if(password2.isNullOrBlank()) password2Empty = true
-                    if(!userEmpty && !emailEmpty && !passwordEmpty && !password2Empty && password == password2){
-                        viewModel.createUserInFirebase(email, password, password2, user); if(viewModel.getLoginValue()){
+                    if(!userEmpty && !emailEmpty && !passwordEmpty && !password2Empty && password == password2 && password.length >= 6){
+                        viewModel.createUserInFirebase(email, password, user);/* if(viewModel.getLoginValue()){
                             navController.navigate("HOME_SCREEN")
-                        }
+                        }*/
                     }},
                     modifier = Modifier
                     .padding(2.dp)
@@ -359,6 +360,9 @@ fun SignIn(
                         .size(30.dp)
                 )
             }
+        }
+        if(viewModel.login){
+            navController.navigate(Screens.HOME_SCREEN)
         }
     }
 }

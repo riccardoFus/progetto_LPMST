@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">shelfy</string>
+    <string name="shelfy">SHELFY</string>
+    <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="book_image_no_available"><![CDATA[store.bookbaby.com/BookShop/CommonControls/BookshopThemes/bookshop/OnePageBookCoverImage.jpg?BookID=BK00014296&abOnly=False&ImageType=Back]]></string>
+    <string name="no_titolo">No Titolo</string>
+    <string name="no_autori">No Autori</string>
+    <string name="trama_non_presente">Non presente</string>
 </resources>

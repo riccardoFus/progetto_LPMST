@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class BookHomePageViewModel : ViewModel(){
@@ -27,6 +28,7 @@ class BookHomePageViewModel : ViewModel(){
     var sum : Int by mutableIntStateOf(0)
     var tot : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
     var login : Boolean by mutableStateOf(false)
+    var alreadySignedIn : Boolean by mutableStateOf(false)
     public fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -69,18 +71,18 @@ class BookHomePageViewModel : ViewModel(){
     fun createUserInFirebase(
         email: String,
         password: String,
-        confirmPassword: String = "",
         username: String = ""
     ){
-        FirebaseAuth.getInstance()
-            .createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener{
-            }
-            .addOnFailureListener{
-            }
-        if (!checkEmailAlreadyExists(email) && !checkUsernameAlreadyExists(username)){
-            addUser(username, email, password)
-            login(email, password)
+        alreadySignedIn = runBlocking { checkEmailAlreadyExists(email) }
+        if (!alreadySignedIn){
+            FirebaseAuth.getInstance()
+                .createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener{
+                    addUser(username, email, password)
+                    login(email, password)
+                }
+                .addOnFailureListener{
+                }
         }
     }
 
@@ -101,7 +103,6 @@ class BookHomePageViewModel : ViewModel(){
 
     fun login(email: String, password: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        System.out.println("Sono arrivato qua")
         val dbUsers: CollectionReference = dB.collection("Users")
         if(email.contains("@")) {
             dB.collection("Users").whereEqualTo("email", email).get()
@@ -114,6 +115,9 @@ class BookHomePageViewModel : ViewModel(){
                                 .addOnCompleteListener {
                                 }
                                 .addOnFailureListener {
+                                    FirebaseAuth
+                                        .getInstance()
+                                        .createUserWithEmailAndPassword(email, password)
                                 }
                             dB.collection("Users").whereEqualTo("email", email).get()
                                 .addOnSuccessListener { documents1 ->
@@ -126,35 +130,8 @@ class BookHomePageViewModel : ViewModel(){
                     }
                 }
         }
-        else {
-            dB.collection("Users").whereEqualTo("username", email).get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        if (document.get("password") == password) {
-                            FirebaseAuth
-                                .getInstance()
-                                .signInWithEmailAndPassword(email, password)
-
-                                .addOnCompleteListener {
-                                }
-                                .addOnFailureListener {
-                                }
-                            dB.collection("Users").whereEqualTo("username", email).get()
-                                .addOnSuccessListener { documents1 ->
-                                    for (document2 in documents1) {
-                                        userId = document.id
-                                    }
-                                }
-                            login = true
-                        }
-                    }
-                }
-        }
     }
 
-    fun getLoginValue(): Boolean{
-        return login
-    }
     fun addUser(username: String, email: String, password: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbUsers: CollectionReference = dB.collection("Users")
@@ -183,8 +160,8 @@ class BookHomePageViewModel : ViewModel(){
             }
         }
     }
-    fun checkEmailAlreadyExists(email: String): Boolean{
-        var result = false
+    private fun checkEmailAlreadyExists(email: String): Boolean{
+        var result by mutableStateOf(false)
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbRecensioni  = dB.collection("Users")
 
@@ -194,7 +171,8 @@ class BookHomePageViewModel : ViewModel(){
         return result
     }
 
-    fun checkUsernameAlreadyExists(username: String): Boolean{
+    /*
+    private fun checkUsernameAlreadyExists(username: String): Boolean{
         var result = false
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbRecensioni  = dB.collection("Users")
@@ -204,6 +182,8 @@ class BookHomePageViewModel : ViewModel(){
         }
         return result
     }
+    
+     */
 
     fun getUser(): String {
         return userId
