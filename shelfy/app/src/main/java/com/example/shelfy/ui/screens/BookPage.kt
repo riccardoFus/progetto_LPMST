@@ -1,11 +1,8 @@
 package com.example.shelfy.ui.screens
 
 import android.content.Intent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,15 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,17 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +50,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.shelfy.R
 import com.example.shelfy.ui.BookHomePageViewModel
+import com.example.shelfy.ui.composables.BottomBar
+import com.example.shelfy.ui.composables.TopBar
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
@@ -82,22 +70,11 @@ fun Visualizer(
             .fillMaxHeight()
             .background(color = BlackPage)
     ) {
-        Box(
+        TopBar(
             modifier = Modifier
                 .weight(1f)
-                .background(color = BlackBar),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "SHELFY",
-                color = BlueText,
-                fontFamily = fonts,
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
-        }
+                .background(color = BlackBar)
+        )
         Box(
             modifier = Modifier
                 .background(color = BlackPage)
@@ -461,43 +438,12 @@ fun Visualizer(
                 }
             }
         }
-        Row(
+        BottomBar(
+            navController,
             modifier = Modifier
                 .background(color = BlackBar)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            IconButton(onClick = { navController.navigate("SEARCH_SCREEN") }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.search_outline_1024x1024),
-                    contentDescription = "Search",
-                    tint = BlueText,
-                    modifier = Modifier
-                        .weight(1f)
-                        .size(30.dp)
-                )
-            }
-            IconButton(onClick = { navController.navigate("HOME_SCREEN") }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.home_1024x919),
-                    contentDescription = "Search",
-                    tint = BlueText,
-                    modifier = Modifier
-                        .weight(1f)
-                        .size(30.dp)
-                )
-            }
-            IconButton(onClick = { navController.navigate("PROFILE_SCREEN") }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-                    contentDescription = "Search",
-                    tint = BlueText,
-                    modifier = Modifier
-                        .weight(1f)
-                        .size(30.dp)
-                )
-            }
-        }
+                .fillMaxWidth()
+        )
     }
 }
 
