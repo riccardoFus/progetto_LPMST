@@ -59,6 +59,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.shelfy.ui.BookHomePageViewModel
 import com.example.shelfy.R
+import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
@@ -192,7 +193,7 @@ fun Login(
                 }
 
                 OutlinedButton(onClick = {if (user.isNullOrBlank()) userEmpty = true; if (password.isNullOrBlank()) passwordEmpty = true;
-                    if (!userEmpty && !passwordEmpty) {viewModel.login(user, password); if(viewModel.getLoginValue()){ navController.navigate("HOME_SCREEN") }}}, modifier = Modifier
+                    if (!userEmpty && !passwordEmpty) {viewModel.login(user, password); /*if(viewModel.getLoginValue()){ navController.navigate("HOME_SCREEN") }*/}}, modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
                     colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),
@@ -267,6 +268,10 @@ fun Login(
                         .size(30.dp)
                 )
             }
+        }
+
+        if(viewModel.login){
+            navController.navigate(Screens.HOME_SCREEN)
         }
     }
 }
