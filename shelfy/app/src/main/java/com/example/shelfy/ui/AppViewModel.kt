@@ -52,6 +52,7 @@ class AppViewModel : ViewModel(){
     var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
     var loginDone : Boolean by mutableStateOf(false)
     var alreadySignedIn : Boolean by mutableStateOf(false)
+    var note : String by mutableStateOf("")
     private fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -114,7 +115,7 @@ class AppViewModel : ViewModel(){
         stars : Int,
         text: String = "",
     ){
-        addReview(id, stars, text)
+        addReview(id, userId, stars, text)
     }
 
     fun logout(){
@@ -162,10 +163,10 @@ class AppViewModel : ViewModel(){
     }
 
 
-    private fun addReview(id: String, stars: Int, text: String){
+    private fun addReview(id: String, userId: String, stars: Int, text: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReviews  = dB.collection("Reviews")
-        val review = Review(id, stars, text)
+        val review = Review(id, userId, stars, text)
         dbReviews.add(review)
             .addOnSuccessListener {}
             .addOnFailureListener {}
@@ -180,6 +181,20 @@ class AppViewModel : ViewModel(){
                 .addOnFailureListener {}
         }
     }
+
+    fun getNota(userId: String, bookId: String?){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
+            documents -> if(!documents.isEmpty) {
+                for(document in documents){
+                    if(document.get("bookId").toString() == bookId) {
+                        note = document.get("text").toString()
+                    }
+                }
+            }
+        }
+    }
+
     private fun checkEmailAlreadyExists(email: String): Boolean{
         var result by mutableStateOf(false)
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
