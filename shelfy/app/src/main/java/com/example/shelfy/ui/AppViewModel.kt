@@ -182,10 +182,26 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    fun updateNota(userId: String, text: String, bookId: String){
+        var id = ""
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener(){
+            documents -> if(!documents.isEmpty){
+                for(document in documents){
+                    if(document.get("bookId").toString() == bookId){
+                        note = text
+                        id = document.id
+                        dB.collection("Notes").document(id).update("text", text).addOnSuccessListener { }.addOnFailureListener { }
+                    }
+                }
+            }
+        }
+    }
+
     fun getNota(userId: String, bookId: String?){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
-            documents -> if(!documents.isEmpty) {
+            documents -> if(!documents.isEmpty){
                 for(document in documents){
                     if(document.get("bookId").toString() == bookId) {
                         note = document.get("text").toString()

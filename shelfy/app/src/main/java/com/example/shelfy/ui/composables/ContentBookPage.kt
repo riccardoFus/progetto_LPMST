@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -94,15 +95,16 @@ fun ContentBookPage(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(20.dp)
             ) {
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = (viewModel.bookUiState.data?.volumeInfo?.title ?: stringResource(id = R.string.no_titolo)),
+                        text = (viewModel.bookUiState.data?.volumeInfo?.title
+                            ?: stringResource(id = R.string.no_titolo)),
                         color = BlueText,
-                        fontSize = 22.sp,
+                        fontSize = 25.sp,
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .fillMaxWidth(),
@@ -115,7 +117,7 @@ fun ContentBookPage(
                         text = (viewModel.bookUiState.data?.volumeInfo?.authors.toString()
                             .replace("[", "").replace("]", "")),
                         color = WhiteText,
-                        fontSize = 12.sp,
+                        fontSize = 15.sp,
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .fillMaxWidth(),
@@ -125,46 +127,50 @@ fun ContentBookPage(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        viewModel.bookUiState.data?.volumeInfo?.infoLink
-                    )
-                    type = "text/plain"
-                }
-                val shareIntent = Intent.createChooser(sendIntent, null);
-                val context = LocalContext.current;
-                IconButton(onClick = { context.startActivity(shareIntent) }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.share_1024x896),
-                        contentDescription = stringResource(R.string.share),
-                        tint = BlueText,
-                        modifier = Modifier
-                            .weight(1f)
-                            .size(23.dp)
-                    )
-                }
-                IconButton(onClick = {noteVisualizer = true}) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_note_24),
-                        contentDescription = stringResource(R.string.share),
-                        tint = BlueText,
-                        modifier = Modifier
-                            .weight(1f)
-                            .size(23.dp)
-                    )
+                Column (modifier = Modifier.padding(top = 11.dp, start = 11.dp)){
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            viewModel.bookUiState.data?.volumeInfo?.infoLink
+                        )
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null);
+                    val context = LocalContext.current;
+                    IconButton(onClick = { context.startActivity(shareIntent) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.share_1024x896),
+                            contentDescription = stringResource(R.string.share),
+                            tint = BlueText,
+                            modifier = Modifier
+                                .weight(1f)
+                                .size(25.dp)
+                        )
+                    }
+                    IconButton(onClick = { noteVisualizer = true }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_note_24),
+                            contentDescription = stringResource(R.string.share),
+                            tint = BlueText,
+                            modifier = Modifier
+                                .weight(1f)
+                                .size(25.dp)
+                        )
+                    }
                 }
             }
-            val note = viewModel.note
+            var note = viewModel.note
+            var testo by remember { mutableStateOf("") }
             if(note == ""){
                 viewModel.getNota(viewModel.userId, id)
             }
+            testo = note
                 if (noteVisualizer) {
                     var modify by remember {mutableStateOf(false)}
                     Dialog(onDismissRequest = { noteVisualizer = false }) {
                         TextField(singleLine = false,
-                            value = note,
+                            value = testo,
                             placeholder = {
                                 Text(
                                     text = "Nessuna nota" ,
@@ -172,7 +178,7 @@ fun ContentBookPage(
                                     fontSize = 20.sp
                                 )
                             },
-                            onValueChange = {},
+                            onValueChange = {newText -> testo = newText;},
                             textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
                             readOnly = !modify,
                             modifier = Modifier
@@ -183,18 +189,33 @@ fun ContentBookPage(
                                 unfocusedIndicatorColor = Color.Transparent,
                             ),
                             trailingIcon = {
-                                IconButton(onClick = {
-                                    noteVisualizer = false;
-                                }) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.baseline_done_24),
-                                        contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                        tint = BlueText,
-                                        modifier = Modifier
-                                            .size(50.dp)
-                                    )
+                                Column(modifier = Modifier.fillMaxHeight()) {
+                                    IconButton(onClick = {
+                                        noteVisualizer = false
+                                        viewModel.updateNota(viewModel.userId, testo, id!!)
+                                    }) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_done_24),
+                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                            tint = BlueText,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                    IconButton(onClick = {
+                                        modify = !modify
+                                    }) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_edit_24),
+                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                            tint = BlueText,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
                                 }
                             })
+
                     }
                 }
 
