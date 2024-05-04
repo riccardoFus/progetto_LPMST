@@ -150,7 +150,7 @@ fun ContentBookPage(
                     }
                     IconButton(onClick = { noteVisualizer = true }) {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_note_24),
+                            painter = painterResource(id = R.drawable.baseline_sticky_note_2_24),
                             contentDescription = stringResource(R.string.share),
                             tint = BlueText,
                             modifier = Modifier
