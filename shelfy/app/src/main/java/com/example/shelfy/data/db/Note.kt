@@ -4,4 +4,6 @@ data class Note(
     val userId: String,
     val text: String,
     val bookId: String
-)
+){
+    constructor(): this("","", "")
+}

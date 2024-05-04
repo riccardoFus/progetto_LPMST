@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.shelfy.ui.BookHomePageViewModel
+import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.composables.BottomBar
 import com.example.shelfy.ui.composables.ContentSearchPage
 import com.example.shelfy.ui.composables.TopBar
@@ -19,8 +19,8 @@ import com.example.shelfy.ui.theme.BlackPage
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Search(
-    viewModel : BookHomePageViewModel,
+fun SearchPage(
+    viewModel : AppViewModel,
     navController : NavHostController
 ){
     Column(
@@ -53,5 +53,5 @@ fun Search(
 @Preview
 @Composable
 fun preview(){
-    Search(viewModel = BookHomePageViewModel(), navController = rememberNavController())
+    SearchPage(viewModel = AppViewModel(), navController = rememberNavController())
 }

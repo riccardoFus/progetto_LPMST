@@ -9,7 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.shelfy.ui.BookHomePageViewModel
+import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.composables.BottomBar
 import com.example.shelfy.ui.composables.ContentHomePage
 import com.example.shelfy.ui.composables.TopBar
@@ -18,7 +18,7 @@ import com.example.shelfy.ui.theme.BlackPage
 
 @Composable
 fun HomePage(
-    viewModel : BookHomePageViewModel,
+    viewModel : AppViewModel,
     navController : NavHostController
 ){
     Column(
