@@ -6,5 +6,5 @@ object Screens {
     const val SEARCH_SCREEN = "SEARCH_SCREEN"
     const val VISUALIZER_SCREEN = "VISUALIZER_SCREEN"
     const val LOGIN_SCREEN = "LOGIN_SCREEN"
-    const val SIGNIN_SCREEN = "SIGNIN_SCREEN"
+    const val SIGN_IN_SCREEN = "SIGN_IN_SCREEN"
 }

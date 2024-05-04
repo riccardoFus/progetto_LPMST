@@ -23,14 +23,14 @@ import coil.request.ImageRequest
 import com.example.shelfy.R
 import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.navigation.Screens
-import com.example.shelfy.ui.BookHomePageViewModel
+import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
 @Composable
 fun BookCardHomePage(
     item: Item,
-    viewModel : BookHomePageViewModel,
+    viewModel : AppViewModel,
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
