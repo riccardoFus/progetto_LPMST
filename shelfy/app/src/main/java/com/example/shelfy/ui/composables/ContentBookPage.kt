@@ -1,5 +1,6 @@
 package com.example.shelfy.ui.composables
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,6 +55,7 @@ import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ContentBookPage(
     viewModel : AppViewModel,
@@ -161,13 +163,11 @@ fun ContentBookPage(
                 }
             }
             var note = viewModel.note
-            var testo by remember { mutableStateOf("") }
-            if(note == ""){
-                viewModel.getNota(viewModel.userId, id)
-            }
+            var testo by rememberSaveable { mutableStateOf("") }
+            viewModel.getNota(viewModel.userId, id)
             testo = note
                 if (noteVisualizer) {
-                    var modify by remember {mutableStateOf(false)}
+                    var modify = false
                     Dialog(onDismissRequest = { noteVisualizer = false }) {
                         TextField(singleLine = false,
                             value = testo,
@@ -193,7 +193,7 @@ fun ContentBookPage(
                                     IconButton(onClick = {
                                         noteVisualizer = false
                                         viewModel.updateNota(viewModel.userId, testo, id!!)
-                                    }) {
+                                    }, enabled = if (testo != "") true else false) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.baseline_done_24),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
@@ -204,7 +204,7 @@ fun ContentBookPage(
                                     }
                                     IconButton(onClick = {
                                         modify = !modify
-                                    }) {
+                                    }, enabled = if (testo != "") true else false) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.baseline_edit_24),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
@@ -499,8 +499,6 @@ fun ContentBookPage(
                     }
                 }
             }
-            System.err.println("Nota: " + note)
         }
     }
-
 }

@@ -191,6 +191,7 @@ class AppViewModel : ViewModel(){
                     if(document.get("bookId").toString() == bookId){
                         note = text
                         id = document.id
+                        System.err.println("Va")
                         dB.collection("Notes").document(id).update("text", text).addOnSuccessListener { }.addOnFailureListener { }
                     }
                 }
@@ -205,6 +206,9 @@ class AppViewModel : ViewModel(){
                 for(document in documents){
                     if(document.get("bookId").toString() == bookId) {
                         note = document.get("text").toString()
+                    }
+                    else {
+                        note = ""
                     }
                 }
             }
