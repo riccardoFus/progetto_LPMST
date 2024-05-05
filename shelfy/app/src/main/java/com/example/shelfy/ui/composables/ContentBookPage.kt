@@ -1,5 +1,6 @@
 package com.example.shelfy.ui.composables
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -52,6 +54,8 @@ import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
+
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ContentBookPage(
     viewModel : AppViewModel,
@@ -66,6 +70,8 @@ fun ContentBookPage(
                 .padding(8.dp)
                 .fillMaxWidth()
         ) {
+            val id = viewModel.bookUiState.data?.id
+            var noteVisualizer by rememberSaveable { mutableStateOf(false) }
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
@@ -91,13 +97,14 @@ fun ContentBookPage(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(20.dp)
             ) {
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = (viewModel.bookUiState.data?.volumeInfo?.title ?: stringResource(id = R.string.no_titolo)),
+                        text = (viewModel.bookUiState.data?.volumeInfo?.title
+                            ?: stringResource(id = R.string.no_titolo)),
                         color = BlueText,
                         fontSize = 25.sp,
                         modifier = Modifier
@@ -112,7 +119,7 @@ fun ContentBookPage(
                         text = (viewModel.bookUiState.data?.volumeInfo?.authors.toString()
                             .replace("[", "").replace("]", "")),
                         color = WhiteText,
-                        fontSize = 12.sp,
+                        fontSize = 15.sp,
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .fillMaxWidth(),
@@ -122,27 +129,96 @@ fun ContentBookPage(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        viewModel.bookUiState.data?.volumeInfo?.infoLink
-                    )
-                    type = "text/plain"
-                }
-                val shareIntent = Intent.createChooser(sendIntent, null);
-                val context = LocalContext.current;
-                IconButton(onClick = { context.startActivity(shareIntent) }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.share_1024x896),
-                        contentDescription = stringResource(R.string.share),
-                        tint = BlueText,
-                        modifier = Modifier
-                            .weight(1f)
-                            .size(25.dp)
-                    )
+                Column (modifier = Modifier.padding(top = 11.dp, start = 11.dp)){
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            viewModel.bookUiState.data?.volumeInfo?.infoLink
+                        )
+                        type = "text/plain"
+                    }
+                    val shareIntent = Intent.createChooser(sendIntent, null);
+                    val context = LocalContext.current;
+                    IconButton(onClick = { context.startActivity(shareIntent) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.share_1024x896),
+                            contentDescription = stringResource(R.string.share),
+                            tint = BlueText,
+                            modifier = Modifier
+                                .weight(1f)
+                                .size(25.dp)
+                        )
+                    }
+                    IconButton(onClick = { noteVisualizer = true }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_sticky_note_2_24),
+                            contentDescription = stringResource(R.string.share),
+                            tint = BlueText,
+                            modifier = Modifier
+                                .weight(1f)
+                                .size(25.dp)
+                        )
+                    }
                 }
             }
+            var note = viewModel.note
+            var testo by rememberSaveable { mutableStateOf("") }
+            viewModel.getNota(viewModel.userId, id)
+            testo = note
+                if (noteVisualizer) {
+                    var modify = false
+                    Dialog(onDismissRequest = { noteVisualizer = false }) {
+                        TextField(singleLine = false,
+                            value = testo,
+                            placeholder = {
+                                Text(
+                                    text = "Nessuna nota" ,
+                                    fontFamily = fonts,
+                                    fontSize = 20.sp
+                                )
+                            },
+                            onValueChange = {newText -> testo = newText;},
+                            textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
+                            readOnly = !modify,
+                            modifier = Modifier
+                                .height(100.dp),
+                            shape = RoundedCornerShape(30.dp),
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                            ),
+                            trailingIcon = {
+                                Column(modifier = Modifier.fillMaxHeight()) {
+                                    IconButton(onClick = {
+                                        noteVisualizer = false
+                                        viewModel.updateNota(viewModel.userId, testo, id!!)
+                                    }, enabled = if (testo != "") true else false) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_done_24),
+                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                            tint = BlueText,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                    IconButton(onClick = {
+                                        modify = !modify
+                                    }, enabled = if (testo != "") true else false) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_edit_24),
+                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                            tint = BlueText,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                }
+                            })
+
+                    }
+                }
+
             var showTrama by rememberSaveable { mutableStateOf(false) }
             var text = viewModel.bookUiState.data?.volumeInfo?.description
                 ?: stringResource(id = R.string.trama_non_presente)
@@ -164,7 +240,6 @@ fun ContentBookPage(
                 textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
                 maxLines = if (showTrama) Int.MAX_VALUE else 7
             )
-            var id = viewModel.bookUiState.data?.id
             var reviews = viewModel.numberAndMediaReviews
             if(id != null) {
                 viewModel.getReviews(id)
@@ -267,11 +342,11 @@ fun ContentBookPage(
                                 .padding(7.dp)
                         )
                     }
-                    var note by rememberSaveable { mutableStateOf("") }
+                    var nota by rememberSaveable { mutableStateOf("") }
                     if (noteEnabled) {
                         Dialog(onDismissRequest = {noteEnabled = false}) {
                             TextField(singleLine = false,
-                                value = note,
+                                value = nota,
                                 placeholder = {
                                     Text(
                                         text = stringResource(R.string.aggiungi_una_nota),
@@ -279,7 +354,7 @@ fun ContentBookPage(
                                         fontSize = 20.sp
                                     )
                                 },
-                                onValueChange = { newText -> note = newText },
+                                onValueChange = { newText -> nota = newText },
                                 textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
                                 modifier = Modifier
                                     .height(100.dp),
@@ -289,7 +364,7 @@ fun ContentBookPage(
                                     unfocusedIndicatorColor = Color.Transparent,
                                 ),
                                 trailingIcon = {
-                                    IconButton(onClick = { noteEnabled = false; viewModel.addNota(viewModel.getUser(), note, id!!) }) {
+                                    IconButton(onClick = { noteEnabled = false; viewModel.addNota(viewModel.getUser(), nota, id!!) }) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
