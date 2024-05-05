@@ -7,7 +7,7 @@
     <string name="book_image_no_available"><![CDATA[store.bookbaby.com/BookShop/CommonControls/BookshopThemes/bookshop/OnePageBookCoverImage.jpg?BookID=BK00014296&abOnly=False&ImageType=Back]]></string>
     <string name="no_titolo">No Titolo</string>
     <string name="no_autori">No Autori</string>
-    <string name="trama_non_presente">Non presente</string>
+    <string name="trama_non_presente">Trama non presente</string>
     <string name="formato_email_non_rispettato">Formato email non rispettato</string>
     <string name="formato_password_non_corretto">Formato password non corretto</string>
     <string name="cerca_libro">Cerca libro...</string>
