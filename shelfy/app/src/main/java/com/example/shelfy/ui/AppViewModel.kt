@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shelfy.data.db.Note
+import com.example.shelfy.data.db.Readlist
 import com.example.shelfy.data.db.Review
 import com.example.shelfy.data.db.User
 import com.example.shelfy.data.remote.responses.Books
@@ -53,6 +54,7 @@ class AppViewModel : ViewModel(){
     var loginDone : Boolean by mutableStateOf(false)
     var alreadySignedIn : Boolean by mutableStateOf(false)
     var note : String by mutableStateOf("")
+    var libraryAdded : Boolean by mutableStateOf(false)
     private fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -90,7 +92,6 @@ class AppViewModel : ViewModel(){
             booksSearchUiState = Resource.Success<Books>(book)
         }
     }
-    
 
     fun signInUser(
         email: String,
@@ -104,6 +105,7 @@ class AppViewModel : ViewModel(){
                 .addOnSuccessListener{
                     addUser(username, email, password)
                     login(email, password)
+                    // addReadlist("Libreria", userId)
                 }
                 .addOnFailureListener{
                 }
@@ -177,6 +179,18 @@ class AppViewModel : ViewModel(){
         val note = Note(userId, text, bookId)
         if (userId != "") {
             dbNotes.add(note)
+                .addOnSuccessListener {}
+                .addOnFailureListener {}
+        }
+    }
+
+    fun addReadlist(name : String, userId : String){
+        val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbReadlist = dB.collection("Readlists")
+        val readlist = Readlist(name = name, userId = userId, emptyList())
+        if (userId != "") {
+            libraryAdded = true
+            dbReadlist.add(readlist)
                 .addOnSuccessListener {}
                 .addOnFailureListener {}
         }
