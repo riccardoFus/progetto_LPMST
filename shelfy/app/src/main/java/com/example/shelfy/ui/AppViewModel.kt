@@ -200,15 +200,18 @@ class AppViewModel : ViewModel(){
     }
 
     fun getNota(userId: String, bookId: String?){
+        var found: Boolean = false
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
             documents -> if(!documents.isEmpty){
                 for(document in documents){
                     if(document.get("bookId").toString() == bookId) {
                         note = document.get("text").toString()
+                        found = true
                     }
                     else {
-                        note = ""
+                        if(!found)
+                            note = ""
                     }
                 }
             }
