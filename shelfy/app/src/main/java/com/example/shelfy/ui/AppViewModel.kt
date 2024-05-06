@@ -55,6 +55,7 @@ class AppViewModel : ViewModel(){
     var alreadySignedIn : Boolean by mutableStateOf(false)
     var note : String by mutableStateOf("")
     var libraryAdded : Boolean by mutableStateOf(false)
+    var noteAlreadyExists : Boolean by mutableStateOf(false)
     private fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -241,6 +242,22 @@ class AppViewModel : ViewModel(){
         }
 
         return result
+    }
+
+  fun checkNoteAlreadyInserted(userId: String, bookId: String){
+        var found = false
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
+            documents -> if(!documents.isEmpty){
+                for(document in documents){
+                    if(document.get("bookId") == bookId) {
+                        found = true
+                        }
+                    }
+                }
+            noteAlreadyExists = found
+        }
+
     }
 
     fun getUser(): String {
