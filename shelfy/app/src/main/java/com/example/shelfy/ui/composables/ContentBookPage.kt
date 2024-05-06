@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -49,6 +52,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.shelfy.R
 import com.example.shelfy.ui.AppViewModel
+import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
@@ -72,6 +76,9 @@ fun ContentBookPage(
         ) {
             val id = viewModel.bookUiState.data?.id
             var noteVisualizer by rememberSaveable { mutableStateOf(false) }
+
+            var reviewEnabled by rememberSaveable { mutableStateOf(false) }
+            var review by rememberSaveable { mutableStateOf(0) }
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
@@ -140,31 +147,128 @@ fun ContentBookPage(
                     }
                     val shareIntent = Intent.createChooser(sendIntent, null);
                     val context = LocalContext.current;
-                    IconButton(onClick = { context.startActivity(shareIntent) }) {
+
+                    var more by rememberSaveable { mutableStateOf(false) }
+                    IconButton(onClick = { more = true }) {
                         Icon(
-                            painter = painterResource(id = R.drawable.share_1024x896),
+                            painter = painterResource(id = R.drawable.baseline_more_vert_24),
                             contentDescription = stringResource(R.string.share),
                             tint = BlueText,
                             modifier = Modifier
                                 .weight(1f)
-                                .size(25.dp)
+                                .size(40.dp)
                         )
                     }
-                    IconButton(onClick = { noteVisualizer = true }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_sticky_note_2_24),
-                            contentDescription = stringResource(R.string.share),
-                            tint = BlueText,
+                    
+                    if(more){
+                        DropdownMenu(
+                            expanded = true,
+                            onDismissRequest = { more = false },
                             modifier = Modifier
-                                .weight(1f)
-                                .size(25.dp)
-                        )
+                                .background(BlackBar)
+                        ) {
+                            DropdownMenuItem(leadingIcon = {
+                                 Icon(
+                                    painter = painterResource(id = R.drawable.share_1024x896),
+                                    contentDescription = stringResource(R.string.share),
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(25.dp)
+                                )
+                            },
+                                text = {
+                                    Text(text = "Condividi libro", color = BlueText)},
+                                onClick = { context.startActivity(shareIntent) },
+                                modifier = Modifier
+                                    .height(25.dp)
+                            )
+                            Spacer(modifier = Modifier
+                                .size(10.dp))
+                            DropdownMenuItem(leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_sticky_note_2_24),
+                                    contentDescription = stringResource(R.string.share),
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(25.dp)
+                                )
+                            },
+                                text = {
+                                    Text(text = "Visualizza nota", color = BlueText)},
+                                onClick = {
+                                    noteVisualizer = true; viewModel.getNota(viewModel.userId, id)
+                                          },
+                                modifier = Modifier
+                                    .height(25.dp)
+                            )
+                            Spacer(modifier = Modifier
+                                .size(10.dp))
+                            DropdownMenuItem(leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                    contentDescription = stringResource(R.string.aggiungi_alla_libreria),
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(25.dp)
+                                )
+                            },
+                                text = {
+                                    Text(text = "Aggiungi alla libreria", color = BlueText)},
+                                onClick = {
+
+                                },
+                                modifier = Modifier
+                                    .height(25.dp)
+                            )
+                            Spacer(modifier = Modifier
+                                .size(10.dp))
+                            DropdownMenuItem(leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                    contentDescription = stringResource(R.string.aggiungi_a_una_readlist),
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(25.dp)
+                                )
+                            },
+                                text = {
+                                    Text(text = "Aggiungi a una readlist", color = BlueText)},
+                                onClick = {
+                                },
+                                modifier = Modifier
+                                    .height(25.dp)
+                            )
+                            Spacer(modifier = Modifier
+                                .size(10.dp))
+                            DropdownMenuItem(leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                    contentDescription = stringResource(R.string.aggiungi_una_recensione),
+                                    tint = BlueText,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .size(25.dp)
+                                )
+                            },
+                                text = {
+                                    Text(text = "Aggiungi una recensione", color = BlueText)},
+                                onClick = {
+                                    more = false
+                                    reviewEnabled = true
+                                },
+                                modifier = Modifier
+                                    .height(25.dp)
+                            )
+                        }
                     }
                 }
             }
             var note = viewModel.note
             var testo by rememberSaveable { mutableStateOf("") }
-            viewModel.getNota(viewModel.userId, id)
             testo = note
                 if (noteVisualizer) {
                     var modify = false
@@ -376,8 +480,6 @@ fun ContentBookPage(
                                 })
                         }
                     }
-                    var reviewEnabled by rememberSaveable { mutableStateOf(false) }
-                    var review by rememberSaveable { mutableStateOf(0) }
                     if (reviewEnabled) {
                         Dialog(onDismissRequest = { reviewEnabled = false }) {
                             Column(modifier = Modifier
