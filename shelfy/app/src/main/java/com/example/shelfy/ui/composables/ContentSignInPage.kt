@@ -309,7 +309,8 @@ fun ContentSignInPage(
             )
         }
     }
-    if(viewModel.loginDone){
+    if(viewModel.loginDone && viewModel.userId != "" && !viewModel.libraryAdded){
+        viewModel.addReadlist("Libreria", viewModel.userId)
         navController.navigate(Screens.HOME_SCREEN)
     }
 }
