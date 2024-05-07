@@ -218,6 +218,7 @@ fun ContentBookPage(
                                 text = {
                                     Text(text = "Aggiungi alla libreria", color = BlueText)},
                                 onClick = {
+                                          viewModel.addToReadlist(id!!, viewModel.userId)
 
                                 },
                                 modifier = Modifier
@@ -269,11 +270,14 @@ fun ContentBookPage(
             }
             var note = viewModel.note
             var testo by remember{ mutableStateOf("") }
+            var checked: Boolean = false;
+            var modify: Boolean = false
             testo = note
-            var noteAlreadyExists = viewModel.noteAlreadyExists
                 if (noteVisualizer) {
+                    var noteAlreadyExists = viewModel.noteAlreadyExists
                     viewModel.checkNoteAlreadyInserted(viewModel.userId, id!!);
-                    var modify by remember{mutableStateOf(viewModel.noteAlreadyExists)}
+                        modify = viewModel.noteAlreadyExists
+                        checked = true
                     Dialog(onDismissRequest = { noteVisualizer = false }) {
                         TextField(singleLine = false,
                             value = testo,
@@ -323,7 +327,7 @@ fun ContentBookPage(
                                         )
                                     }
                                     IconButton(onClick = {
-                                        modify = !modify
+                                        modify = true
                                     }, enabled = if (!noteAlreadyExists) true else false) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
