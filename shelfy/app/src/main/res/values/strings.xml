@@ -32,4 +32,5 @@
     <string name="campo_obbligatorio">Campo obbligatorio</string>
     <string name="ripeti_password">Ripeti password</string>
     <string name="sei_gi_un_utente">Sei già un utente?</string>
+    <string name="la_tua_libreria">La tua libreria</string>
 </resources>
