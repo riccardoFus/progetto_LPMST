@@ -2,6 +2,7 @@ package com.example.shelfy.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -46,17 +47,8 @@ fun sha256(input: String): String {
 }
 
 class AppViewModel : ViewModel(){
+
     var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
-    var booksUiStateRecommendation2 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
-    var booksUiStateRecommendation3 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
-    var userId: String by mutableStateOf("")
-    var sumReviews : Int by mutableIntStateOf(0)
-    var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
-    var loginDone : Boolean by mutableStateOf(false)
-    var alreadySignedIn : Boolean by mutableStateOf(false)
-    var note : String by mutableStateOf("")
-    var libraryAdded : Boolean by mutableStateOf(false)
-    var noteAlreadyExists : Boolean by mutableStateOf(false)
     private fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -64,6 +56,8 @@ class AppViewModel : ViewModel(){
         }
     }
 
+
+    var booksUiStateRecommendation2 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     private fun getBooksRecommendation2(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -71,6 +65,8 @@ class AppViewModel : ViewModel(){
         }
     }
 
+
+    var booksUiStateRecommendation3 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
     private fun getBooksRecommendation3(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -95,6 +91,10 @@ class AppViewModel : ViewModel(){
         }
     }
 
+
+    var userId: String by mutableStateOf("")
+    var loginDone : Boolean by mutableStateOf(false)
+    var alreadySignedIn : Boolean by mutableStateOf(false)
     fun signInUser(
         email: String,
         password: String,
@@ -186,6 +186,8 @@ class AppViewModel : ViewModel(){
         }
     }
 
+
+    var libraryAdded : Boolean by mutableStateOf(false)
     fun addReadlist(name : String, userId : String){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReadlist = dB.collection("Readlists")
@@ -198,7 +200,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
-    fun addToReadlist(bookId : String, userId : String){
+    fun addToReadlist(bookId: Item?, userId: String){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
             documents -> if(!documents.isEmpty){
@@ -215,6 +217,8 @@ class AppViewModel : ViewModel(){
         }
     }
 
+
+    var note : String by mutableStateOf("")
     fun updateNota(userId: String, text: String, bookId: String){
         var id = ""
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -262,7 +266,9 @@ class AppViewModel : ViewModel(){
         return result
     }
 
-  fun checkNoteAlreadyInserted(userId: String, bookId: String){
+
+    var noteAlreadyExists : Boolean by mutableStateOf(false)
+    fun checkNoteAlreadyInserted(userId: String, bookId: String){
         var found = false
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
@@ -282,6 +288,8 @@ class AppViewModel : ViewModel(){
         return userId
     }
 
+    var sumReviews : Int by mutableIntStateOf(0)
+    var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
     fun getReviews(bookId : String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReviews  = dB.collection("Reviews")
@@ -307,10 +315,49 @@ class AppViewModel : ViewModel(){
             }
     }
 
+    var itemList = mutableStateListOf<Item>()
+    fun getElementsLibrary(userId : String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbReadlist  = dB.collection("Readlists")
+        dbReadlist
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("name", "Libreria")
+            .get()
+            .addOnSuccessListener {
+                val list = it.documents
+                for(document in list){
+                    val readlist : Readlist? = document.toObject(Readlist::class.java)
+                    if (readlist != null) {
+                        for(books in readlist.content){
+                            println(books.id)
+                            itemList.add(books)
+                        }
+                    }
+                }
+            }
+    }
+
+    var readlists = mutableStateListOf<Readlist>()
+    fun getReadlists(userId : String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbReadlist  = dB.collection("Readlists")
+        dbReadlist
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener {
+                val list = it.documents
+                for(document in list){
+                    val readlist : Readlist? = document.toObject(Readlist::class.java)
+                    if (readlist != null) {
+                        readlists.add(readlist)
+                    }
+                }
+            }
+    }
+
     init{
         getBooksRecommendation1("giallo")
         getBooksRecommendation2("horror")
         getBooksRecommendation3("fantasy")
-        // getBook("eu3REAAAQBAJ")
     }
 }
