@@ -2,6 +2,7 @@ package com.example.shelfy.ui.composables
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.view.Gravity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -43,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogWindowProvider
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.shelfy.R
@@ -52,6 +55,8 @@ import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -154,7 +159,7 @@ fun ContentBookPage(
                                 .size(40.dp)
                         )
                     }
-                    
+                    var aggiunto by remember{mutableStateOf(false)}
                     if(more){
                         DropdownMenu(
                             expanded = true,
@@ -212,12 +217,25 @@ fun ContentBookPage(
                             },
                                 text = {
                                     Text(text = "Aggiungi alla libreria", color = BlueText)},
+                                trailingIcon = {
+                                    if(aggiunto) {
+                                        Spacer(modifier = Modifier.size(10.dp))
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_done_24),
+                                            contentDescription = "Done",
+                                            tint = BlueText,
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .size(25.dp)
+                                        )
+                                    }
+                                },
                                 onClick = {
                                           viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId)
-
                                 },
                                 modifier = Modifier
                                     .height(25.dp)
+
                             )
                             Spacer(modifier = Modifier
                                 .size(10.dp))
@@ -265,14 +283,10 @@ fun ContentBookPage(
             }
             var note = viewModel.note
             var testo by remember{ mutableStateOf("") }
-            var checked: Boolean = false;
-            var modify: Boolean = false
             testo = note
                 if (noteVisualizer) {
                     var noteAlreadyExists = viewModel.noteAlreadyExists
                     viewModel.checkNoteAlreadyInserted(viewModel.userId, id!!);
-                        modify = viewModel.noteAlreadyExists
-                        checked = true
                     Dialog(onDismissRequest = { noteVisualizer = false }) {
                         TextField(singleLine = false,
                             value = testo,
@@ -285,7 +299,6 @@ fun ContentBookPage(
                             },
                             onValueChange = {newText -> testo = newText},
                             textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
-                            readOnly = modify,
                             modifier = Modifier
                                 .height(150.dp),
                             shape = RoundedCornerShape(30.dp),
@@ -303,31 +316,8 @@ fun ContentBookPage(
                                             viewModel.addNota(viewModel.userId, testo, id!!)
                                     }, enabled = if (testo != "") true else false) {
                                         Icon(
-                                            painter = painterResource(id = R.drawable.baseline_done_24),
+                                            painter = painterResource(id = R.drawable.baseline_close_24),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                            tint = Color.Green,
-                                            modifier = Modifier
-                                                .size(50.dp)
-                                        )
-                                    }
-                                    IconButton(onClick = {
-                                        modify = !modify
-                                    }, enabled = if (noteAlreadyExists) true else false) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.baseline_edit_24),
-                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                            tint = Color.Black,
-                                            modifier = Modifier
-                                                .size(50.dp)
-                                        )
-                                    }
-                                    IconButton(onClick = {
-                                        modify = true
-                                    }, enabled = if (!noteAlreadyExists) true else false) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                            tint = Color.Black,
                                             modifier = Modifier
                                                 .size(50.dp)
                                         )
