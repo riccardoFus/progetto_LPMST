@@ -16,6 +16,7 @@ import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -55,6 +56,7 @@ class AppViewModel : ViewModel(){
     var alreadySignedIn : Boolean by mutableStateOf(false)
     var note : String by mutableStateOf("")
     var libraryAdded : Boolean by mutableStateOf(false)
+    var noteAlreadyExists : Boolean by mutableStateOf(false)
     private fun getBooksRecommendation1(query : String){
         viewModelScope.launch{
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
@@ -196,6 +198,23 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    fun addToReadlist(bookId : String, userId : String){
+        val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
+            documents -> if(!documents.isEmpty){
+            System.err.println("Valp")
+            for(document in documents){
+                        dB.collection("Readlists").document(document.id).update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
+                                System.err.println("Va")
+                        }.addOnFailureListener {
+                            System.err.println("Non va")
+
+                        }
+                }
+            }
+        }
+    }
+
     fun updateNota(userId: String, text: String, bookId: String){
         var id = ""
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -241,6 +260,22 @@ class AppViewModel : ViewModel(){
         }
 
         return result
+    }
+
+  fun checkNoteAlreadyInserted(userId: String, bookId: String){
+        var found = false
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
+            documents -> if(!documents.isEmpty){
+                for(document in documents){
+                    if(document.get("bookId") == bookId) {
+                        found = true
+                        }
+                    }
+                }
+            noteAlreadyExists = found
+        }
+
     }
 
     fun getUser(): String {
