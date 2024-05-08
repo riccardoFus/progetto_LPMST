@@ -204,13 +204,9 @@ class AppViewModel : ViewModel(){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
             documents -> if(!documents.isEmpty){
-            System.err.println("Valp")
             for(document in documents){
                         dB.collection("Readlists").document(document.id).update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
-                                System.err.println("Va")
                         }.addOnFailureListener {
-                            System.err.println("Non va")
-
                         }
                 }
             }
