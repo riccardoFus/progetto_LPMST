@@ -319,7 +319,7 @@ fun ContentBookPage(
                                             viewModel.updateNota(viewModel.userId, testo, id!!)
                                         else
                                             viewModel.addNota(viewModel.userId, testo, id!!)
-                                    }, enabled = if (testo != "") true else false) {
+                                    }) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.baseline_close_24),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
