@@ -218,6 +218,7 @@ fun ContentBookPage(
                                 text = {
                                     Text(text = "Aggiungi alla libreria", color = BlueText)},
                                 onClick = {
+                                          viewModel.addToReadlist(id!!, viewModel.userId)
 
                                 },
                                 modifier = Modifier
@@ -268,10 +269,15 @@ fun ContentBookPage(
                 }
             }
             var note = viewModel.note
-            var testo by rememberSaveable { mutableStateOf("") }
+            var testo by remember{ mutableStateOf("") }
+            var checked: Boolean = false;
+            var modify: Boolean = false
             testo = note
                 if (noteVisualizer) {
-                    var modify = false
+                    var noteAlreadyExists = viewModel.noteAlreadyExists
+                    viewModel.checkNoteAlreadyInserted(viewModel.userId, id!!);
+                        modify = viewModel.noteAlreadyExists
+                        checked = true
                     Dialog(onDismissRequest = { noteVisualizer = false }) {
                         TextField(singleLine = false,
                             value = testo,
@@ -282,11 +288,11 @@ fun ContentBookPage(
                                     fontSize = 20.sp
                                 )
                             },
-                            onValueChange = {newText -> testo = newText;},
+                            onValueChange = {newText -> testo = newText},
                             textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
-                            readOnly = !modify,
+                            readOnly = modify,
                             modifier = Modifier
-                                .height(100.dp),
+                                .height(150.dp),
                             shape = RoundedCornerShape(30.dp),
                             colors = TextFieldDefaults.colors(
                                 focusedIndicatorColor = Color.Transparent,
@@ -296,23 +302,37 @@ fun ContentBookPage(
                                 Column(modifier = Modifier.fillMaxHeight()) {
                                     IconButton(onClick = {
                                         noteVisualizer = false
-                                        viewModel.updateNota(viewModel.userId, testo, id!!)
+                                        if(noteAlreadyExists)
+                                            viewModel.updateNota(viewModel.userId, testo, id!!)
+                                        else
+                                            viewModel.addNota(viewModel.userId, testo, id!!)
                                     }, enabled = if (testo != "") true else false) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.baseline_done_24),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                            tint = BlueText,
+                                            tint = Color.Green,
                                             modifier = Modifier
                                                 .size(50.dp)
                                         )
                                     }
                                     IconButton(onClick = {
                                         modify = !modify
-                                    }, enabled = if (testo != "") true else false) {
+                                    }, enabled = if (noteAlreadyExists) true else false) {
                                         Icon(
                                             painter = painterResource(id = R.drawable.baseline_edit_24),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                            tint = BlueText,
+                                            tint = Color.Black,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
+                                    IconButton(onClick = {
+                                        modify = true
+                                    }, enabled = if (!noteAlreadyExists) true else false) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                            tint = Color.Black,
                                             modifier = Modifier
                                                 .size(50.dp)
                                         )
@@ -362,124 +382,6 @@ fun ContentBookPage(
                     .background(color = BlackPage),
                 contentAlignment = Alignment.TopStart
             ) {
-                Column(
-                ) {
-                    Row() {
-                        IconButton(
-                            onClick = {},
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                contentDescription = stringResource(R.string.aggiungi_libro),
-                                tint = BlueText,
-                                modifier = Modifier
-                                    .size(32.dp)
-                            )
-                        }
-                        Text(
-                            text = AnnotatedString(stringResource(R.string.aggiungi_alla_libreria)),
-                            style = TextStyle(
-                                fontFamily = fonts,
-                                fontSize = 20.sp,
-                                color = BlueText
-                            ),
-                            textAlign = TextAlign.Justify,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(7.dp)
-                        )
-                    }
-                    Row() {
-                        IconButton(
-                            onClick = {},
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                contentDescription = stringResource(id = R.string.aggiungi_libro),
-                                tint = BlueText,
-                                modifier = Modifier
-                                    .size(32.dp)
-                            )
-                        }
-                        Text(
-                            text = AnnotatedString(stringResource(R.string.aggiungi_a_una_readlist)),
-                            style = TextStyle(
-                                fontFamily = fonts,
-                                fontSize = 20.sp,
-                                color = BlueText
-                            ),
-                            textAlign = TextAlign.Justify,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(7.dp)
-                        )
-                    }
-                    var noteEnabled by rememberSaveable { mutableStateOf(false) }
-
-                    Row() {
-                        IconButton(
-                            onClick = {
-                                noteEnabled = true
-                            },
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                tint = BlueText,
-                                modifier = Modifier
-                                    .size(32.dp)
-                            )
-                        }
-                        ClickableText(
-                            text = AnnotatedString(stringResource(R.string.aggiungi_una_nota)),
-                            onClick = {
-                                noteEnabled = true
-                                      },
-                            style = TextStyle(
-                                fontFamily = fonts,
-                                fontSize = 20.sp,
-                                color = BlueText,
-                                textAlign = TextAlign.Justify,
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(7.dp)
-                        )
-                    }
-                    var nota by rememberSaveable { mutableStateOf("") }
-                    if (noteEnabled) {
-                        Dialog(onDismissRequest = {noteEnabled = false}) {
-                            TextField(singleLine = false,
-                                value = nota,
-                                placeholder = {
-                                    Text(
-                                        text = stringResource(R.string.aggiungi_una_nota),
-                                        fontFamily = fonts,
-                                        fontSize = 20.sp
-                                    )
-                                },
-                                onValueChange = { newText -> nota = newText },
-                                textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
-                                modifier = Modifier
-                                    .height(100.dp),
-                                shape = RoundedCornerShape(30.dp),
-                                colors = TextFieldDefaults.colors(
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                ),
-                                trailingIcon = {
-                                    IconButton(onClick = { noteEnabled = false; viewModel.addNota(viewModel.getUser(), nota, id!!) }) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
-                                            tint = BlueText,
-                                            modifier = Modifier
-                                                .size(30.dp)
-                                        )
-                                    }
-                                })
-                        }
-                    }
                     if (reviewEnabled) {
                         Dialog(onDismissRequest = { reviewEnabled = false }) {
                             Column(modifier = Modifier
@@ -571,35 +473,6 @@ fun ContentBookPage(
                             }
                         }
                     }
-                    Row(){
-                        IconButton(
-                            onClick = {
-                                      reviewEnabled = true
-                            },
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
-                                contentDescription = stringResource(R.string.aggiungi_una_recensione),
-                                tint = BlueText,
-                                modifier = Modifier
-                                    .size(32.dp)
-                            )
-                        }
-                        ClickableText(
-                            text = AnnotatedString(stringResource(R.string.aggiungi_una_recensione)),
-                            onClick = {reviewEnabled = true},
-                            style = TextStyle(
-                                fontFamily = fonts,
-                                fontSize = 20.sp,
-                                color = BlueText,
-                                textAlign = TextAlign.Justify,
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(7.dp)
-                        )
-                    }
-                }
             }
         }
     }
