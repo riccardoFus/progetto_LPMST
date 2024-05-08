@@ -232,6 +232,11 @@ fun ContentBookPage(
                                 },
                                 onClick = {
                                           viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId)
+                                    GlobalScope.launch {
+                                        aggiunto = true
+                                        Thread.sleep(2000)
+                                        aggiunto = false
+                                    }
                                 },
                                 modifier = Modifier
                                     .height(25.dp)
