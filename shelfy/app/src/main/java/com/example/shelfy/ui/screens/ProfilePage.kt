@@ -59,7 +59,7 @@ fun ProfilePage(
                 .weight(1f)
                 .background(color = BlackBar)
         )
-        BarUser(navController = navController)
+        BarUser(viewModel = viewModel, navController = navController)
         ContentProfilePage(
             viewModel = viewModel,
             navController = navController,

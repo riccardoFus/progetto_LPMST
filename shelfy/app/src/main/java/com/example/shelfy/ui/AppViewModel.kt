@@ -269,19 +269,44 @@ class AppViewModel : ViewModel(){
         }
     }
 
-    fun addToReadlist(bookId: Item?, userId: String){
+    fun addToReadlist(bookId: Item?, userId: String, readlist: String){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
             documents -> if(!documents.isEmpty){
             for(document in documents){
-                        dB.collection("Readlists").document(document.id).update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
-                        }.addOnFailureListener {
-                        }
+                if(document.get("name") == readlist) {
+                    dB.collection("Readlists").document(document.id)
+                        .update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
+                    }.addOnFailureListener {
+                    }
+                }
                 }
             }
         }
     }
 
+    var readlists = mutableStateListOf<Readlist>()
+    var readlistsNumber = mutableStateListOf<Int>(0)
+    var currentUser by mutableStateOf("")
+    fun getReadlists(){
+        if(currentUser != userId) {
+            val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+            val dbReadlist = dB.collection("Readlists")
+            dbReadlist
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener {
+                    val list = it.documents
+                    for (document in list) {
+                        val readlist: Readlist? = document.toObject(Readlist::class.java)
+                        if (readlist != null) {
+                            readlists.add(readlist)
+                        }
+                    }
+                }
+            currentUser = userId
+        }
+    }
 
     var note : String by mutableStateOf("")
     fun updateNota(userId: String, text: String, bookId: String){
@@ -370,24 +395,6 @@ class AppViewModel : ViewModel(){
                             println(books.id)
                             itemList.add(books)
                         }
-                    }
-                }
-            }
-    }
-
-    var readlists = mutableStateListOf<Readlist>()
-    fun getReadlists(userId : String){
-        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val dbReadlist  = dB.collection("Readlists")
-        dbReadlist
-            .whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener {
-                val list = it.documents
-                for(document in list){
-                    val readlist : Readlist? = document.toObject(Readlist::class.java)
-                    if (readlist != null) {
-                        readlists.add(readlist)
                     }
                 }
             }
