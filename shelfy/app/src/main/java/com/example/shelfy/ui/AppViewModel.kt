@@ -276,9 +276,9 @@ class AppViewModel : ViewModel(){
 
     var readlists = mutableStateListOf<Readlist>()
     var readlistsNumber = mutableStateListOf<Int>(0)
-    var currentUser by mutableStateOf("")
+    var updated by mutableStateOf(false)
     fun getReadlists(){
-        if(currentUser != userId) {
+            if(!updated){
             val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
             val dbReadlist = dB.collection("Readlists")
             dbReadlist
@@ -293,8 +293,8 @@ class AppViewModel : ViewModel(){
                         }
                     }
                 }
-            currentUser = userId
         }
+        updated = true
     }
 
     var note : String by mutableStateOf("")
