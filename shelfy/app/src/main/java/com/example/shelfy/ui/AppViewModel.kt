@@ -19,8 +19,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okhttp3.internal.wait
 import java.security.MessageDigest
 
 fun isValidEmail(email: String): Boolean {
@@ -114,14 +117,6 @@ class AppViewModel : ViewModel(){
         }
     }
 
-    fun createReviewInFirebase(
-        id : String,
-        stars : Int,
-        text: String = "",
-    ){
-        addReview(id, userId, stars, text)
-    }
-
     fun logout(){
         val firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.signOut()
@@ -166,6 +161,79 @@ class AppViewModel : ViewModel(){
             .addOnFailureListener {}
     }
 
+    fun createReviewInFirebase(
+        id : String,
+        stars : Int,
+        text: String = "",
+    ){
+        addReview(id, userId, stars, text)
+    }
+    var sumReviews : Int by mutableIntStateOf(0)
+    var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
+
+    fun getReviews(bookId : String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbReviews  = dB.collection("Reviews")
+        dbReviews.get()
+            .addOnSuccessListener {
+                if(!it.isEmpty){
+                    val list = it.documents
+                    var conta = 0
+                    for(document in list){
+                        val review : Review? = document.toObject(Review::class.java)
+                        if (review != null && review.bookId == bookId) {
+                            sumReviews = sumReviews.plus(review.stars)
+                            conta++
+                        }
+                    }
+                    if(sumReviews != 0) {
+                        numberAndMediaReviews = Pair<Int, Double>(conta, sumReviews.toDouble() / conta.toDouble())
+                    }else{
+                        numberAndMediaReviews = Pair<Int, Double>(0, 0.0)
+                    }
+                    sumReviews = 0
+                }
+            }
+    }
+    var reviews = mutableListOf<Review>()
+    var reviewsUsers = mutableListOf<User>()
+    var reviewsUpdated by mutableStateOf(false)
+    fun getReviewsPlusUser(bookId : String) {
+        println("Chiamata")
+            val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+            dB.collection("Reviews").whereEqualTo("bookId", bookId).get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        for (document in documents) {
+                            println("Aggiungo review ")
+                            reviews.add(
+                                Review(
+                                    document.get("userId").toString(),
+                                    document.getLong("stars")?.toInt() ?: 0,
+                                    document.get("desc").toString()
+                                )
+                            )
+                        }
+                    }
+                    reviewsUpdated = true
+        }
+    }
+    fun getReviewsUsers(){
+        println("Chiamata users")
+        println("Size dentro " + reviews.size)
+            val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+            for (review in reviews) {
+                val document = dB.collection("Users").document(review.userId)
+                System.out.println("Userid " + review.userId)
+                document.get().addOnSuccessListener { documents ->
+                    System.out.println(
+                        "Aggiunto username " + documents.getString("username").toString()
+                    )
+                    reviewsUsers.add(User(documents.get("username").toString()))
+                }
+            }
+        reviewsUpdated = false
+    }
 
     private fun addReview(id: String, userId: String, stars: Int, text: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -175,6 +243,7 @@ class AppViewModel : ViewModel(){
             .addOnSuccessListener {}
             .addOnFailureListener {}
     }
+
     fun addNota(userId: String, text: String, bookId: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbNotes  = dB.collection("Notes")
@@ -282,33 +351,6 @@ class AppViewModel : ViewModel(){
 
     fun getUser(): String {
         return userId
-    }
-
-    var sumReviews : Int by mutableIntStateOf(0)
-    var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
-    fun getReviews(bookId : String){
-        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val dbReviews  = dB.collection("Reviews")
-        dbReviews.get()
-            .addOnSuccessListener {
-                if(!it.isEmpty){
-                    val list = it.documents
-                    var conta = 0
-                    for(document in list){
-                        val review : Review? = document.toObject(Review::class.java)
-                        if (review != null && review.bookId == bookId) {
-                            sumReviews = sumReviews.plus(review.stars)
-                            conta++
-                        }
-                    }
-                    if(sumReviews != 0) {
-                        numberAndMediaReviews = Pair<Int, Double>(conta, sumReviews.toDouble() / conta.toDouble())
-                    }else{
-                        numberAndMediaReviews = Pair<Int, Double>(0, 0.0)
-                    }
-                    sumReviews = 0
-                }
-            }
     }
 
     var itemList = mutableStateListOf<Item>()

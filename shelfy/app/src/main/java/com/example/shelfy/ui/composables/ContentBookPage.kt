@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -59,7 +61,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("SuspiciousIndentation")
+@SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition")
 @Composable
 fun ContentBookPage(
     viewModel : AppViewModel,
@@ -354,6 +356,7 @@ fun ContentBookPage(
                 textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
                 maxLines = if (showTrama) Int.MAX_VALUE else 7
             )
+
             var reviews = viewModel.numberAndMediaReviews
             if(id != null) {
                 viewModel.getReviews(id)
@@ -463,6 +466,40 @@ fun ContentBookPage(
                             }
                         }
                     }
+            }
+
+            var currentBookId by rememberSaveable{ mutableStateOf(id) }
+            var reviewsUpdated : Boolean = viewModel.reviewsUpdated
+            if(reviews.first > 0) {
+                if(id != null){
+                    if(currentBookId != id){
+                        currentBookId = id
+                        viewModel.reviews.clear()
+                        viewModel.reviewsUsers.clear()
+                        if(viewModel.numberAndMediaReviews.first > viewModel.reviews.size) {
+                            viewModel.getReviewsPlusUser(id)
+                        }
+                    }
+                }
+
+                for(test in viewModel.reviews){
+                    println("Desc " + test.desc + " size " + viewModel.reviews.size)
+                }
+
+                for(test in viewModel.reviewsUsers){
+                    println("Username " + test.username)
+                }
+                if(reviewsUpdated){
+                    viewModel.getReviewsUsers()
+                }
+            }
+            else{
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)) {
+                    Text(text = "Testiamolo", fontFamily = fonts, fontSize = 20.sp, color = BlueText)
+                }
+
             }
         }
     }
