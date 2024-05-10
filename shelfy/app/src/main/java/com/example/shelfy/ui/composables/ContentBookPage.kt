@@ -10,14 +10,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -59,6 +63,7 @@ import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 
 @SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition")
@@ -467,40 +472,91 @@ fun ContentBookPage(
                         }
                     }
             }
-
-            var currentBookId by rememberSaveable{ mutableStateOf(id) }
+            var currentBookId by rememberSaveable{ mutableStateOf("") }
             var reviewsUpdated : Boolean = viewModel.reviewsUpdated
             if(reviews.first > 0) {
                 if(id != null){
                     if(currentBookId != id){
                         currentBookId = id
+                        viewModel.reviewsUpdated = false
                         viewModel.reviews.clear()
-                        viewModel.reviewsUsers.clear()
-                        if(viewModel.numberAndMediaReviews.first > viewModel.reviews.size) {
-                            viewModel.getReviewsPlusUser(id)
+                        viewModel.getReviewsPlusUser(id)
+                    }
+                }
+
+                if(reviewsUpdated){
+                    Text(
+                        text = stringResource(R.string.recensioni),
+                        fontFamily = fonts,
+                        fontSize = 20.sp,
+                        color = BlueText,
+                        textAlign = TextAlign.Center
+                    )
+
+                    LazyRow(){
+                        items(viewModel.reviews){
+                            Box(modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(BlackBar)
+                                .size(200.dp)
+                            ){
+                                Column (
+                                    modifier = Modifier.fillMaxSize()
+                                ){
+                                    Text(
+                                        text = "User : " + it.username,
+                                        fontFamily = fonts,
+                                        fontSize = 18.sp,
+                                        color = WhiteText,
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                    )
+                                    Text(
+                                        text = "Voto : " + it.stars,
+                                        fontFamily = fonts,
+                                        fontSize = 18.sp,
+                                        color = WhiteText,
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                    )
+                                    if (it.desc.isNotBlank()) {
+                                        Text(
+                                            text = "Descrizione : " + it.desc,
+                                            fontFamily = fonts,
+                                            fontSize = 15.sp,
+                                            color = WhiteText,
+                                            modifier = Modifier
+                                                .padding(8.dp)
+                                                .fillMaxSize(),
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
+                                }
+
+                            }
+
+
                         }
                     }
                 }
 
-                for(test in viewModel.reviews){
-                    println("Desc " + test.desc + " size " + viewModel.reviews.size)
-                }
-
-                for(test in viewModel.reviewsUsers){
-                    println("Username " + test.username)
-                }
-                if(reviewsUpdated){
-                    viewModel.getReviewsUsers()
-                }
             }
             else{
                 Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)) {
-                    Text(text = "Testiamolo", fontFamily = fonts, fontSize = 20.sp, color = BlueText)
+                    .fillMaxWidth(),
+                    contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stringResource(R.string.no_recensioni),
+                        fontFamily = fonts,
+                        fontSize = 20.sp,
+                        color = BlueText
+                    )
                 }
 
             }
+
+
         }
     }
 }

@@ -26,11 +26,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.shelfy.R
+import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
 
 @Composable
 fun BarUser(
+    viewModel : AppViewModel,
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
@@ -90,7 +92,11 @@ fun BarUser(
         }
 
         IconButton(
-            onClick = {}
+            onClick = {
+                viewModel.itemList.sortBy {
+                    it.volumeInfo.title
+                }
+            }
         ){
             Icon(
                 painter = painterResource(id = R.drawable.sort_ascending_1024x1024),
