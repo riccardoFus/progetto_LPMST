@@ -7,4 +7,5 @@ data class Review(
     val desc : String
 ){
     constructor(): this("", "", 0, "")
+    constructor(userId: String, stars: Int, desc: String ): this("", userId, stars, desc)
 }
