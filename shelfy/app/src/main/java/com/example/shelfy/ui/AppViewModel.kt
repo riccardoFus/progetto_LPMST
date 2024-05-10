@@ -172,6 +172,7 @@ class AppViewModel : ViewModel(){
     }
     var sumReviews : Int by mutableIntStateOf(0)
     var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
+    var reviewsUpdated by mutableStateOf(false)
 
     fun getReviews(bookId : String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -198,7 +199,6 @@ class AppViewModel : ViewModel(){
             }
     }
     var reviews = mutableStateListOf<Review>()
-    var reviewsUpdated by mutableStateOf(false)
     fun getReviewsPlusUser(bookId : String) {
         println("Chiamata")
             val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -226,7 +226,10 @@ class AppViewModel : ViewModel(){
         val dbReviews  = dB.collection("Reviews")
         val review = Review(id, username, stars, text)
         dbReviews.add(review)
-            .addOnSuccessListener {}
+            .addOnSuccessListener {
+                reviews.clear()
+                getReviewsPlusUser(id)
+            }
             .addOnFailureListener {}
     }
 
