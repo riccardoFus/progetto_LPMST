@@ -279,6 +279,7 @@ class AppViewModel : ViewModel(){
     var updated by mutableStateOf(false)
     fun getReadlists(){
             if(!updated){
+            readlists.clear()
             val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
             val dbReadlist = dB.collection("Readlists")
             dbReadlist
