@@ -21,15 +21,18 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.shelfy.R
@@ -64,7 +68,6 @@ import com.example.shelfy.ui.theme.fonts
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlin.math.max
-
 
 @SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition")
 @Composable
@@ -86,6 +89,8 @@ fun ContentBookPage(
 
             var reviewEnabled by rememberSaveable { mutableStateOf(false) }
             var review by rememberSaveable { mutableStateOf(0) }
+            var showReadlists by remember {mutableStateOf(false)}
+            viewModel.getReadlists()
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
@@ -238,7 +243,7 @@ fun ContentBookPage(
                                     }
                                 },
                                 onClick = {
-                                          viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId)
+                                          viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, "Libreria")
                                     GlobalScope.launch {
                                         aggiunto = true
                                         Thread.sleep(2000)
@@ -264,6 +269,7 @@ fun ContentBookPage(
                                 text = {
                                     Text(text = "Aggiungi a una readlist", color = BlueText)},
                                 onClick = {
+                                    showReadlists = true
                                 },
                                 modifier = Modifier
                                     .height(25.dp)
@@ -361,6 +367,31 @@ fun ContentBookPage(
                 textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
                 maxLines = if (showTrama) Int.MAX_VALUE else 7
             )
+
+            if(showReadlists) {
+                DropdownMenu(
+                    expanded = true,
+                    onDismissRequest = {showReadlists = false},
+                    modifier = Modifier
+                        .background(BlackBar)
+                ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .height(300.dp)
+                            .width(165.dp)
+                            .align(Alignment.CenterHorizontally)
+                            .fillMaxWidth()
+                    ) {
+                        items(viewModel.readlists) { item ->
+                            Column(modifier = Modifier
+                                .padding(11.dp)
+                                .align(Alignment.CenterHorizontally)){
+                                OutlinedButton(onClick = { viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, item.name) }, content = {Text(text = item.name, color = BlueText, fontFamily = fonts, fontSize = 20.sp)}, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp) )
+                            }
+                        }
+                    }
+                }
+            }
 
             var reviews = viewModel.numberAndMediaReviews
             if(id != null) {
