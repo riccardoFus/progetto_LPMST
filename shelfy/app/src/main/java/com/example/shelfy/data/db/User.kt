@@ -6,5 +6,4 @@ data class User(
     val password : String
 ){
     constructor(): this("","", "")
-    constructor(username: String): this(username,"", "")
 }

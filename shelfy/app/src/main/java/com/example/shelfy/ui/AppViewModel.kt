@@ -19,8 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.internal.wait
@@ -96,6 +94,7 @@ class AppViewModel : ViewModel(){
 
 
     var userId: String by mutableStateOf("")
+    var username: String by mutableStateOf("")
     var loginDone : Boolean by mutableStateOf(false)
     var alreadySignedIn : Boolean by mutableStateOf(false)
     fun signInUser(
@@ -103,6 +102,7 @@ class AppViewModel : ViewModel(){
         password: String,
         username: String = ""
     ){
+        this.username = username
         alreadySignedIn = runBlocking { checkEmailAlreadyExists(email) }
         if (!alreadySignedIn){
             FirebaseAuth.getInstance()
@@ -121,6 +121,7 @@ class AppViewModel : ViewModel(){
         val firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.signOut()
         userId = ""
+        username = ""
         loginDone = false
     }
 
@@ -143,6 +144,7 @@ class AppViewModel : ViewModel(){
                         dB.collection("Users").whereEqualTo("email", email).get()
                             .addOnSuccessListener { documents1 ->
                                 for (document2 in documents1) {
+                                    username = document.get("username").toString()
                                     userId = document.id
                                 }
                             }
@@ -166,7 +168,7 @@ class AppViewModel : ViewModel(){
         stars : Int,
         text: String = "",
     ){
-        addReview(id, userId, stars, text)
+        addReview(id, username, stars, text)
     }
     var sumReviews : Int by mutableIntStateOf(0)
     var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
@@ -195,8 +197,7 @@ class AppViewModel : ViewModel(){
                 }
             }
     }
-    var reviews = mutableListOf<Review>()
-    var reviewsUsers = mutableListOf<User>()
+    var reviews = mutableStateListOf<Review>()
     var reviewsUpdated by mutableStateOf(false)
     fun getReviewsPlusUser(bookId : String) {
         println("Chiamata")
@@ -208,37 +209,22 @@ class AppViewModel : ViewModel(){
                             println("Aggiungo review ")
                             reviews.add(
                                 Review(
-                                    document.get("userId").toString(),
+                                    document.get("username").toString(),
                                     document.getLong("stars")?.toInt() ?: 0,
                                     document.get("desc").toString()
                                 )
                             )
                         }
+
+                        reviewsUpdated = true
                     }
-                    reviewsUpdated = true
         }
     }
-    fun getReviewsUsers(){
-        println("Chiamata users")
-        println("Size dentro " + reviews.size)
-            val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-            for (review in reviews) {
-                val document = dB.collection("Users").document(review.userId)
-                System.out.println("Userid " + review.userId)
-                document.get().addOnSuccessListener { documents ->
-                    System.out.println(
-                        "Aggiunto username " + documents.getString("username").toString()
-                    )
-                    reviewsUsers.add(User(documents.get("username").toString()))
-                }
-            }
-        reviewsUpdated = false
-    }
 
-    private fun addReview(id: String, userId: String, stars: Int, text: String){
+    private fun addReview(id: String, username: String, stars: Int, text: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReviews  = dB.collection("Reviews")
-        val review = Review(id, userId, stars, text)
+        val review = Review(id, username, stars, text)
         dbReviews.add(review)
             .addOnSuccessListener {}
             .addOnFailureListener {}
