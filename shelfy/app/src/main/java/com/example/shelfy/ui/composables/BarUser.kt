@@ -148,7 +148,11 @@ fun BarUser(
         }
 
         IconButton(
-            onClick = {}
+            onClick = {
+                viewModel.itemList.sortBy {
+                    it.volumeInfo.title
+                }
+            }
         ){
             Icon(
                 painter = painterResource(id = R.drawable.sort_ascending_1024x1024),

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">shelfy</string>
+    <string name="app_name">Shelfy</string>
     <string name="shelfy">SHELFY</string>
     <string name="search">Search</string>
     <string name="home">Home</string>
@@ -34,4 +34,6 @@
     <string name="ripeti_password">Ripeti password</string>
     <string name="sei_gi_un_utente">Sei già un utente?</string>
     <string name="la_tua_libreria">La tua libreria</string>
+    <string name="no_recensioni">No recensioni</string>
+    <string name="recensioni">Recensioni</string>
 </resources>
