@@ -5,14 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,6 +29,7 @@ import com.example.shelfy.R
 import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
+import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
@@ -80,16 +85,27 @@ fun BookCardSearchPage(
             modifier = Modifier
                 .padding(top = 2.dp),
             fontWeight = FontWeight.SemiBold,
-            fontFamily = fonts
+            fontFamily = fonts,
+            maxLines = 2
         )
         Text(
-            text = "Trama : " + (item?.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
+            text = (item?.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
             color = WhiteText,
             fontSize = 11.sp,
             modifier = Modifier
                 .padding(top = 2.dp),
             fontWeight = FontWeight.SemiBold,
             fontFamily = fonts,
-            overflow = TextOverflow.Ellipsis)
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 7)
+        IconButton(onClick = {viewModel.deleteBookFromReadlist("Libreria", item.id)}) {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_remove_circle_outline_24),
+                contentDescription = "Rimuovi libro",
+                tint = BlueText,
+                modifier = Modifier
+                    .size(23.dp)
+            )
+        }
     }
 }

@@ -105,7 +105,7 @@ fun BarUser(
                             value = readList,
                             placeholder = {
                                 Text(
-                                    text = stringResource(R.string.cerca_libro),
+                                    text = stringResource(R.string.aggiungi_readlist),
                                     fontFamily = fonts,
                                     fontSize = 20.sp
                                 )
