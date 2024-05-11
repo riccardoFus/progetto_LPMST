@@ -94,10 +94,15 @@ fun ContentBookPage(
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
-                        ("https://" + (viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.substring(
-                            7
-                        )
-                            ?: stringResource(id = R.string.book_image_no_available)))
+                        "https://" + if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.length ?: 0) != 0){
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.substring(7)?.replace("zoom=1", "zoom=0")
+                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.length ?: 0) != 0){
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.substring(7)?.replace("zoom=1", "zoom=0")
+                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) != 0){
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                        }else{
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                        }
                     )
                     .crossfade(true)
                     .build(),
