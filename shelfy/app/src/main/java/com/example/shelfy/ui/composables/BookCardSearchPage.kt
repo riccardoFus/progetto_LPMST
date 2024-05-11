@@ -43,8 +43,15 @@ fun BookCardSearchPage(
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(
-                (("https://" + (item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
-                    ?: (stringResource(R.string.book_image_no_available)))))
+                "https://" + if((item?.volumeInfo?.imageLinks?.large?.length ?: 0) != 0){
+                    item?.volumeInfo?.imageLinks?.large?.substring(7)?.replace("zoom=1", "zoom=0")
+                }else if((item?.volumeInfo?.imageLinks?.small?.length ?: 0) != 0){
+                    item?.volumeInfo?.imageLinks?.small?.substring(7)?.replace("zoom=1", "zoom=0")
+                }else if((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) != 0){
+                    item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                }else{
+                    item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                }
             )
             .crossfade(true)
             .build(),

@@ -105,7 +105,11 @@ fun BarUser(
                             value = readList,
                             placeholder = {
                                 Text(
+<<<<<<< HEAD
                                     text = stringResource(R.string.aggiungi_readlist),
+=======
+                                    text = stringResource(R.string.aggiungi_una_readlist),
+>>>>>>> 76d5c8d92f69c636c824c2f2c81c21770e650adc
                                     fontFamily = fonts,
                                     fontSize = 20.sp
                                 )
