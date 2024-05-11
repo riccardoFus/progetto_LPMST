@@ -106,7 +106,6 @@ fun BarUser(
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.aggiungi_readlist),
-                                    text = stringResource(R.string.aggiungi_una_readlist),
                                     fontFamily = fonts,
                                     fontSize = 20.sp
                                 )
