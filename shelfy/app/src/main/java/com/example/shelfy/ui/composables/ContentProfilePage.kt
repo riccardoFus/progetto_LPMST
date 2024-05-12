@@ -51,11 +51,8 @@ fun ContentProfilePage(
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
-    var done by rememberSaveable {
-        mutableStateOf(false)
-    }
-    if(!done){
-        done = true
+    if(!viewModel.done){
+        viewModel.done = true
         viewModel.itemList.clear()
         viewModel.getElementsLibrary(
             viewModel.userId
@@ -63,14 +60,23 @@ fun ContentProfilePage(
     }
     Box(
         modifier = modifier){
-            LazyColumn(modifier = Modifier
+
+            LazyRow(modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth()){
                 items(viewModel.itemList){ item ->
-                    Row(modifier = Modifier
-                        .padding(8.dp)
-                        .height(250.dp)) {
-                        BookCardSearchPage(item = item, viewModel = viewModel, navController = navController)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .height(300.dp)
+                            .width(200.dp)
+                            .padding(8.dp)
+                    ) {
+                        BookCardHomePage(
+                            item = item,
+                            viewModel = viewModel,
+                            navController = navController
+                        )
                     }
                 }
             }

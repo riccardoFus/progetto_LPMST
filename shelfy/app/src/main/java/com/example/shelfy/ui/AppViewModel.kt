@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.internal.wait
@@ -258,6 +260,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    var updated by mutableStateOf(false)
     fun addToReadlist(bookId: Item?, userId: String, readlist: String){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
@@ -266,6 +269,7 @@ class AppViewModel : ViewModel(){
                 if(document.get("name") == readlist) {
                     dB.collection("Readlists").document(document.id)
                         .update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
+                            updated = false
                     }.addOnFailureListener {
                     }
                 }
@@ -275,10 +279,10 @@ class AppViewModel : ViewModel(){
     }
 
     var readlists = mutableStateListOf<Readlist>()
-    var readlistsNumber = mutableStateListOf<Int>(0)
-    var currentUser by mutableStateOf("")
+
     fun getReadlists(){
-        if(currentUser != userId) {
+            if(!updated){
+            readlists.clear()
             val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
             val dbReadlist = dB.collection("Readlists")
             dbReadlist
@@ -293,7 +297,25 @@ class AppViewModel : ViewModel(){
                         }
                     }
                 }
-            currentUser = userId
+        }
+        updated = true
+    }
+
+    var done by mutableStateOf(false)
+    fun deleteBookFromReadlist(readlist: String, bookId: String){
+        var documentId: String
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener{documents ->
+            for(document in documents){
+                if(document.get("name") == readlist){
+                    documentId = document.id
+                    val rl = document.toObject<Readlist>()
+                    var newList = mutableListOf<Item>()
+                    newList = rl.content as MutableList<Item>
+                    newList.removeIf{it.id == bookId}
+                    dB.collection("Readlists").document(documentId).update("content", newList).addOnSuccessListener { done = false }.addOnFailureListener {  }
+                }
+            }
         }
     }
 
