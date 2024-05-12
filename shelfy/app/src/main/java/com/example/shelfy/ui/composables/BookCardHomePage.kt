@@ -37,7 +37,8 @@ fun BookCardHomePage(
     item: Item,
     viewModel : AppViewModel,
     navController : NavHostController,
-    modifier : Modifier = Modifier
+    modifier : Modifier = Modifier,
+    page : String
 ){
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -48,8 +49,10 @@ fun BookCardHomePage(
                     item?.volumeInfo?.imageLinks?.small?.substring(7)?.replace("zoom=1", "zoom=0")
                 }else if((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) != 0){
                     item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else{
+                }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) != 0){
                     item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                }else{
+                stringResource(R.string.book_image_no_available)
                 }
             )
             .crossfade(true)
@@ -57,7 +60,7 @@ fun BookCardHomePage(
         contentDescription = null,
         modifier = Modifier
             .height(230.dp)
-            .width(180.dp)
+            .width(130.dp)
             .clip(
                 RoundedCornerShape(
                     8.dp
@@ -81,13 +84,15 @@ fun BookCardHomePage(
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis
     )
-    IconButton(onClick = {viewModel.deleteBookFromReadlist("Libreria", item.id)}) {
-        Icon(
-            painter = painterResource(id = R.drawable.baseline_remove_circle_outline_24),
-            contentDescription = "Rimuovi libro",
-            tint = BlueText,
-            modifier = Modifier
-                .size(23.dp)
-        )
+    if(page == "profile") {
+        IconButton(onClick = { viewModel.deleteBookFromReadlist("Libreria", item.id) }) {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_remove_circle_outline_24),
+                contentDescription = "Rimuovi libro",
+                tint = BlueText,
+                modifier = Modifier
+                    .size(23.dp)
+            )
+        }
     }
 }

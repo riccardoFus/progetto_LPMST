@@ -22,7 +22,7 @@ import com.example.shelfy.ui.theme.fonts
 fun ContentHomePage(
     viewModel : AppViewModel,
     navController : NavHostController,
-    modifier : Modifier = Modifier
+    modifier : Modifier = Modifier,
 ){
     Box(
         modifier = modifier
@@ -47,7 +47,8 @@ fun ContentHomePage(
                         BookCardHomePage(
                             item = item,
                             viewModel = viewModel,
-                            navController = navController
+                            navController = navController,
+                            page = "homepage"
                         )
                     }
                 }
@@ -71,7 +72,8 @@ fun ContentHomePage(
                         BookCardHomePage(
                             item = item,
                             viewModel = viewModel,
-                            navController = navController
+                            navController = navController,
+                            page = "homepage"
                         )
                     }
                 }
@@ -95,7 +97,8 @@ fun ContentHomePage(
                         BookCardHomePage(
                             item = item,
                             viewModel = viewModel,
-                            navController = navController
+                            navController = navController,
+                            page = "homepage"
                         )
                     }
                 }
