@@ -58,7 +58,7 @@ fun BookCardHomePage(
         contentDescription = null,
         modifier = Modifier
             .height(230.dp)
-            .width(180.dp)
+            .width(130.dp)
             .clip(
                 RoundedCornerShape(
                     8.dp
