@@ -51,11 +51,8 @@ fun ContentProfilePage(
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
-    var done by rememberSaveable {
-        mutableStateOf(false)
-    }
-    if(!done){
-        done = true
+    if(!viewModel.done){
+        viewModel.done = true
         viewModel.itemList.clear()
         viewModel.getElementsLibrary(
             viewModel.userId
