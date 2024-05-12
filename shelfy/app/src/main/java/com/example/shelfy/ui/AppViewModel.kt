@@ -391,26 +391,24 @@ class AppViewModel : ViewModel(){
 
     var itemList = mutableStateListOf<Item>()
     fun getElementsLibrary(userId : String){
-        if(!updated) {
-            val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-            val dbReadlist = dB.collection("Readlists")
-            dbReadlist
-                .whereEqualTo("userId", userId)
-                .whereEqualTo("name", "Libreria")
-                .get()
-                .addOnSuccessListener {
-                    val list = it.documents
-                    for (document in list) {
-                        val readlist: Readlist? = document.toObject(Readlist::class.java)
-                        if (readlist != null) {
-                            for (books in readlist.content) {
-                                println(books.id)
-                                itemList.add(books)
-                            }
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val dbReadlist  = dB.collection("Readlists")
+        dbReadlist
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("name", "Libreria")
+            .get()
+            .addOnSuccessListener {
+                val list = it.documents
+                for(document in list){
+                    val readlist : Readlist? = document.toObject(Readlist::class.java)
+                    if (readlist != null) {
+                        for(books in readlist.content){
+                            println(books.id)
+                            itemList.add(books)
                         }
                     }
                 }
-        }
+            }
     }
 
     init{
