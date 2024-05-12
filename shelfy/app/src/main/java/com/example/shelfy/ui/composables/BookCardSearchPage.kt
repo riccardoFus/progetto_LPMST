@@ -38,7 +38,7 @@ fun BookCardSearchPage(
     item : Item,
     viewModel : AppViewModel,
     navController : NavHostController,
-    modifier : Modifier = Modifier
+    modifier : Modifier = Modifier,
 ){
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -105,14 +105,5 @@ fun BookCardSearchPage(
             fontFamily = fonts,
             overflow = TextOverflow.Ellipsis,
             maxLines = 7)
-        IconButton(onClick = {viewModel.deleteBookFromReadlist("Libreria", item.id)}) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_remove_circle_outline_24),
-                contentDescription = "Rimuovi libro",
-                tint = BlueText,
-                modifier = Modifier
-                    .size(23.dp)
-            )
-        }
     }
 }
