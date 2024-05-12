@@ -75,7 +75,8 @@ fun ContentProfilePage(
                         BookCardHomePage(
                             item = item,
                             viewModel = viewModel,
-                            navController = navController
+                            navController = navController,
+                            page = "profile"
                         )
                     }
                 }
