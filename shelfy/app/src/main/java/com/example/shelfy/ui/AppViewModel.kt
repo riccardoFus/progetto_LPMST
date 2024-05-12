@@ -403,8 +403,8 @@ class AppViewModel : ViewModel(){
                     val readlist : Readlist? = document.toObject(Readlist::class.java)
                     if (readlist != null) {
                         for(books in readlist.content){
-                            println(books.id)
                             itemList.add(books)
+                            done = false
                         }
                     }
                 }
