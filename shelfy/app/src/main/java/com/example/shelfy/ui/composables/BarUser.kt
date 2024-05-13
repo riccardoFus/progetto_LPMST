@@ -126,7 +126,6 @@ fun BarUser(
                                 onDone = {
                                     viewModel.addReadlist(readList, viewModel.userId)
                                     addBook = false
-                                    viewModel.updated = false
                                 }),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedTextColor = BlueText,

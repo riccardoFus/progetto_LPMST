@@ -1,6 +1,7 @@
 package com.example.shelfy.ui.composables
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,61 +39,68 @@ fun BookCardHomePage(
     viewModel : AppViewModel,
     navController : NavHostController,
     modifier : Modifier = Modifier,
-    page : String
+    page : String,
+    readlist: String
 ){
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(
-                "https://" + if((item?.volumeInfo?.imageLinks?.large?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.large?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else if((item?.volumeInfo?.imageLinks?.small?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.small?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else if((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else{
-                    stringResource(R.string.book_image_no_available)
-                }
-            )
-            .crossfade(true)
-            .build(),
-        contentDescription = null,
-        modifier = Modifier
-            .height(250.dp)
-            .width(180.dp)
-            .clip(
-                RoundedCornerShape(
-                    8.dp
+    Column() {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(
+                    "https://" + if ((item?.volumeInfo?.imageLinks?.large?.length ?: 0) > 0) {
+                        item?.volumeInfo?.imageLinks?.large?.substring(7)
+                            ?.replace("zoom=1", "zoom=0")
+                    } else if ((item?.volumeInfo?.imageLinks?.small?.length ?: 0) > 0) {
+                        item?.volumeInfo?.imageLinks?.small?.substring(7)
+                            ?.replace("zoom=1", "zoom=0")
+                    } else if ((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) > 0) {
+                        item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
+                            ?.replace("zoom=1", "zoom=0")
+                    } else if ((item?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) > 0) {
+                        item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)
+                            ?.replace("zoom=1", "zoom=0")
+                    } else {
+                        stringResource(R.string.book_image_no_available)
+                    }
                 )
-            )
-            .clickable(
-                onClick = {
-                    viewModel.getBook(item?.id.toString())
-                    navController.navigate(Screens.VISUALIZER_SCREEN)
-                }
-            ),
-        contentScale = ContentScale.Crop
-    )
-    Text(
-        text = (item?.volumeInfo?.title ?: stringResource(R.string.no_titolo)),
-        color = WhiteText,
-        fontSize = 14.sp,
-        modifier = Modifier.padding(top = 2.dp),
-        fontWeight = FontWeight.SemiBold,
-        fontFamily = fonts,
-        textAlign = TextAlign.Center,
-        overflow = TextOverflow.Ellipsis
-    )
-    if(page == "profile") {
-        IconButton(onClick = { viewModel.deleteBookFromReadlist("Libreria", item.id) }) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_remove_circle_outline_24),
-                contentDescription = "Rimuovi libro",
-                tint = BlueText,
-                modifier = Modifier
-                    .size(23.dp)
-            )
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            modifier = Modifier
+                .height(250.dp)
+                .width(180.dp)
+                .clip(
+                    RoundedCornerShape(
+                        8.dp
+                    )
+                )
+                .clickable(
+                    onClick = {
+                        viewModel.getBook(item?.id.toString())
+                        navController.navigate(Screens.VISUALIZER_SCREEN)
+                    }
+                ),
+            contentScale = ContentScale.Crop
+        )
+        Text(
+            text = (item?.volumeInfo?.title ?: stringResource(R.string.no_titolo)),
+            color = WhiteText,
+            fontSize = 14.sp,
+            modifier = Modifier.padding(top = 2.dp),
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = fonts,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis
+        )
+        if (page == "profile") {
+            IconButton(onClick = { viewModel.deleteBookFromReadlist(readlist, item.id) }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_remove_circle_outline_24),
+                    contentDescription = "Rimuovi libro",
+                    tint = BlueText,
+                    modifier = Modifier
+                        .size(23.dp)
+                )
+            }
         }
     }
 }
