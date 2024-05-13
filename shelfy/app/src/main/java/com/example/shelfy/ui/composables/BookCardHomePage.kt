@@ -42,7 +42,7 @@ fun BookCardHomePage(
     page : String,
     readlist: String
 ){
-    Column() {
+    Column(modifier = Modifier.padding(end = 8.dp)) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(
