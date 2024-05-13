@@ -51,8 +51,9 @@ fun ContentProfilePage(
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
-    if(!viewModel.done){
+    if(!viewModel.done && !viewModel.updated){
         viewModel.done = true
+        viewModel.updated = true
         viewModel.itemList.clear()
         viewModel.getElementsLibrary(
             viewModel.userId
@@ -75,7 +76,8 @@ fun ContentProfilePage(
                         BookCardHomePage(
                             item = item,
                             viewModel = viewModel,
-                            navController = navController
+                            navController = navController,
+                            page = "profile"
                         )
                     }
                 }
