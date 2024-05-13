@@ -52,13 +52,17 @@ fun ContentProfilePage(
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
-    if(!viewModel.done && !viewModel.updated){
-        viewModel.done = true
-        viewModel.updated = true
+    if(!viewModel.libraryUpdated) {
         viewModel.itemList.clear()
+        viewModel.libraryUpdated = true
         viewModel.getElementsLibrary(
             viewModel.userId
         )
+    }
+
+    if(!viewModel.readlistsUpdated){
+        viewModel.readlistsUpdated = true
+        viewModel.getReadlists()
     }
     Box(
         modifier = modifier){
@@ -104,6 +108,7 @@ fun ContentProfilePage(
                 )
             }
 
+        
 
     }
 }

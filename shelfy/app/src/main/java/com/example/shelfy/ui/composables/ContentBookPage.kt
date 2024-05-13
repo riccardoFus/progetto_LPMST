@@ -90,7 +90,11 @@ fun ContentBookPage(
             var reviewEnabled by rememberSaveable { mutableStateOf(false) }
             var review by rememberSaveable { mutableStateOf(0) }
             var showReadlists by remember {mutableStateOf(false)}
-            viewModel.getReadlists()
+
+            if(!viewModel.readlistsUpdated) {
+                viewModel.readlistsUpdated = true
+                viewModel.getReadlists()
+            }
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
