@@ -27,7 +27,9 @@ fun ContentHomePage(
     Box(
         modifier = modifier
     ){
-        Column {
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = "Giallo",
                 color = BlueText,
