@@ -1,5 +1,6 @@
 package com.example.shelfy.ui.composables
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,27 +62,48 @@ fun ContentProfilePage(
     }
     Box(
         modifier = modifier){
-
-            LazyRow(modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth()){
-                items(viewModel.itemList){ item ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
-                            .padding(8.dp)
-                    ) {
-                        BookCardHomePage(
-                            item = item,
-                            viewModel = viewModel,
-                            navController = navController,
-                            page = "profile"
-                        )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Text(
+                    text = stringResource(R.string.libreria),
+                    fontFamily = fonts,
+                    fontSize = 20.sp,
+                    color = BlueText,
+                    textAlign = TextAlign.Center
+                )
+                LazyRow(modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()){
+                    items(viewModel.itemList){ item ->
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .height(350.dp)
+                                .width(200.dp)
+                                .padding(8.dp)
+                        ) {
+                            BookCardHomePage(
+                                item = item,
+                                viewModel = viewModel,
+                                navController = navController,
+                                page = "profile"
+                            )
+                        }
                     }
                 }
+                Text(
+                    text = stringResource(R.string.readlists),
+                    fontFamily = fonts,
+                    fontSize = 20.sp,
+                    color = BlueText,
+                    textAlign = TextAlign.Center
+                )
             }
+
+
     }
 }
 
