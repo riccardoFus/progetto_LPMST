@@ -72,23 +72,30 @@ fun ContentProfilePage(
                 fontFamily = fonts,
                 fontSize = 20.sp,
                 color = BlueText,
-                modifier = Modifier.align(Alignment.CenterHorizontally))
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally))
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(if(viewModel.itemList.isNotEmpty()) 350.dp else 30.dp)
+                    .height(if(viewModel.itemList.isNotEmpty()) 350.dp else 0.dp)
             ) {
-                if (viewModel.itemList.isNotEmpty()) {
-                    items(viewModel.itemList) { item ->
-                        BookCardHomePage(
-                            item = item,
-                            viewModel = viewModel,
-                            navController = navController,
-                            page = "profile",
-                            readlist = "Libreria"
+                items(viewModel.itemList) { item ->
+                    BookCardHomePage(
+                        item = item,
+                        viewModel = viewModel,
+                        navController = navController,
+                        page = "profile",
+                        readlist = "Libreria"
                         )
                     }
                 }
+            if(viewModel.itemList.isEmpty()){
+                Text(text = "(Vuota)",
+                    fontFamily = fonts,
+                    fontSize = 11.sp,
+                    color = BlueText,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally))
             }
 
             LazyColumn(
@@ -103,13 +110,12 @@ fun ContentProfilePage(
                             fontFamily = fonts,
                             fontSize = 20.sp,
                             color = BlueText,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(8.dp)
+                            textAlign = TextAlign.Center
                         )
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(if(readlist.content.isNotEmpty()) 350.dp else 30.dp)
+                                .height(if(readlist.content.isNotEmpty()) 350.dp else 0.dp)
                         ) {
                             items(readlist.content) { item ->
                                 BookCardHomePage(
@@ -120,6 +126,14 @@ fun ContentProfilePage(
                                     readlist = readlist.name
                                 )
                             }
+
+                        }
+                        if(readlist.content.isEmpty()){
+                            Text(text = "(Vuota)",
+                                fontFamily = fonts,
+                                fontSize = 11.sp,
+                                color = BlueText,
+                                textAlign = TextAlign.Center)
                         }
                     }
                 }
