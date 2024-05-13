@@ -43,24 +43,24 @@ fun BookCardHomePage(
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(
-                "https://" + if((item?.volumeInfo?.imageLinks?.large?.length ?: 0) != 0){
+                "https://" + if((item?.volumeInfo?.imageLinks?.large?.length ?: 0) > 0){
                     item?.volumeInfo?.imageLinks?.large?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else if((item?.volumeInfo?.imageLinks?.small?.length ?: 0) != 0){
+                }else if((item?.volumeInfo?.imageLinks?.small?.length ?: 0) > 0){
                     item?.volumeInfo?.imageLinks?.small?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else if((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) != 0){
+                }else if((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) > 0){
                     item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
-                }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) != 0){
+                }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) > 0){
                     item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
                 }else{
-                stringResource(R.string.book_image_no_available)
+                    stringResource(R.string.book_image_no_available)
                 }
             )
             .crossfade(true)
             .build(),
         contentDescription = null,
         modifier = Modifier
-            .height(230.dp)
-            .width(130.dp)
+            .height(250.dp)
+            .width(180.dp)
             .clip(
                 RoundedCornerShape(
                     8.dp
