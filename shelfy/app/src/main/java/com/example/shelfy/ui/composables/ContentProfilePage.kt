@@ -76,16 +76,18 @@ fun ContentProfilePage(
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(350.dp)
+                    .height(if(viewModel.itemList.isNotEmpty()) 350.dp else 30.dp)
             ) {
-                items(viewModel.itemList) { item ->
-                    BookCardHomePage(
-                        item = item,
-                        viewModel = viewModel,
-                        navController = navController,
-                        page = "profile",
-                        readlist = "Libreria"
-                    )
+                if (viewModel.itemList.isNotEmpty()) {
+                    items(viewModel.itemList) { item ->
+                        BookCardHomePage(
+                            item = item,
+                            viewModel = viewModel,
+                            navController = navController,
+                            page = "profile",
+                            readlist = "Libreria"
+                        )
+                    }
                 }
             }
 
@@ -101,12 +103,13 @@ fun ContentProfilePage(
                             fontFamily = fonts,
                             fontSize = 20.sp,
                             color = BlueText,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(8.dp)
                         )
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(if(readlist.content.isNotEmpty()) 350.dp else 0.dp)
+                                .height(if(readlist.content.isNotEmpty()) 350.dp else 30.dp)
                         ) {
                             items(readlist.content) { item ->
                                 BookCardHomePage(
@@ -124,4 +127,3 @@ fun ContentProfilePage(
         }
     }
 }
-
