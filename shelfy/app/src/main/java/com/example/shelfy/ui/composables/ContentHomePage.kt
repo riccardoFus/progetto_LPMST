@@ -50,7 +50,8 @@ fun ContentHomePage(
                             item = item,
                             viewModel = viewModel,
                             navController = navController,
-                            page = "homepage"
+                            page = "homepage",
+                            readlist = "None"
                         )
                     }
                 }
@@ -75,7 +76,8 @@ fun ContentHomePage(
                             item = item,
                             viewModel = viewModel,
                             navController = navController,
-                            page = "homepage"
+                            page = "homepage",
+                            readlist = "None"
                         )
                     }
                 }
@@ -100,7 +102,8 @@ fun ContentHomePage(
                             item = item,
                             viewModel = viewModel,
                             navController = navController,
-                            page = "homepage"
+                            page = "homepage",
+                            readlist = "None"
                         )
                     }
                 }

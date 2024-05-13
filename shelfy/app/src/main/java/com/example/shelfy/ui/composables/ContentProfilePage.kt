@@ -1,5 +1,6 @@
 package com.example.shelfy.ui.composables
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -66,50 +67,61 @@ fun ContentProfilePage(
     }
     Box(
         modifier = modifier){
-            Column(
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Libreria",
+                fontFamily = fonts,
+                fontSize = 20.sp,
+                color = BlueText,
+                modifier = Modifier.align(Alignment.CenterHorizontally))
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(350.dp)
+            ) {
+                items(viewModel.itemList) { item ->
+                    BookCardHomePage(
+                        item = item,
+                        viewModel = viewModel,
+                        navController = navController,
+                        page = "profile",
+                        readlist = "Libreria"
+                    )
+                }
+            }
+
+            LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = stringResource(R.string.libreria),
-                    fontFamily = fonts,
-                    fontSize = 20.sp,
-                    color = BlueText,
-                    textAlign = TextAlign.Center
-                )
-                LazyRow(modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()){
-                    items(viewModel.itemList){ item ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                items(viewModel.readlists) { readlist ->
+                    if (readlist.name != "Libreria") {
+                        Text(
+                            text = readlist.name,
+                            fontFamily = fonts,
+                            fontSize = 20.sp,
+                            color = BlueText,
+                            textAlign = TextAlign.Center
+                        )
+                        LazyRow(
                             modifier = Modifier
-                                .height(350.dp)
-                                .width(200.dp)
-                                .padding(8.dp)
+                                .fillMaxWidth()
+                                .height(if(readlist.content.isNotEmpty()) 350.dp else 0.dp)
                         ) {
-                            BookCardHomePage(
-                                item = item,
-                                viewModel = viewModel,
-                                navController = navController,
-                                page = "profile"
-                            )
+                            items(readlist.content) { item ->
+                                BookCardHomePage(
+                                    item = item,
+                                    viewModel = viewModel,
+                                    navController = navController,
+                                    page = "profile",
+                                    readlist = readlist.name
+                                )
+                            }
                         }
                     }
                 }
-                Text(
-                    text = stringResource(R.string.readlists),
-                    fontFamily = fonts,
-                    fontSize = 20.sp,
-                    color = BlueText,
-                    textAlign = TextAlign.Center
-                )
             }
-
-        
-
+        }
     }
 }
 
