@@ -36,7 +36,7 @@ fun BottomBar(
                 tint = BlueText,
                 modifier = Modifier
                     .weight(1f)
-                    .size(30.dp)
+                    .size(25.dp)
             )
         }
         IconButton(onClick = {
@@ -48,7 +48,7 @@ fun BottomBar(
                 tint = BlueText,
                 modifier = Modifier
                     .weight(1f)
-                    .size(30.dp)
+                    .size(25.dp)
             )
         }
 
@@ -61,7 +61,7 @@ fun BottomBar(
                 tint = BlueText,
                 modifier = Modifier
                     .weight(1f)
-                    .size(30.dp)
+                    .size(25.dp)
             )
         }
     }

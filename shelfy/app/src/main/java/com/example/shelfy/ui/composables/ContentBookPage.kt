@@ -99,13 +99,13 @@ fun ContentBookPage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
                         "https://" + if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.length ?: 0) > 0){
-                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.substring(7)?.replace("zoom=1", "zoom=0")
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.substring(7)
                         }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.length ?: 0) > 0){
-                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.substring(7)?.replace("zoom=1", "zoom=0")
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.substring(7)
                         }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) > 0){
-                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
                         }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) > 0){
-                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                            viewModel.bookUiState.data?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)
                         }else{
                             stringResource(R.string.book_image_no_available)
                         }

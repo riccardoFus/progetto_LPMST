@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -27,16 +28,15 @@ fun ContentHomePage(
     Box(
         modifier = modifier
     ){
-        Column (
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column () {
             Text(
                 text = "Giallo",
                 color = BlueText,
                 modifier = Modifier
                     .padding(start = 8.dp, top = 8.dp),
                 fontSize = 20.sp,
-                fontFamily = fonts)
+                fontFamily = fonts,
+                textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation1.data?.items ?: emptyList()){ item ->
                     Column(
@@ -57,12 +57,13 @@ fun ContentHomePage(
                 }
             }
             Text(
-                text = "Horror",
+                text = "Avventura",
                 color = BlueText,
                 modifier = Modifier
                     .padding(start = 8.dp),
                 fontSize = 20.sp,
-                fontFamily = fonts)
+                fontFamily = fonts,
+                textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation2.data?.items ?: emptyList()){ item ->
                     Column(
@@ -88,7 +89,8 @@ fun ContentHomePage(
                 modifier = Modifier
                     .padding(start = 8.dp),
                 fontSize = 20.sp,
-                fontFamily = fonts)
+                fontFamily = fonts,
+                textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation3.data?.items ?: emptyList()){ item ->
                     Column(
