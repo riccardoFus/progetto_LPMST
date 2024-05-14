@@ -2,6 +2,7 @@ package com.example.shelfy.ui.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -44,13 +45,13 @@ fun BookCardSearchPage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(
                 "https://" + if((item?.volumeInfo?.imageLinks?.large?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.large?.substring(7)?.replace("zoom=1", "zoom=0")
+                    item?.volumeInfo?.imageLinks?.large?.substring(7)
                 }else if((item?.volumeInfo?.imageLinks?.small?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.small?.substring(7)?.replace("zoom=1", "zoom=0")
+                    item?.volumeInfo?.imageLinks?.small?.substring(7)
                 }else if((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                    item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
                 }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) > 0){
-                    item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)?.replace("zoom=1", "zoom=0")
+                    item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)
                 }else{
                     stringResource(R.string.book_image_no_available)
                 }
@@ -74,8 +75,9 @@ fun BookCardSearchPage(
     )
     Column(
         modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
-            .padding(start = 8.dp))
+            .fillMaxHeight())
     {
         Text(
             text = (item?.volumeInfo?.title ?: stringResource(id = R.string.no_titolo)),
@@ -98,14 +100,13 @@ fun BookCardSearchPage(
             maxLines = 2
         )
         Text(
-            text = (item?.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
+            text = "Trama : " + (item?.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
             color = WhiteText,
             fontSize = 11.sp,
             modifier = Modifier
                 .padding(top = 2.dp),
             fontWeight = FontWeight.SemiBold,
             fontFamily = fonts,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 7)
+            overflow = TextOverflow.Ellipsis)
     }
 }

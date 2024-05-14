@@ -1,6 +1,7 @@
 package com.example.shelfy.ui.composables
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,6 +43,7 @@ import com.example.shelfy.R
 import com.example.shelfy.data.db.Readlist
 import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.ui.AppViewModel
+import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
 import com.google.firebase.firestore.FirebaseFirestore
@@ -67,8 +69,10 @@ fun ContentProfilePage(
     }
     Box(
         modifier = modifier){
+
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Libreria",
+
+            /*Text(text = "Libreria",
                 fontFamily = fonts,
                 fontSize = 20.sp,
                 color = BlueText,
@@ -91,19 +95,20 @@ fun ContentProfilePage(
                 }
             }
 
+             */
+
             LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 items(viewModel.readlists) { readlist ->
-                    if (readlist.name != "Libreria") {
+                    if (readlist.name.length > 0) {
                         Text(
                             text = readlist.name,
                             fontFamily = fonts,
                             fontSize = 20.sp,
                             color = BlueText,
-                            textAlign = TextAlign.Center,
+                            textAlign = TextAlign.Justify,
                             modifier = Modifier.padding(8.dp)
                         )
                         LazyRow(

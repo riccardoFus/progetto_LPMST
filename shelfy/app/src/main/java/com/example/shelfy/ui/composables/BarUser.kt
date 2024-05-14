@@ -49,7 +49,7 @@ fun BarUser(
     modifier : Modifier = Modifier
 ){
     Row (
-        modifier = Modifier,
+        modifier = Modifier.padding(top = 8.dp),
         verticalAlignment = Alignment.CenterVertically
 
     ) {
@@ -147,6 +147,7 @@ fun BarUser(
             }
         }
 
+        /*
         IconButton(
             onClick = {
                 viewModel.itemList.sortBy {
@@ -162,5 +163,7 @@ fun BarUser(
                     .size(28.dp)
             )
         }
+
+         */
     }
 }

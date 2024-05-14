@@ -414,8 +414,8 @@ class AppViewModel : ViewModel(){
     }
 
     init{
-        getBooksRecommendation1("giallo")
-        getBooksRecommendation2("horror")
-        getBooksRecommendation3("fantasy")
+        getBooksRecommendation1("best+seller+giallo")
+        getBooksRecommendation2("best+seller+avventura")
+        getBooksRecommendation3("best+seller+fantasy")
     }
 }

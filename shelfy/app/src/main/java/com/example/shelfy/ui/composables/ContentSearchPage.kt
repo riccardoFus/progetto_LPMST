@@ -1,5 +1,6 @@
 package com.example.shelfy.ui.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,6 +46,7 @@ import androidx.navigation.NavHostController
 import com.example.shelfy.R
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.isValidPassword
+import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
 
@@ -126,7 +128,9 @@ fun ContentSearchPage(
                 items(viewModel.booksSearchUiState.data?.items ?: emptyList()){ item ->
                     Row(modifier = Modifier
                         .padding(8.dp)
-                        .height(250.dp)) {
+                        .height(250.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(BlackBar)) {
                         BookCardSearchPage(item = item, viewModel = viewModel, navController = navController)
                     }
                 }
