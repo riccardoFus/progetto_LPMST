@@ -59,7 +59,7 @@ fun ProfilePage(
     ) {
         TopBar(
             modifier = Modifier
-                .weight(1f)
+                .weight(0.9f)
                 .background(color = BlackBar)
         )
         BarUser(

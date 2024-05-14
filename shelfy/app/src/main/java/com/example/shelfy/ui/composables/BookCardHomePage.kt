@@ -114,21 +114,9 @@ fun BookCardHomePage(
         )
         if (page == "profile") {
             Row {
-                /*IconButton(onClick = { viewModel.deleteBookFromReadlist(readlist, item.id) }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_remove_circle_outline_24),
-                        contentDescription = "Rimuovi libro",
-                        tint = BlueText,
-                        modifier = Modifier
-                            .size(23.dp)
-                            .weight(1f)
-                    )
-                }
-
-                 */
                 TextButton(onClick = { viewModel.deleteBookFromReadlist(readlist, item.id) }) {
                     Text(
-                        text = "Rimuovi da " + readlist,
+                        text = "Rimuovi da $readlist",
                         fontFamily = fonts,
                         fontSize = 15.sp,
                         color = BlueText,

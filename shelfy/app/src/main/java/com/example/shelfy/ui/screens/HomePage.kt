@@ -29,7 +29,7 @@ fun HomePage(
     ) {
         TopBar(
             modifier = Modifier
-                .weight(1f)
+                .weight(0.83f)
                 .background(color = BlackBar)
         )
         ContentHomePage(

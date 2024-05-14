@@ -54,6 +54,7 @@ fun BarUser(
 
     ) {
         Spacer(modifier = Modifier.width(2.dp))
+        /*
         Icon(
             painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
             contentDescription = "Profilo",
@@ -64,6 +65,7 @@ fun BarUser(
                 .padding(5.dp)
         )
         Spacer(modifier = Modifier.width(5.dp))
+        */
         Text(
             text = stringResource(R.string.la_tua_libreria),
             fontFamily = fonts,
@@ -73,6 +75,7 @@ fun BarUser(
         )
         Spacer(modifier = Modifier.width(65.dp))
         var addBook by remember { mutableStateOf(false) }
+        var sortBy by remember { mutableStateOf("cre") }
         IconButton(
             onClick = {addBook = true}
         ){
@@ -94,7 +97,17 @@ fun BarUser(
                 modifier = Modifier
                     .size(28.dp))
         }
+        IconButton(
+            onClick = {viewModel.sortReadlists(sortBy); if(sortBy == "cre") sortBy = "dec" else sortBy = "cre"}
+        ){
+            Icon(
+                painter = painterResource(id = R.drawable.sort_ascending_1024x1024),
+                contentDescription = stringResource(R.string.ordina),
+                tint = BlueText,
+                modifier = Modifier
+                    .size(28.dp))
 
+        }
         var readList by remember {mutableStateOf("")}
         if (addBook) {
             Dialog(onDismissRequest = { addBook = false }) {
