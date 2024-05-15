@@ -522,7 +522,7 @@ fun ContentBookPage(
                         currentBookId = id
                         viewModel.reviewsUpdated = false
                         viewModel.reviews.clear()
-                        viewModel.getReviewsPlusUser(id)
+                        viewModel.getReviewsPlusUser(currentBookId)
                     }
                 }
 
