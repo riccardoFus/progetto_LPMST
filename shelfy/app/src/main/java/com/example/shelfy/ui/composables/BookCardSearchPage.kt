@@ -100,7 +100,7 @@ fun BookCardSearchPage(
             maxLines = 2
         )
         Text(
-            text = "Trama : " + (item?.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
+            text = "Trama: " + (item?.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
             color = WhiteText,
             fontSize = 11.sp,
             modifier = Modifier
