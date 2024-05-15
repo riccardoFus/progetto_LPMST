@@ -202,13 +202,11 @@ class AppViewModel : ViewModel(){
     }
     var reviews = mutableStateListOf<Review>()
     fun getReviewsPlusUser(bookId : String) {
-        println("Chiamata")
             val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
             dB.collection("Reviews").whereEqualTo("bookId", bookId).get()
                 .addOnSuccessListener { documents ->
                     if (!documents.isEmpty) {
                         for (document in documents) {
-                            println("Aggiungo review ")
                             reviews.add(
                                 Review(
                                     document.get("username").toString(),
