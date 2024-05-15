@@ -548,24 +548,34 @@ fun ContentBookPage(
                                     modifier = Modifier.fillMaxSize()
                                 ){
                                     Text(
-                                        text = "User : " + it.username,
+                                        text = "User: " + it.username,
                                         fontFamily = fonts,
                                         fontSize = 18.sp,
                                         color = WhiteText,
                                         modifier = Modifier
                                             .padding(8.dp)
                                     )
-                                    Text(
-                                        text = "Voto : " + it.stars,
-                                        fontFamily = fonts,
-                                        fontSize = 18.sp,
-                                        color = WhiteText,
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                    )
+                                    Row() {
+                                        Text(
+                                            text = "Voto:",
+                                            fontFamily = fonts,
+                                            fontSize = 18.sp,
+                                            color = WhiteText,
+                                            modifier = Modifier
+                                                .padding(8.dp)
+                                        )
+                                        for (i in 1..it.stars) {
+                                            Icon(painter = painterResource(R.drawable.baseline_star_24),
+                                                contentDescription = "Stelle",
+                                                modifier = Modifier
+                                                    .size(20.dp)
+                                                    .align(Alignment.CenterVertically),
+                                                tint = Color.Yellow)
+                                        }
+                                    }
                                     if (it.desc.isNotBlank()) {
                                         Text(
-                                            text = "Descrizione : " + it.desc,
+                                            text = "Descrizione: " + it.desc,
                                             fontFamily = fonts,
                                             fontSize = 15.sp,
                                             color = WhiteText,
