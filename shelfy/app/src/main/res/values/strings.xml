@@ -4,12 +4,12 @@
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
-    <string name="no_titolo">No Titolo</string>
-    <string name="no_autori">No Autori</string>
+    <string name="no_titolo">Nessun titolo</string>
+    <string name="no_autori">Autori vari</string>
     <string name="trama_non_presente">Trama non presente</string>
     <string name="formato_email_non_rispettato">Formato email non rispettato</string>
     <string name="formato_password_non_corretto">Formato password non corretto</string>
-    <string name="cerca_libro">Cerca libro...</string>
+    <string name="cerca_libro">Cerca libro…</string>
     <string name="share">Share</string>
     <string name="aggiungi_libro">Aggiungi libro o libreria</string>
     <string name="aggiungi_alla_libreria">Aggiungi alla libreria</string>
@@ -21,7 +21,7 @@
     <string name="password">Password</string>
     <string name="non_sei_registrato">Non sei registrato?</string>
     <string name="login">Login</string>
-    <string name="testo_recensione">Testo recensione...</string>
+    <string name="testo_recensione">Testo recensione…</string>
     <string name="_5_stelle">5 stelle</string>
     <string name="_4_stelle">4 stelle</string>
     <string name="_3_stelle">3 stelle</string>
@@ -29,14 +29,15 @@
     <string name="_1_stella">1 stella</string>
     <string name="sign_in">Sign In</string>
     <string name="username">Username</string>
-    <string name="aggiungi_readlist">Aggiungi readlist...</string>
+    <string name="aggiungi_readlist">Aggiungi readlist…</string>
     <string name="campo_obbligatorio">Campo obbligatorio</string>
     <string name="ripeti_password">Ripeti password</string>
     <string name="sei_gi_un_utente">Sei già un utente?</string>
     <string name="la_tua_libreria">Il tuo catalogo</string>
-    <string name="no_recensioni">No recensioni</string>
+    <string name="no_recensioni">Nessuna recensione</string>
     <string name="recensioni">Recensioni</string>
     <string name="book_image_no_available">camo.githubusercontent.com/7ea4539dc770901e26bceecc2fc23f052c5fc367e3f5d3cf6b2ec56d41af0a22/68747470733a2f2f692e696d6775722e636f6d2f32306d7a39774f2e706e67</string>
     <string name="libreria">Libreria</string>
     <string name="readlists">Readlists</string>
+    <string name="ordina">Ordina</string>
 </resources>

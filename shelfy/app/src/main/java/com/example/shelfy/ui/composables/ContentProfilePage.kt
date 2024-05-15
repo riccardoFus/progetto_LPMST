@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -138,7 +139,7 @@ fun ContentProfilePage(
                             Text(text = "(Vuota)",
                                 fontFamily = fonts,
                                 fontSize = 15.sp,
-                                color = BlueText,
+                                color = Color.White,
                                 modifier = Modifier.padding(start = 20.dp, bottom = 11.dp))
                         }
                     }

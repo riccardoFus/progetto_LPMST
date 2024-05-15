@@ -343,6 +343,13 @@ class AppViewModel : ViewModel(){
             }
     }
 
+    fun sortReadlists(by: String){
+        if(by == "cre")
+            readlists.sortBy { it.name }
+        if(by == "dec")
+            readlists.sortByDescending { it.name }
+    }
+
     var note : String by mutableStateOf("")
     fun updateNota(userId: String, text: String, bookId: String){
         var id = ""
