@@ -54,6 +54,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -427,8 +428,8 @@ fun ContentBookPage(
                             Column(modifier = Modifier
                                 .background(Color.Transparent)
                                 .width(300.dp)
-                                .height(500.dp)
-                                .fillMaxWidth()){
+                                .height(250.dp)
+                                    ){
                                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
                                     IconButton(onClick = {review = 1}){
                                         Icon(
