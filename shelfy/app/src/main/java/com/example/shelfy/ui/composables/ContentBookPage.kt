@@ -397,7 +397,7 @@ fun ContentBookPage(
                             Column(modifier = Modifier
                                 .padding(11.dp)
                                 .align(Alignment.CenterHorizontally)){
-                                OutlinedButton(onClick = { viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, item.name) }, content = {Text(text = item.name, color = BlueText, fontFamily = fonts, fontSize = 20.sp)}, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp) )
+                                OutlinedButton(onClick = { viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, item.name); showReadlists = false }, content = {Text(text = item.name, color = BlueText, fontFamily = fonts, fontSize = 20.sp)}, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp) )
                             }
                         }
                     }
@@ -409,7 +409,7 @@ fun ContentBookPage(
                 viewModel.getReviews(id)
             }
             Text(
-                text = reviews.first.toString() + "-" + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
+                text = reviews.first.toString() + " - " + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
