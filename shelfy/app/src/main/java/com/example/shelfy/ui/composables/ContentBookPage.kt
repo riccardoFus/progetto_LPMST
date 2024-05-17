@@ -409,13 +409,6 @@ fun ContentBookPage(
             if(id != null) {
                 viewModel.getReviews(id)
             }
-            Text(
-                text = reviews.first.toString() + " - " + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
-            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -518,6 +511,7 @@ fun ContentBookPage(
             var currentBookId by rememberSaveable{ mutableStateOf("") }
             var reviewsUpdated : Boolean = viewModel.reviewsUpdated
             if(reviews.first > 0) {
+
                 if(id != null){
                     if(currentBookId != id){
                         currentBookId = id
@@ -534,6 +528,13 @@ fun ContentBookPage(
                         fontSize = 20.sp,
                         color = BlueText,
                         textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Numero voti: " + reviews.first.toString() + ", media voti: " + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
+                        textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
                     )
 
                     LazyRow(){
