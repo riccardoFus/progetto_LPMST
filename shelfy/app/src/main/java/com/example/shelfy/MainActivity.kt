@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
             )
             Column(
                 modifier = Modifier
-                    .weight(7f),
+                    .weight(10f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier
