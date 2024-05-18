@@ -31,6 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -177,13 +178,13 @@ fun ContentLoginPage(
                 modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = BlueText),
-                border = BorderStroke(1.dp, color = Color.Transparent),
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent),
+                border = BorderStroke(1.dp, color = BlueText),
                 content = {
                     Text(text = stringResource(R.string.login), modifier = Modifier
                         .align(Alignment.CenterVertically),
                         fontSize = 20.sp,
-                        fontFamily = fonts,  color = WhiteText,
+                        fontFamily = fonts,  color = BlueText,
                         textAlign = TextAlign.Start)
                 }
             )
@@ -194,13 +195,14 @@ fun ContentLoginPage(
                 content = {
                     Text(text = stringResource(R.string.non_sei_registrato), modifier = Modifier
                         .align(Alignment.CenterVertically),
-                        fontSize = 19.sp,
+                        fontSize = 15.sp,
                         fontFamily = fonts,
                         textAlign = TextAlign.Center,
-                        color = BlueText
+                        color = WhiteText,
+                        textDecoration = TextDecoration.Underline
                     )
                 },
-                border = BorderStroke(1.dp, BlueText)
+                border = BorderStroke(1.dp, Color.Transparent)
             )
         }
     }
