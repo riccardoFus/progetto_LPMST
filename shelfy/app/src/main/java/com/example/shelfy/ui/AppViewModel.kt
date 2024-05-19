@@ -262,17 +262,30 @@ class AppViewModel : ViewModel(){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
             documents -> if(!documents.isEmpty){
-            for(document in documents){
-                if(document.get("name") == readlist) {
-                    dB.collection("Readlists").document(document.id)
-                        .update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
-                            readlistsUpdated = false
-                            if(readlist == "Libreria"){
-                                libraryUpdated = false
+                for(document in documents){
+                    if(document.get("name") == readlist) {
+                        val readlistDb : Readlist? = document.toObject(Readlist::class.java)
+                        var contain : Boolean = false
+                        if (readlistDb != null) {
+                            for(item in readlistDb.content){
+                                println("Ciao " + item.id + " " + bookId)
+                                if(item.id == bookId!!.id){
+                                    contain = true
+                                }
                             }
-                    }.addOnFailureListener {
+                        }
+                        println("Ciao " + contain)
+                        if(!contain){
+                            dB.collection("Readlists").document(document.id)
+                                .update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
+                                    readlistsUpdated = false
+                                    if(readlist == "Libreria"){
+                                        libraryUpdated = false
+                                    }
+                                }.addOnFailureListener {
+                                }
+                        }
                     }
-                }
                 }
             }
         }
