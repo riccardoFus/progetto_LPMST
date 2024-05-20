@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shelfy.navigation.NavGraph
 import com.example.shelfy.ui.composables.TopBar
+import com.example.shelfy.ui.screens.OfflinePage
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
@@ -40,7 +41,18 @@ sealed class ConnectionState {
     object Unavailable : ConnectionState()
 }
 
-private fun getCurrentConnectivityState(
+/**
+ * Retrieves the current state of the network connectivity.
+ *
+ * This function checks all available networks using the provided `ConnectivityManager` and determines
+ * if there is any network with internet capability. If at least one network is found with internet
+ * capability, the function returns `ConnectionState.Available`; otherwise, it returns `ConnectionState.Unavailable`.
+ *
+ * @param connectivityManager The `ConnectivityManager` instance used to check the network state.
+ * @return `ConnectionState.Available` if there is at least one network with internet capability,
+ *         `ConnectionState.Unavailable` otherwise.
+ */
+fun getCurrentConnectivityState(
     connectivityManager: ConnectivityManager
 ): ConnectionState {
     val connected = connectivityManager.allNetworks.any { network ->
@@ -55,6 +67,12 @@ private fun getCurrentConnectivityState(
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /**
+         * Checks the current network connection state and navigates to the appropriate page based on the connectivity:
+         *  - If the connection is available (ON), navigate to the home page if the user is logged in,
+         *  or the login page if the user is not logged in.
+         *  - If the connection is unavailable (OFF), navigate to the offline page.
+         */
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var connection = getCurrentConnectivityState(connectivityManager)
         if(connection == ConnectionState.Available){
@@ -69,73 +87,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Composable
-    fun ShelfyApp(){
-        NavGraph()
-    }
+}
+@Composable
+fun ShelfyApp(){
+    NavGraph()
+}
 
-    @Composable
-    fun ShelfyAppNoInternet(mainActivity: MainActivity) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(BlackPage),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ){
-            val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-            TopBar(
-                modifier = Modifier
-                    .weight(0.9f)
-                    .background(color = BlackBar)
-            )
-            Column(
-                modifier = Modifier
-                    .weight(10f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier
-                    .size(200.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable._3959),
-                    contentDescription = stringResource(R.string.home),
-                    tint = BlueText,
-                    modifier = Modifier
-                        .size(100.dp)
-                )
-                Text(
-                    text = stringResource(R.string.attivare_connessione_internet_per_utilizzare_shelfy),
-                    color = BlueText,
-                    fontFamily = fonts,
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                        .padding(50.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-                OutlinedButton(onClick = {
-                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
-                        mainActivity.setContent {
-                            ShelfyApp()
-                        }
-                    }
-                },
-                    modifier = Modifier
-                        .widthIn(185.dp),
-                    content = {
-                        Text(text = stringResource(R.string.riprova), modifier = Modifier
-                            .align(Alignment.CenterVertically),
-                            fontSize = 19.sp,
-                            fontFamily = fonts,
-                            textAlign = TextAlign.Center,
-                            color = BlueText
-                        )
-                    },
-                    border = BorderStroke(1.dp, BlueText)
-                )
-            }
-
-        }
-    }
+@Composable
+fun ShelfyAppNoInternet(mainActivity: MainActivity) {
+    OfflinePage(mainActivity)
 }

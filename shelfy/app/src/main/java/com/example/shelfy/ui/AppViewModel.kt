@@ -24,16 +24,47 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.security.MessageDigest
 
+/**
+ * Checks if a given email is valid based on a predefined regular expression.
+ *
+ * The email must follow the pattern where it starts with one or more alphanumeric characters,
+ * followed by an optional sequence of periods, underscores, percentage signs, or plus signs.
+ * This is followed by the '@' symbol and a domain name, which consists of one or more alphanumeric
+ * characters or hyphens. The domain must end with a period and a top-level domain of at least
+ * two alphabetical characters.
+ *
+ * @param email The email address to validate.
+ * @return `true` if the email is valid, `false` otherwise.
+ */
 fun isValidEmail(email: String): Boolean {
     val emailRegex = Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
     return emailRegex.matches(email)
 }
 
+/**
+ * Checks if a given password is valid based on a predefined regular expression.
+ *
+ * The password must be at least 8 characters long and contain at least one lowercase letter,
+ * one uppercase letter, one digit, and one special character from the set @, $, !, %, *, ?, &.
+ *
+ * @param password The password to validate.
+ * @return `true` if the password is valid, `false` otherwise.
+ */
 fun isValidPassword(password: String): Boolean {
     val passwordRegex = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$")
     return passwordRegex.matches(password)
 }
 
+/**
+ * Generates a SHA-256 hash for a given input string.
+ *
+ * This function converts the input string to a byte array, computes the SHA-256 hash of the
+ * byte array, and then converts the resulting hash bytes to a hexadecimal string.
+ *
+ * @param input The input string to hash.
+ * @return The SHA-256 hash of the input string, represented as a hexadecimal string.
+ * @throws NoSuchAlgorithmException if the SHA-256 algorithm is not available in the environment.
+ */
 fun sha256(input: String): String {
     val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
     val hexString = StringBuilder()
@@ -47,12 +78,19 @@ fun sha256(input: String): String {
     return hexString.toString()
 }
 
+
 class AppViewModel : ViewModel(){
 
+    // A mutable state variable that holds the state of the book recommendations 1
     var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+
+    // Function to fetch books by a query
     private fun getBooksRecommendation1(query : String){
+        // Launch a coroutine in the viewModelScope to perform the network request
         viewModelScope.launch{
+            // Fetch the books from the API based on the provided query
             val books = RetrofitInstance.provideBooksApi().getBooks(query)
+            // Update the state to reflect the successful data fetch
             booksUiStateRecommendation1 = Resource.Success<Books>(books)
         }
     }
@@ -75,50 +113,72 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // A mutable state variable that holds the state of a single book item
     var bookUiState : Resource<Item> by mutableStateOf(Resource.Loading<Item>())
 
+    // Function to fetch a book by its ID
     fun getBook(id : String){
+        // Launch a coroutine in the viewModelScope to perform the network request
         viewModelScope.launch{
+            // Fetch the book from the API based on the provided ID
             val book = RetrofitInstance.provideBooksApi().getBook(id)
+            // Update the state to reflect the successful data fetch
             bookUiState = Resource.Success<Item>(book)
         }
     }
 
+    // A mutable state variable that holds the state of the books search results
     var booksSearchUiState : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+
+    // Function to fetch books based on a search query
     fun getBooksByQuery(query : String){
+        // Launch a coroutine in the viewModelScope to perform the network request
         viewModelScope.launch {
+            // Fetch the books from the API based on the provided query
             val book = RetrofitInstance.provideBooksApi().getBooks(query)
+            // Update the state to reflect the successful data fetch
             booksSearchUiState = Resource.Success<Books>(book)
         }
     }
 
-
+    // A mutable state variable that holds the user ID
     var userId: String by mutableStateOf("")
+    // A mutable state variable that holds the username
     var username: String by mutableStateOf("")
+    // A mutable state variable that indicates whether the login is done
     var loginDone : Boolean by mutableStateOf(false)
+    // A mutable state variable that indicates whether the user is already signed in
     var alreadySignedIn : Boolean by mutableStateOf(false)
+
+    // Function to sign in a user with email and password
     fun signInUser(
         email: String,
         password: String,
         username: String = ""
     ){
         this.username = username
+
+        // Check if the email already exists in the database
         alreadySignedIn = runBlocking { checkEmailAlreadyExists(email) }
+
+        // If the user is not already signed in, create a new user
         if (!alreadySignedIn){
             FirebaseAuth.getInstance()
                 .createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener{
+                    // Add the user to the database with the provided details
                     addUser(username, email, password,
                         FirebaseAuth.getInstance().currentUser?.uid ?: ""
                     )
+                    // Perform login with the provided email and password
                     login(email, password)
-                    // addReadlist("Libreria", userId)
                 }
                 .addOnFailureListener{
                 }
         }
     }
 
+    // Function to log out the current user
     fun logout(){
         val firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.signOut()
@@ -127,12 +187,15 @@ class AppViewModel : ViewModel(){
         loginDone = false
     }
 
+    // Function to authenticate user login using email and password.
     fun login(email: String, password: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        // Query Firestore to find user with matching email
         dB.collection("Users").whereEqualTo("email", email).get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     if (document.get("password") == password) {
+                        // Sign in with Firebase Authentication
                         FirebaseAuth
                             .getInstance()
                             .signInWithEmailAndPassword(email, password)
@@ -140,6 +203,7 @@ class AppViewModel : ViewModel(){
                             }
                             .addOnFailureListener {
                             }
+                        // Query Firestore again to fetch additional user data
                         dB.collection("Users").whereEqualTo("email", email).get()
                             .addOnSuccessListener { documents1 ->
                                 for (document2 in documents1) {
@@ -153,6 +217,7 @@ class AppViewModel : ViewModel(){
             }
     }
 
+    // Function to add user in Firebase Firestore
     private fun addUser(username: String, email: String, password: String, uid: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbUsers: CollectionReference = dB.collection("Users")
@@ -162,6 +227,7 @@ class AppViewModel : ViewModel(){
             .addOnFailureListener {}
     }
 
+    // Wrapper function to create a review in Firebase Firestore
     fun createReviewInFirebase(
         id : String,
         stars : Int,
@@ -169,10 +235,18 @@ class AppViewModel : ViewModel(){
     ){
         addReview(id, username, stars, text)
     }
+
+    // A mutable state variable that holds the sum of the votes of a given book
     var sumReviews : Int by mutableIntStateOf(0)
+
+    // A mutable state variable that holds the number of votes and the average vote of a given book
     var numberAndMediaReviews : Pair<Int, Double> by mutableStateOf(Pair<Int, Double>(0, 0.0))
+
+    // A mutable state variable that checks if the list of reviews of a given book is updated or not
     var reviewsUpdated by mutableStateOf(false)
 
+    // function to get reviews of a given book, it updates the number of votes and the average vote of
+    // the book
     fun getReviews(bookId : String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReviews  = dB.collection("Reviews")
@@ -180,16 +254,19 @@ class AppViewModel : ViewModel(){
             .addOnSuccessListener {
                 if(!it.isEmpty){
                     val list = it.documents
-                    var conta = 0
+                    // counter of the books
+                    var count = 0
                     for(document in list){
                         val review : Review? = document.toObject(Review::class.java)
                         if (review != null && review.bookId == bookId) {
+                            // sum of all the votes of the reviews
                             sumReviews = sumReviews.plus(review.stars)
-                            conta++
+                            count++
                         }
                     }
+                    // update of the number of reviews and the average vote
                     if(sumReviews != 0) {
-                        numberAndMediaReviews = Pair<Int, Double>(conta, sumReviews.toDouble() / conta.toDouble())
+                        numberAndMediaReviews = Pair<Int, Double>(count, sumReviews.toDouble() / count.toDouble())
                     }else{
                         numberAndMediaReviews = Pair<Int, Double>(0, 0.0)
                     }
@@ -197,7 +274,11 @@ class AppViewModel : ViewModel(){
                 }
             }
     }
+
+    // A mutable state variable that holds the list of reviews of a given book
     var reviews = mutableStateListOf<Review>()
+
+    // Function to get reviews of a given book, and also gives information the creator of the review
     fun getReviewsPlusUser(bookId : String) {
             val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
             dB.collection("Reviews").whereEqualTo("bookId", bookId).get()
@@ -218,6 +299,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // Function to add a review of a user for a book in Firebase Firestpre
     private fun addReview(id: String, username: String, stars: Int, text: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReviews  = dB.collection("Reviews")
@@ -230,7 +312,8 @@ class AppViewModel : ViewModel(){
             .addOnFailureListener {}
     }
 
-    fun addNota(userId: String, text: String, bookId: String){
+    // Function to add a note in Firebase Firestore
+    fun addNote(userId: String, text: String, bookId: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbNotes  = dB.collection("Notes")
         val note = Note(userId, text, bookId)
@@ -241,9 +324,13 @@ class AppViewModel : ViewModel(){
         }
     }
 
-
+    // A mutable state variable that checks if the library is added in Firebase Firestore
     var libraryAdded : Boolean by mutableStateOf(false)
+
+    // A mutable state variable that checks if the library is updated in Firebase Firestore
     var libraryUpdated: Boolean by mutableStateOf(false)
+
+    // Function to add a readlist for a user in Firebase Firestore
     fun addReadlist(name : String, userId : String){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReadlist = dB.collection("Readlists")
@@ -257,7 +344,10 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // A mutable state variable that checks if a readlist is updated or not in Firebase Firestore
     var readlistsUpdated by mutableStateOf(false)
+
+    // Function to add a book in a readlist
     fun addToReadlist(bookId: Item?, userId: String, readlist: String){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
@@ -265,16 +355,17 @@ class AppViewModel : ViewModel(){
                 for(document in documents){
                     if(document.get("name") == readlist) {
                         val readlistDb : Readlist? = document.toObject(Readlist::class.java)
+
+                        // check if book is already contained in readlist
                         var contain : Boolean = false
                         if (readlistDb != null) {
                             for(item in readlistDb.content){
-                                println("Ciao " + item.id + " " + bookId)
                                 if(item.id == bookId!!.id){
                                     contain = true
                                 }
                             }
                         }
-                        println("Ciao " + contain)
+
                         if(!contain){
                             dB.collection("Readlists").document(document.id)
                                 .update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
@@ -291,8 +382,10 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // A mutable state variable that holds a list of readlists of the user
     var readlists = mutableStateListOf<Readlist>()
 
+    // Function to get all the readlist of a given user
     fun getReadlists(){
         readlists.clear()
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -311,6 +404,7 @@ class AppViewModel : ViewModel(){
                 }
     }
 
+    // Function to delete a given book from a given readlist
     fun deleteBookFromReadlist(readlist: String, bookId: String){
         var documentId: String
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -322,15 +416,21 @@ class AppViewModel : ViewModel(){
                     var newList = mutableListOf<Item>()
                     newList = rl.content as MutableList<Item>
                     newList.removeIf{it.id == bookId}
-                    dB.collection("Readlists").document(documentId).update("content", newList).addOnSuccessListener {
-                        readlistsUpdated = false; if(readlist == "Libreria") libraryUpdated = false}
+                    dB.collection("Readlists").document(documentId).update("content", newList)
+                        .addOnSuccessListener {
+                            readlistsUpdated = false
+                            if(readlist == "Libreria") libraryUpdated = false
+                        }
                         .addOnFailureListener {  }
                 }
             }
         }
     }
 
+    // A mutable state variable that holds a list of Item (Book)
     var itemList = mutableStateListOf<Item>()
+
+    // Function to get all the books in the library of the user
     fun getElementsLibrary(userId : String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReadlist  = dB.collection("Readlists")
@@ -351,6 +451,7 @@ class AppViewModel : ViewModel(){
             }
     }
 
+    // Function to sort the list of readlists in a given way
     fun sortReadlists(by: String){
         if(by == "cre")
             readlists.sortBy { it.name }
@@ -358,8 +459,11 @@ class AppViewModel : ViewModel(){
             readlists.sortByDescending { it.name }
     }
 
+    // A mutable state variable that holds the content of a note
     var note : String by mutableStateOf("")
-    fun updateNota(userId: String, text: String, bookId: String){
+
+    // Function to update a note of a user for a given book
+    fun updateNote(userId: String, text: String, bookId: String){
         var id = ""
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener(){
@@ -376,6 +480,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // Function to get a note of the user for a given book
     fun getNota(userId: String, bookId: String?){
         var found: Boolean = false
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -395,6 +500,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // Function to check if a user with a given email already exists in Firebase Firestore
     private fun checkEmailAlreadyExists(email: String): Boolean{
         var result by mutableStateOf(false)
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -406,8 +512,11 @@ class AppViewModel : ViewModel(){
         return result
     }
 
-
+    // A mutable state variable that checks if a note already exists in Firebase Firestore, given user
+    // and book
     var noteAlreadyExists : Boolean by mutableStateOf(false)
+
+    // Function to check if a note of a user for a given book already exists
     fun checkNoteAlreadyInserted(userId: String, bookId: String){
         var found = false
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -421,13 +530,9 @@ class AppViewModel : ViewModel(){
                 }
             noteAlreadyExists = found
         }
-
     }
 
-    fun getUser(): String {
-        return userId
-    }
-
+    // Initialization of the AppViewModel, it creates the book recommendation lists
     init{
         getBooksRecommendation1("best+seller+giallo")
         getBooksRecommendation2("best+seller+avventura")

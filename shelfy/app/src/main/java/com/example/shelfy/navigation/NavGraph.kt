@@ -36,17 +36,6 @@ fun NavGraph(appViewModel: AppViewModel = viewModel()){
         composable(Screens.SIGN_IN_SCREEN){
             SignInPage(viewModel = appViewModel, navController = navController)
         }
-
-        /*
-        composable("${Routes.WELCOME_SCREEN}/{${Routes.USER_NAME}}/{${Routes.ANIMAL_SELECTED}}",
-            arguments = listOf(
-                navArgument(name = Routes.USER_NAME){ type = NavType.StringType },
-                navArgument(name = Routes.ANIMAL_SELECTED){ type = NavType.StringType }
-            )
-        ){
-            WelcomeScreen()
-        }
-        */
     }
 }
 

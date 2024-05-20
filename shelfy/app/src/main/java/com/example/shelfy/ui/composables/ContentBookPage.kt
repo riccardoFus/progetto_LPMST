@@ -2,8 +2,6 @@ package com.example.shelfy.ui.composables
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.view.Gravity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,10 +22,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -37,7 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +43,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -59,12 +52,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.DialogWindowProvider
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.shelfy.ConnectionState
 import com.example.shelfy.R
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlackBar
@@ -74,7 +63,6 @@ import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlin.math.max
 
 @SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition")
 @Composable
@@ -378,9 +366,9 @@ fun ContentBookPage(
                                     IconButton(onClick = {
                                         noteVisualizer = false
                                         if(noteAlreadyExists)
-                                            viewModel.updateNota(viewModel.userId, testo, id!!)
+                                            viewModel.updateNote(viewModel.userId, testo, id!!)
                                         else
-                                            viewModel.addNota(viewModel.userId, testo, id!!)
+                                            viewModel.addNote(viewModel.userId, testo, id!!)
                                     },
                                         modifier = Modifier
                                             .padding(10.dp)) {
