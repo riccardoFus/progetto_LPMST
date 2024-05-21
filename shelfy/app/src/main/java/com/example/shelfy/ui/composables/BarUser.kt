@@ -38,6 +38,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.shelfy.R
+import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
@@ -107,6 +108,17 @@ fun BarUser(
                 modifier = Modifier
                     .size(28.dp))
 
+        }
+        IconButton(onClick = {
+            viewModel.logout()
+            navController.navigate(Screens.LOGIN_SCREEN)
+        }) {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_exit_to_app_24),
+                contentDescription = stringResource(R.string.esci),
+                tint = BlueText,
+                modifier = Modifier
+                    .size(28.dp))
         }
         var readList by remember {mutableStateOf("")}
         if (addBook) {

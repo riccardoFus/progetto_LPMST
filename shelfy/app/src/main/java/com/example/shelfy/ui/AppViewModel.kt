@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.internal.wait
 import java.security.MessageDigest
 
 fun isValidEmail(email: String): Boolean {
@@ -110,7 +108,9 @@ class AppViewModel : ViewModel(){
             FirebaseAuth.getInstance()
                 .createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener{
-                    addUser(username, email, password)
+                    addUser(username, email, password,
+                        FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    )
                     login(email, password)
                     // addReadlist("Libreria", userId)
                 }
@@ -139,9 +139,6 @@ class AppViewModel : ViewModel(){
                             .addOnCompleteListener {
                             }
                             .addOnFailureListener {
-                                FirebaseAuth
-                                    .getInstance()
-                                    .createUserWithEmailAndPassword(email, password)
                             }
                         dB.collection("Users").whereEqualTo("email", email).get()
                             .addOnSuccessListener { documents1 ->
@@ -156,10 +153,10 @@ class AppViewModel : ViewModel(){
             }
     }
 
-    private fun addUser(username: String, email: String, password: String){
+    private fun addUser(username: String, email: String, password: String, uid: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbUsers: CollectionReference = dB.collection("Users")
-        val user = User(username, email, password)
+        val user = User(username, email, password, uid)
         dbUsers.add(user)
             .addOnSuccessListener {}
             .addOnFailureListener {}

@@ -3,8 +3,12 @@ package com.example.shelfy.ui.composables
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.Gravity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -59,6 +64,7 @@ import androidx.compose.ui.window.DialogWindowProvider
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.shelfy.ConnectionState
 import com.example.shelfy.R
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlackBar
@@ -202,7 +208,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Condividi libro", color = BlueText)},
+                                    Text(text = "Condividi libro", color = WhiteText)},
                                 onClick = { context.startActivity(shareIntent) },
                                 modifier = Modifier
                                     .height(25.dp)
@@ -220,7 +226,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Visualizza nota", color = BlueText)},
+                                    Text(text = "Visualizza nota", color = WhiteText)},
                                 onClick = {
                                     noteVisualizer = true; viewModel.getNota(viewModel.userId, id)
                                           },
@@ -240,7 +246,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Aggiungi alla libreria", color = BlueText)},
+                                    Text(text = "Aggiungi alla libreria", color = WhiteText)},
                                 trailingIcon = {
                                     if(aggiunto) {
                                         Spacer(modifier = Modifier.size(10.dp))
@@ -279,7 +285,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Aggiungi a una readlist", color = BlueText)},
+                                    Text(text = "Aggiungi a una readlist", color = WhiteText)},
                                 onClick = {
                                     showReadlists = true
                                 },
@@ -290,7 +296,7 @@ fun ContentBookPage(
                                 .size(10.dp))
                             DropdownMenuItem(leadingIcon = {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
+                                    painter = painterResource(id = R.drawable.baseline_edit_24),
                                     contentDescription = stringResource(R.string.aggiungi_una_recensione),
                                     tint = BlueText,
                                     modifier = Modifier
@@ -299,7 +305,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Aggiungi una recensione", color = BlueText)},
+                                    Text(text = stringResource(id = R.string.aggiungi_una_recensione), color = WhiteText)},
                                 onClick = {
                                     more = false
                                     reviewEnabled = true
@@ -318,35 +324,68 @@ fun ContentBookPage(
                     var noteAlreadyExists = viewModel.noteAlreadyExists
                     viewModel.checkNoteAlreadyInserted(viewModel.userId, id!!);
                     Dialog(onDismissRequest = { noteVisualizer = false }) {
-                        TextField(singleLine = false,
+                        TextField(
+                            singleLine = false,
                             value = testo,
                             placeholder = {
                                 Text(
-                                    text = "Nessuna nota" ,
+                                    text = stringResource(R.string.nessuna_nota) ,
                                     fontFamily = fonts,
                                     fontSize = 20.sp
                                 )
                             },
                             onValueChange = {newText -> testo = newText},
-                            textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp),
+                            textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp, color = WhiteText),
                             modifier = Modifier
-                                .height(150.dp),
+                                .width(450.dp)
+                                .height(450.dp),
                             shape = RoundedCornerShape(30.dp),
                             colors = TextFieldDefaults.colors(
+                                unfocusedTextColor = WhiteText,
+                                unfocusedLabelColor = WhiteText,
+                                unfocusedLeadingIconColor = WhiteText,
+                                focusedTextColor = WhiteText,
+                                focusedLabelColor = WhiteText,
+                                focusedLeadingIconColor = WhiteText,
+                                cursorColor = WhiteText,
+                                unfocusedPlaceholderColor = WhiteText,
+                                focusedPlaceholderColor = WhiteText,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
+                                focusedSupportingTextColor = WhiteText,
+                                unfocusedSupportingTextColor = WhiteText,
+                                focusedPrefixColor = WhiteText,
+                                unfocusedPrefixColor = WhiteText,
+                                focusedSuffixColor = WhiteText,
+                                unfocusedSuffixColor = WhiteText,
+                                focusedContainerColor = BlackBar,
+                                unfocusedContainerColor = BlackBar
                             ),
                             trailingIcon = {
                                 Column(modifier = Modifier.fillMaxHeight()) {
+                                    IconButton(onClick = {
+                                        noteVisualizer = false
+                                    },
+                                        modifier = Modifier
+                                            .padding(10.dp)) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.baseline_close_24),
+                                            contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    }
                                     IconButton(onClick = {
                                         noteVisualizer = false
                                         if(noteAlreadyExists)
                                             viewModel.updateNota(viewModel.userId, testo, id!!)
                                         else
                                             viewModel.addNota(viewModel.userId, testo, id!!)
-                                    }) {
+                                    },
+                                        modifier = Modifier
+                                            .padding(10.dp)) {
                                         Icon(
-                                            painter = painterResource(id = R.drawable.baseline_close_24),
+                                            painter = painterResource(id = R.drawable.baseline_done_24),
                                             contentDescription = stringResource(R.string.aggiungi_una_nota),
                                             modifier = Modifier
                                                 .size(50.dp)
@@ -409,26 +448,25 @@ fun ContentBookPage(
             if(id != null) {
                 viewModel.getReviews(id)
             }
-            Text(
-                text = reviews.first.toString() + " - " + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
-            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
-                    .background(color = BlackPage),
+                    .padding(10.dp),
                 contentAlignment = Alignment.TopStart
             ) {
                     if (reviewEnabled) {
-                        Dialog(onDismissRequest = { reviewEnabled = false }) {
+                        Dialog(onDismissRequest = { reviewEnabled = false; review = 0 }) {
                             Column(modifier = Modifier
-                                .background(Color.Transparent)
-                                .width(300.dp)
-                                .height(250.dp)
+                                .background(BlackPage)
+                                .width(400.dp)
+                                .height(350.dp)
+                                .border(
+                                    width = 3.dp,
+                                    color = BlackBar,
+                                    shape = RoundedCornerShape(30.dp)
+                                ),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
                                     ){
                                 Row(modifier = Modifier.align(Alignment.CenterHorizontally)){
                                     IconButton(onClick = {review = 1}){
@@ -491,26 +529,55 @@ fun ContentBookPage(
                                         )
                                                   },
                                     onValueChange = { newText -> text = newText },
+                                    textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp, color = WhiteText),
                                     modifier = Modifier
-                                        .padding(8.dp)
-                                        .clip(RoundedCornerShape(20.dp))
-                                        .height(100.dp),
+                                        .width(450.dp)
+                                        .height(175.dp)
+                                        .padding(20.dp),
+                                    shape = RoundedCornerShape(30.dp),
                                     colors = TextFieldDefaults.colors(
-                                        focusedIndicatorColor = Color.Transparent
+                                        unfocusedTextColor = WhiteText,
+                                        unfocusedLabelColor = WhiteText,
+                                        unfocusedLeadingIconColor = WhiteText,
+                                        focusedTextColor = WhiteText,
+                                        focusedLabelColor = WhiteText,
+                                        focusedLeadingIconColor = WhiteText,
+                                        cursorColor = WhiteText,
+                                        unfocusedPlaceholderColor = WhiteText,
+                                        focusedPlaceholderColor = WhiteText,
+                                        focusedIndicatorColor = Color.Transparent,
+                                        unfocusedIndicatorColor = Color.Transparent,
+                                        focusedSupportingTextColor = WhiteText,
+                                        unfocusedSupportingTextColor = WhiteText,
+                                        focusedPrefixColor = WhiteText,
+                                        unfocusedPrefixColor = WhiteText,
+                                        focusedSuffixColor = WhiteText,
+                                        unfocusedSuffixColor = WhiteText,
+                                        focusedContainerColor = BlackBar,
+                                        unfocusedContainerColor = BlackBar
                                     ),
-                                    textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp)
                                 )
-                                IconButton(onClick = {
+                                OutlinedButton(onClick = {
                                     reviewEnabled = false
                                     if (id != null) {
                                         viewModel.createReviewInFirebase(id, review, text)
+                                        review = 0
                                     }
-                                }, modifier = Modifier
-                                    .padding(11.dp)
-                                    .align(Alignment.CenterHorizontally)){
-                                    Icon(painter = painterResource(R.drawable.add_circle_plus_1024x1024), contentDescription = "Aggiungi", tint = BlueText, modifier = Modifier.size(30.dp)
-                                    )
-                                }
+                                },
+                                    modifier = Modifier
+                                        .widthIn(185.dp)
+                                        .padding(10.dp),
+                                    content = {
+                                        Text(text = stringResource(R.string.aggiungi_recensione), modifier = Modifier
+                                            .align(Alignment.CenterVertically),
+                                            fontSize = 19.sp,
+                                            fontFamily = fonts,
+                                            textAlign = TextAlign.Center,
+                                            color = WhiteText
+                                        )
+                                    },
+                                    border = BorderStroke(3.dp, BlueText)
+                                )
                             }
                         }
                     }
@@ -518,6 +585,7 @@ fun ContentBookPage(
             var currentBookId by rememberSaveable{ mutableStateOf("") }
             var reviewsUpdated : Boolean = viewModel.reviewsUpdated
             if(reviews.first > 0) {
+
                 if(id != null){
                     if(currentBookId != id){
                         currentBookId = id
@@ -534,6 +602,13 @@ fun ContentBookPage(
                         fontSize = 20.sp,
                         color = BlueText,
                         textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Numero voti: " + reviews.first.toString() + ", media voti: " + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
+                        textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
                     )
 
                     LazyRow(){

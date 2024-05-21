@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,7 @@ import androidx.navigation.NavHostController
 import com.example.shelfy.R
 import com.example.shelfy.data.db.Readlist
 import com.example.shelfy.data.remote.responses.Item
+import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
@@ -122,7 +124,7 @@ fun ContentProfilePage(
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(if(readlist.content.isNotEmpty()) 360.dp else 0.dp)
+                                .height(if (readlist.content.isNotEmpty()) 360.dp else 0.dp)
                         ) {
                             items(readlist.content) { item ->
                                 BookCardHomePage(

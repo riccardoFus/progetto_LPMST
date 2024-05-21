@@ -51,29 +51,45 @@ import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun LoginPage(
     viewModel : AppViewModel,
     navController : NavHostController
 ){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(color = BlackPage)
-    ) {
-        TopBar(
+    if(FirebaseAuth.getInstance().currentUser != null){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Users").whereEqualTo("uid", FirebaseAuth.getInstance().currentUser!!.uid).get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    viewModel.username = document.get("username").toString()
+                    viewModel.userId = document.id
+                }
+                viewModel.loginDone = true
+                navController.navigate(Screens.HOME_SCREEN)
+            }
+    }else{
+        Column(
             modifier = Modifier
-                .weight(0.9f)
-                .background(color = BlackBar)
-        )
-        ContentLoginPage(
-            viewModel = viewModel,
-            navController = navController,
-            modifier = Modifier
-                .weight(10f)
-                .verticalScroll(rememberScrollState()))
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(color = BlackPage)
+        ) {
+            TopBar(
+                modifier = Modifier
+                    .weight(0.9f)
+                    .background(color = BlackBar)
+            )
+            ContentLoginPage(
+                viewModel = viewModel,
+                navController = navController,
+                modifier = Modifier
+                    .weight(10f)
+                    .verticalScroll(rememberScrollState()))
+        }
     }
 }
 
