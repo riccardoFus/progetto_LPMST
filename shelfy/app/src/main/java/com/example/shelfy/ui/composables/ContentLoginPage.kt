@@ -184,7 +184,7 @@ fun ContentLoginPage(
                     Text(text = stringResource(R.string.login), modifier = Modifier
                         .align(Alignment.CenterVertically),
                         fontSize = 20.sp,
-                        fontFamily = fonts,  color = BlueText,
+                        fontFamily = fonts,  color = WhiteText,
                         textAlign = TextAlign.Start)
                 }
             )

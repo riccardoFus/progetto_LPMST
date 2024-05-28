@@ -623,7 +623,9 @@ fun ContentBookPage(
                 modifier = Modifier
                     .padding(20.dp)
                     .widthIn(120.dp),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.Transparent
+                ),
                 border = BorderStroke(1.dp, color = BlueText),
                 content = {
                     Text(text = if(showReviews) stringResource(R.string.nascondi_recensioni) else stringResource(

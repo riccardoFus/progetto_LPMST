@@ -287,7 +287,7 @@ fun ContentSignInPage(
                         fontSize = 20.sp,
                         fontFamily = fonts,
                         textAlign = TextAlign.Center,
-                        color = BlueText
+                        color = WhiteText
                     )
                 },
                 border = BorderStroke(1.dp, BlueText),
