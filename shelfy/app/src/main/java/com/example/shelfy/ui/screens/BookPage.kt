@@ -74,11 +74,14 @@ fun BookPage(
             .fillMaxHeight()
             .background(color = BlackPage)
     ) {
-        TopBar(
+        /*TopBar(
             modifier = Modifier
-                .weight(0.83f)
+                .weight(0.9f)
                 .background(color = BlackBar)
         )
+
+         */
+        Spacer(modifier = Modifier.size(10.dp))
         ContentBookPage(
             viewModel,
             modifier = Modifier
@@ -88,6 +91,7 @@ fun BookPage(
                 .verticalScroll(rememberScrollState())
         )
         BottomBar(
+            viewModel,
             navController,
             modifier = Modifier
                 .background(color = BlackBar)

@@ -2,12 +2,15 @@ package com.example.shelfy.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.composables.BottomBar
@@ -27,11 +30,14 @@ fun HomePage(
             .fillMaxHeight()
             .background(color = BlackPage)
     ) {
-        TopBar(
+        /*TopBar(
             modifier = Modifier
-                .weight(0.83f)
+                .weight(0.9f)
                 .background(color = BlackBar)
         )
+
+         */
+        Spacer(modifier = Modifier.size(10.dp))
         ContentHomePage(
             viewModel = viewModel,
             navController = navController,
@@ -40,6 +46,7 @@ fun HomePage(
                 .verticalScroll(rememberScrollState())
         )
         BottomBar(
+            viewModel,
             navController,
             modifier = Modifier
                 .background(color = BlackBar)

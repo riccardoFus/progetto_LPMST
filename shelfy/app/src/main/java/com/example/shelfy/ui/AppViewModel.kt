@@ -293,9 +293,9 @@ class AppViewModel : ViewModel(){
                                 )
                             )
                         }
-
-                        reviewsUpdated = true
                     }
+
+                    reviewsUpdated = true
         }
     }
 
@@ -307,7 +307,7 @@ class AppViewModel : ViewModel(){
         dbReviews.add(review)
             .addOnSuccessListener {
                 reviews.clear()
-                getReviewsPlusUser(id)
+                // getReviewsPlusUser(id)
             }
             .addOnFailureListener {}
     }
@@ -534,8 +534,8 @@ class AppViewModel : ViewModel(){
 
     // Initialization of the AppViewModel, it creates the book recommendation lists
     init{
-        getBooksRecommendation1("best+seller+giallo")
-        getBooksRecommendation2("best+seller+avventura")
-        getBooksRecommendation3("best+seller+fantasy")
+        getBooksRecommendation1("best+mystery+romance")
+        getBooksRecommendation2("best+adventure+romance")
+        getBooksRecommendation3("best+fantasy+romance")
     }
 }

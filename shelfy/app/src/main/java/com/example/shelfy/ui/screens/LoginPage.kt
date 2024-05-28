@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -78,11 +79,14 @@ fun LoginPage(
                 .fillMaxHeight()
                 .background(color = BlackPage)
         ) {
-            TopBar(
+            /*TopBar(
                 modifier = Modifier
                     .weight(0.9f)
                     .background(color = BlackBar)
             )
+
+             */
+            Spacer(modifier = Modifier.size(10.dp))
             ContentLoginPage(
                 viewModel = viewModel,
                 navController = navController,

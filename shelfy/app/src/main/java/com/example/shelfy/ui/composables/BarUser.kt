@@ -1,5 +1,6 @@
 package com.example.shelfy.ui.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -40,6 +41,7 @@ import androidx.navigation.NavHostController
 import com.example.shelfy.R
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
+import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
 
@@ -50,8 +52,7 @@ fun BarUser(
     modifier : Modifier = Modifier
 ){
     Row (
-        modifier = Modifier.padding(top = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.padding(top = 8.dp)
 
     ) {
         Spacer(modifier = Modifier.width(2.dp))
@@ -89,16 +90,6 @@ fun BarUser(
 
         }
         IconButton(
-            onClick = {navController.navigate("SEARCH_SCREEN")}
-        ){
-            Icon(
-                painter = painterResource(id = R.drawable.search_outline_1024x1024),
-                contentDescription = stringResource(id = R.string.cerca_libro),
-                tint = BlueText,
-                modifier = Modifier
-                    .size(28.dp))
-        }
-        IconButton(
             onClick = {viewModel.sortReadlists(sortBy); if(sortBy == "cre") sortBy = "dec" else sortBy = "cre"}
         ){
             Icon(
@@ -124,7 +115,9 @@ fun BarUser(
         if (addBook) {
             Dialog(onDismissRequest = { addBook = false }) {
                 if(addBook){
-                    Dialog(onDismissRequest = { addBook = false}) {
+                    Dialog(
+                        onDismissRequest = { addBook = false}
+                    ) {
                         OutlinedTextField(
                             singleLine = true,
                             value = readList,
@@ -139,8 +132,9 @@ fun BarUser(
                                     newText -> readList = newText
                             },
                             modifier = Modifier
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(BlackBar)
                                 .padding(8.dp)
-                                .clip(RoundedCornerShape(8.dp))
                                 .widthIn(400.dp),
                             textStyle = TextStyle(
                                 fontFamily = fonts,
@@ -171,24 +165,5 @@ fun BarUser(
                 }
             }
         }
-
-        /*
-        IconButton(
-            onClick = {
-                viewModel.itemList.sortBy {
-                    it.volumeInfo.title
-                }
-            }
-        ){
-            Icon(
-                painter = painterResource(id = R.drawable.sort_ascending_1024x1024),
-                contentDescription = "Ordina",
-                tint = BlueText,
-                modifier = Modifier
-                    .size(28.dp)
-            )
-        }
-
-         */
     }
 }

@@ -2,12 +2,15 @@ package com.example.shelfy.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.shelfy.ui.AppViewModel
@@ -29,11 +32,14 @@ fun SearchPage(
             .fillMaxHeight()
             .background(color = BlackPage)
     ) {
-        TopBar(
+        /*TopBar(
             modifier = Modifier
-                .weight(0.83f)
+                .weight(0.9f)
                 .background(color = BlackBar)
         )
+
+         */
+        Spacer(modifier = Modifier.size(10.dp))
         ContentSearchPage(
             viewModel = viewModel,
             navController = navController,
@@ -42,6 +48,7 @@ fun SearchPage(
                 .weight(10f)
                 .fillMaxWidth())
         BottomBar(
+            viewModel,
             navController,
             modifier = Modifier
                 .background(color = BlackBar)

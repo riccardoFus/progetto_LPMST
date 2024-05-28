@@ -86,8 +86,9 @@ fun ContentSearchPage(
                         newText -> text = newText
                 },
                 modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(BlackBar)
                     .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp))
                     .widthIn(400.dp)
                     .onKeyEvent {
                         if (it.key == Key.Enter) {
@@ -129,7 +130,7 @@ fun ContentSearchPage(
                     Row(modifier = Modifier
                         .padding(8.dp)
                         .height(250.dp)
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(10.dp))
                         .background(BlackBar)) {
                         BookCardSearchPage(item = item, viewModel = viewModel, navController = navController)
                     }

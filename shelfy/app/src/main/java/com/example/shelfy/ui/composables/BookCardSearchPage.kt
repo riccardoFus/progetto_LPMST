@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
+import com.example.shelfy.util.Resource
 
 @Composable
 fun BookCardSearchPage(
@@ -65,10 +67,11 @@ fun BookCardSearchPage(
             .height(250.dp)
             .clip(
                 RoundedCornerShape(
-                    8.dp
+                    10.dp
                 )
             )
             .clickable(onClick = {
+                viewModel.bookUiState = Resource.Loading<Item>()
                 viewModel.getBook(item?.id.toString())
                 navController.navigate(Screens.VISUALIZER_SCREEN)
             })

@@ -14,12 +14,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.shelfy.R
+import com.example.shelfy.data.remote.responses.Books
+import com.example.shelfy.data.remote.responses.Item
 import com.example.shelfy.navigation.Screens
+import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
+import com.example.shelfy.util.Resource
 
 @Composable
 fun BottomBar(
+    viewModel : AppViewModel,
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
@@ -28,6 +33,7 @@ fun BottomBar(
         horizontalArrangement = Arrangement.SpaceEvenly
     ){
         IconButton(onClick = {
+            viewModel.booksSearchUiState = Resource.Loading<Books>()
             navController.navigate(Screens.SEARCH_SCREEN)
         }) {
             Icon(

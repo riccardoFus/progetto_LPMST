@@ -57,11 +57,14 @@ fun ProfilePage(
             .background(color = BlackPage),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopBar(
+        /*TopBar(
             modifier = Modifier
                 .weight(0.9f)
                 .background(color = BlackBar)
         )
+        
+         */
+        Spacer(modifier = Modifier.size(10.dp))
         BarUser(
             viewModel = viewModel,
             navController = navController
@@ -74,6 +77,7 @@ fun ProfilePage(
                 .padding(8.dp)
         )
         BottomBar(
+            viewModel,
             navController,
             modifier = Modifier
                 .background(color = BlackBar)

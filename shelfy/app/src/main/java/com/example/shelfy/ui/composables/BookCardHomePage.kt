@@ -38,6 +38,7 @@ import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
+import com.example.shelfy.util.Resource
 
 @Composable
 fun BookCardHomePage(
@@ -58,7 +59,7 @@ fun BookCardHomePage(
                     0.dp
                 }
             )
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(
                 if (page != "profile") {
                     Color.Transparent
@@ -90,11 +91,12 @@ fun BookCardHomePage(
                 .width(180.dp)
                 .clip(
                     RoundedCornerShape(
-                        8.dp
+                        10.dp
                     )
                 )
                 .clickable(
                     onClick = {
+                        viewModel.bookUiState = Resource.Loading<Item>()
                         viewModel.getBook(item?.id.toString())
                         navController.navigate(Screens.VISUALIZER_SCREEN)
                     }

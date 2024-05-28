@@ -2,10 +2,14 @@ package com.example.shelfy.ui.composables
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +26,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -44,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +71,7 @@ import com.example.shelfy.ui.theme.fonts
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-@SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition")
+@SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition", "ResourceType")
 @Composable
 fun ContentBookPage(
     viewModel : AppViewModel,
@@ -113,12 +120,11 @@ fun ContentBookPage(
                     .width(180.dp)
                     .clip(
                         RoundedCornerShape(
-                            8.dp
+                            10.dp
                         )
                     ),
                 contentScale = ContentScale.Crop,
             )
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -141,8 +147,8 @@ fun ContentBookPage(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = (viewModel.bookUiState.data?.volumeInfo?.authors.toString()
-                            .replace("[", "").replace("]", "")),
+                        text = (viewModel.bookUiState?.data?.volumeInfo?.authors?.toString()?.replace("[", "")?.replace("]", "") ?:
+                            stringResource(id = R.string.no_autori)),
                         color = WhiteText,
                         fontSize = 15.sp,
                         modifier = Modifier
@@ -177,6 +183,7 @@ fun ContentBookPage(
                                 .size(40.dp)
                         )
                     }
+                    val libreria = stringResource(R.string.libreria)
                     var aggiunto by remember{mutableStateOf(false)}
                     if(more){
                         DropdownMenu(
@@ -196,7 +203,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Condividi libro", color = WhiteText)},
+                                    Text(text = stringResource(R.string.condividi_libro), color = WhiteText)},
                                 onClick = { context.startActivity(shareIntent) },
                                 modifier = Modifier
                                     .height(25.dp)
@@ -214,7 +221,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Visualizza nota", color = WhiteText)},
+                                    Text(text = stringResource(R.string.visualizza_nota), color = WhiteText)},
                                 onClick = {
                                     noteVisualizer = true; viewModel.getNota(viewModel.userId, id)
                                           },
@@ -234,7 +241,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Aggiungi alla libreria", color = WhiteText)},
+                                    Text(text = stringResource(id = R.string.aggiungi_alla_libreria), color = WhiteText)},
                                 trailingIcon = {
                                     if(aggiunto) {
                                         Spacer(modifier = Modifier.size(10.dp))
@@ -249,7 +256,11 @@ fun ContentBookPage(
                                     }
                                 },
                                 onClick = {
-                                          viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, "Libreria")
+                                          viewModel.addToReadlist(
+                                              viewModel.bookUiState.data,
+                                              viewModel.userId,
+                                              libreria
+                                          )
                                     GlobalScope.launch {
                                         aggiunto = true
                                         Thread.sleep(2000)
@@ -273,7 +284,7 @@ fun ContentBookPage(
                                 )
                             },
                                 text = {
-                                    Text(text = "Aggiungi a una readlist", color = WhiteText)},
+                                    Text(text = stringResource(id = R.string.aggiungi_a_una_readlist), color = WhiteText)},
                                 onClick = {
                                     showReadlists = true
                                 },
@@ -327,7 +338,7 @@ fun ContentBookPage(
                             modifier = Modifier
                                 .width(450.dp)
                                 .height(450.dp),
-                            shape = RoundedCornerShape(30.dp),
+                            shape = RoundedCornerShape(10.dp),
                             colors = TextFieldDefaults.colors(
                                 unfocusedTextColor = WhiteText,
                                 unfocusedLabelColor = WhiteText,
@@ -396,16 +407,28 @@ fun ContentBookPage(
             text = text.replace("</b>", "")
             text = text.replace("<i>", "")
             text = text.replace("</i>", "")
-            Text(
-                text = text, color = WhiteText, fontSize = 16.sp,
+            Box(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp)
-                    .fillMaxWidth()
-                    .clickable { showTrama = !showTrama },
-                fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
-                maxLines = if (showTrama) Int.MAX_VALUE else 7
-            )
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(BlackBar)
+            ){
+                Text(
+                    text = text, color = WhiteText, fontSize = 16.sp,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .clickable { showTrama = !showTrama }
+                        .animateContentSize(
+                            animationSpec = tween(
+                                durationMillis = 1000,
+                                easing = LinearOutSlowInEasing
+                            )
+                        ),
+                    fontWeight = FontWeight.SemiBold, fontFamily = fonts,
+                    textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
+                    maxLines = if (showTrama) Int.MAX_VALUE else 7
+                )
+            }
 
             if(showReadlists) {
                 DropdownMenu(
@@ -416,16 +439,32 @@ fun ContentBookPage(
                 ) {
                     LazyColumn(
                         modifier = Modifier
-                            .height(300.dp)
+                            .height(250.dp)
                             .width(165.dp)
                             .align(Alignment.CenterHorizontally)
                             .fillMaxWidth()
                     ) {
                         items(viewModel.readlists) { item ->
                             Column(modifier = Modifier
-                                .padding(11.dp)
+                                .padding(5.dp)
                                 .align(Alignment.CenterHorizontally)){
-                                OutlinedButton(onClick = { viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, item.name); showReadlists = false }, content = {Text(text = item.name, color = BlueText, fontFamily = fonts, fontSize = 20.sp)}, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp) )
+                                OutlinedButton(
+                                    onClick = {
+                                        viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, item.name)
+                                        showReadlists = false
+                                              },
+                                    content = {
+                                        Text(
+                                            text = item.name,
+                                            color = BlueText,
+                                            fontFamily = fonts,
+                                            fontSize = 15.sp,
+                                            textAlign = TextAlign.Justify
+                                        )
+                                              },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(10.dp)
+                                )
                             }
                         }
                     }
@@ -451,7 +490,7 @@ fun ContentBookPage(
                                 .border(
                                     width = 3.dp,
                                     color = BlackBar,
-                                    shape = RoundedCornerShape(30.dp)
+                                    shape = RoundedCornerShape(10.dp)
                                 ),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center
@@ -522,7 +561,7 @@ fun ContentBookPage(
                                         .width(450.dp)
                                         .height(175.dp)
                                         .padding(20.dp),
-                                    shape = RoundedCornerShape(30.dp),
+                                    shape = RoundedCornerShape(10.dp),
                                     colors = TextFieldDefaults.colors(
                                         unfocusedTextColor = WhiteText,
                                         unfocusedLabelColor = WhiteText,
@@ -549,6 +588,9 @@ fun ContentBookPage(
                                     reviewEnabled = false
                                     if (id != null) {
                                         viewModel.createReviewInFirebase(id, review, text)
+                                        viewModel.reviewsUpdated = false
+                                        viewModel.reviews.clear()
+                                        viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
                                         review = 0
                                     }
                                 },
@@ -564,7 +606,7 @@ fun ContentBookPage(
                                             color = WhiteText
                                         )
                                     },
-                                    border = BorderStroke(3.dp, BlueText)
+                                    border = BorderStroke(3.dp, BlackBar)
                                 )
                             }
                         }
@@ -573,15 +615,6 @@ fun ContentBookPage(
             var currentBookId by rememberSaveable{ mutableStateOf("") }
             var reviewsUpdated : Boolean = viewModel.reviewsUpdated
             if(reviews.first > 0) {
-
-                if(id != null){
-                    if(currentBookId != id){
-                        currentBookId = id
-                        viewModel.reviewsUpdated = false
-                        viewModel.reviews.clear()
-                        viewModel.getReviewsPlusUser(currentBookId)
-                    }
-                }
 
                 if(reviewsUpdated){
                     Text(
@@ -592,7 +625,9 @@ fun ContentBookPage(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "Numero voti: " + reviews.first.toString() + ", media voti: " + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
+                        text = stringResource(R.string.numero_voti) + reviews.first.toString() + stringResource(
+                            R.string.media_voti
+                        ) + reviews.second.toString(), color = WhiteText, fontSize = 16.sp,
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth(), fontWeight = FontWeight.SemiBold, fontFamily = fonts,
@@ -637,16 +672,21 @@ fun ContentBookPage(
                                         }
                                     }
                                     if (it.desc.isNotBlank()) {
-                                        Text(
-                                            text = "Descrizione: " + it.desc,
-                                            fontFamily = fonts,
-                                            fontSize = 15.sp,
-                                            color = WhiteText,
+                                        Column(
                                             modifier = Modifier
-                                                .padding(8.dp)
-                                                .fillMaxSize(),
-                                            overflow = TextOverflow.Ellipsis
-                                        )
+                                                .verticalScroll(rememberScrollState())
+                                        ) {
+                                            Text(
+                                                text = it.desc,
+                                                fontFamily = fonts,
+                                                fontSize = 15.sp,
+                                                color = WhiteText,
+                                                modifier = Modifier
+                                                    .padding(8.dp)
+                                                    .fillMaxSize()
+                                            )
+                                        }
+
                                     }
                                 }
 
