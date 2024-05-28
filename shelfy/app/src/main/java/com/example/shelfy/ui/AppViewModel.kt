@@ -281,6 +281,7 @@ class AppViewModel : ViewModel(){
     // Function to get reviews of a given book, and also gives information the creator of the review
     fun getReviewsPlusUser(bookId : String) {
             val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        reviews.clear()
             dB.collection("Reviews").whereEqualTo("bookId", bookId).get()
                 .addOnSuccessListener { documents ->
                     if (!documents.isEmpty) {
@@ -293,9 +294,9 @@ class AppViewModel : ViewModel(){
                                 )
                             )
                         }
-                    }
 
-                    reviewsUpdated = true
+                        reviewsUpdated = true
+                    }
         }
     }
 
@@ -305,10 +306,7 @@ class AppViewModel : ViewModel(){
         val dbReviews  = dB.collection("Reviews")
         val review = Review(id, username, stars, text)
         dbReviews.add(review)
-            .addOnSuccessListener {
-                reviews.clear()
-                // getReviewsPlusUser(id)
-            }
+            .addOnSuccessListener {}
             .addOnFailureListener {}
     }
 

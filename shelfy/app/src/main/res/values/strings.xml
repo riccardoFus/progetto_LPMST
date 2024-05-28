@@ -49,4 +49,6 @@
     <string name="media_voti">", media voti: "</string>
     <string name="visualizza_nota">Visualizza nota</string>
     <string name="condividi_libro">Condividi libro</string>
+    <string name="nascondi_recensioni">Nascondi recensioni</string>
+    <string name="visualizza_recensioni">Visualizza recensioni</string>
 </resources>

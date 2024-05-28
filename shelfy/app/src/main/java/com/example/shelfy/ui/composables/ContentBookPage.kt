@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -63,6 +64,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.shelfy.R
 import com.example.shelfy.ui.AppViewModel
+import com.example.shelfy.ui.isValidEmail
+import com.example.shelfy.ui.isValidPassword
+import com.example.shelfy.ui.sha256
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
@@ -588,9 +592,8 @@ fun ContentBookPage(
                                     reviewEnabled = false
                                     if (id != null) {
                                         viewModel.createReviewInFirebase(id, review, text)
-                                        viewModel.reviewsUpdated = false
-                                        viewModel.reviews.clear()
-                                        viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
+                                        // viewModel.reviews.clear()
+                                        viewModel.getReviews(viewModel.bookUiState.data!!.id)
                                         review = 0
                                     }
                                 },
@@ -613,10 +616,28 @@ fun ContentBookPage(
                     }
             }
             var currentBookId by rememberSaveable{ mutableStateOf("") }
-            var reviewsUpdated : Boolean = viewModel.reviewsUpdated
-            if(reviews.first > 0) {
-
-                if(reviewsUpdated){
+            var showReviews by rememberSaveable {
+                mutableStateOf(false)
+            }
+            OutlinedButton(onClick = { showReviews = !showReviews },
+                modifier = Modifier
+                    .padding(20.dp)
+                    .widthIn(120.dp),
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent),
+                border = BorderStroke(1.dp, color = BlueText),
+                content = {
+                    Text(text = if(showReviews) stringResource(R.string.nascondi_recensioni) else stringResource(
+                        R.string.visualizza_recensioni
+                    ), modifier = Modifier
+                        .align(Alignment.CenterVertically),
+                        fontSize = 20.sp,
+                        fontFamily = fonts,  color = WhiteText,
+                        textAlign = TextAlign.Start)
+                }
+            )
+            if(showReviews){
+                viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
+                if(reviews.first > 0) {
                     Text(
                         text = stringResource(R.string.recensioni),
                         fontFamily = fonts,
@@ -695,20 +716,19 @@ fun ContentBookPage(
 
                         }
                     }
+                }else{
+                    Box(modifier = Modifier
+                        .fillMaxWidth(),
+                        contentAlignment = Alignment.Center) {
+                        Text(
+                            text = stringResource(R.string.no_recensioni),
+                            fontFamily = fonts,
+                            fontSize = 20.sp,
+                            color = BlueText
+                        )
+                    }
                 }
-
-            }
-            else{
-                Box(modifier = Modifier
-                    .fillMaxWidth(),
-                    contentAlignment = Alignment.Center) {
-                    Text(
-                        text = stringResource(R.string.no_recensioni),
-                        fontFamily = fonts,
-                        fontSize = 20.sp,
-                        color = BlueText
-                    )
-                }
+            }else{
 
             }
 
