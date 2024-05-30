@@ -18,54 +18,28 @@ import com.example.shelfy.ui.screens.SignInPage
 
 @Composable
 fun NavGraph(appViewModel: AppViewModel = viewModel()){
+    // get the default nav controller (Manages app navigation within a NavHost,
+    // handling navigation actions and back stack management)
     val navController = rememberNavController()
+    // define the NavHost (A container that hosts a navigation graph,
+    // defining the composable destinations and their navigation paths)
     NavHost(navController = navController, startDestination = Screens.LOGIN_SCREEN){
-        composable(Screens.HOME_SCREEN, enterTransition = {
-            return@composable slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up,
-                tween(5000)
-            )
-        }){
+        composable(Screens.HOME_SCREEN){
             HomePage(viewModel = appViewModel, navController = navController)
         }
-        composable(Screens.PROFILE_SCREEN, enterTransition = {
-            return@composable slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up,
-                tween(5000)
-            )
-        }){
+        composable(Screens.PROFILE_SCREEN){
             ProfilePage(viewModel = appViewModel, navController = navController)
         }
-        composable(Screens.SEARCH_SCREEN, enterTransition = {
-            return@composable slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up,
-                tween(5000)
-            )
-        }){
+        composable(Screens.SEARCH_SCREEN){
             SearchPage(viewModel = appViewModel, navController = navController)
         }
-        composable(Screens.VISUALIZER_SCREEN, enterTransition = {
-            return@composable slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up,
-                tween(5000)
-            )
-        }){
+        composable(Screens.VISUALIZER_SCREEN){
             BookPage(viewModel = appViewModel, navController = navController)
         }
-        composable(Screens.LOGIN_SCREEN, enterTransition = {
-            return@composable slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up,
-                tween(5000)
-            )
-        }){
+        composable(Screens.LOGIN_SCREEN){
             LoginPage(viewModel = appViewModel, navController = navController)
         }
-        composable(Screens.SIGN_IN_SCREEN, enterTransition = {
-            return@composable slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Up,
-                tween(5000)
-            )
-        }){
+        composable(Screens.SIGN_IN_SCREEN){
             SignInPage(viewModel = appViewModel, navController = navController)
         }
     }

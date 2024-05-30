@@ -24,47 +24,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.security.MessageDigest
 
-/**
- * Checks if a given email is valid based on a predefined regular expression.
- *
- * The email must follow the pattern where it starts with one or more alphanumeric characters,
- * followed by an optional sequence of periods, underscores, percentage signs, or plus signs.
- * This is followed by the '@' symbol and a domain name, which consists of one or more alphanumeric
- * characters or hyphens. The domain must end with a period and a top-level domain of at least
- * two alphabetical characters.
- *
- * @param email The email address to validate.
- * @return `true` if the email is valid, `false` otherwise.
- */
+
+// Checks if a given email is valid based on a predefined regular expression.
 fun isValidEmail(email: String): Boolean {
     val emailRegex = Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
     return emailRegex.matches(email)
 }
 
-/**
- * Checks if a given password is valid based on a predefined regular expression.
- *
- * The password must be at least 8 characters long and contain at least one lowercase letter,
- * one uppercase letter, one digit, and one special character from the set @, $, !, %, *, ?, &.
- *
- * @param password The password to validate.
- * @return `true` if the password is valid, `false` otherwise.
- */
+// Checks if a given password is valid based on a predefined regular expression.
 fun isValidPassword(password: String): Boolean {
     val passwordRegex = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,}\$")
     return passwordRegex.matches(password)
 }
 
-/**
- * Generates a SHA-256 hash for a given input string.
- *
- * This function converts the input string to a byte array, computes the SHA-256 hash of the
- * byte array, and then converts the resulting hash bytes to a hexadecimal string.
- *
- * @param input The input string to hash.
- * @return The SHA-256 hash of the input string, represented as a hexadecimal string.
- * @throws NoSuchAlgorithmException if the SHA-256 algorithm is not available in the environment.
- */
+// Generates a SHA-256 hash for a given input string.
 fun sha256(input: String): String {
     val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
     val hexString = StringBuilder()
@@ -532,8 +505,8 @@ class AppViewModel : ViewModel(){
 
     // Initialization of the AppViewModel, it creates the book recommendation lists
     init{
-        getBooksRecommendation1("best+mystery+romance")
-        getBooksRecommendation2("best+adventure+romance")
-        getBooksRecommendation3("best+fantasy+romance")
+        getBooksRecommendation1("mistero+giallo+thriller+noir+poliziesco")
+        getBooksRecommendation2("avventura+fantasy+fantascienza+storia+azione")
+        getBooksRecommendation3("fantascienza+fantasy+cyberpunk+apocalittico")
     }
 }

@@ -74,13 +74,6 @@ fun BookPage(
             .fillMaxHeight()
             .background(color = BlackPage)
     ) {
-        /*TopBar(
-            modifier = Modifier
-                .weight(0.9f)
-                .background(color = BlackBar)
-        )
-
-         */
         Spacer(modifier = Modifier.size(10.dp))
         ContentBookPage(
             viewModel,
@@ -98,11 +91,4 @@ fun BookPage(
                 .fillMaxWidth()
         )
     }
-}
-
-@Preview
-@Composable
-fun preview1(){
-    BookPage(viewModel = AppViewModel(), navController = rememberNavController()
-    )
 }

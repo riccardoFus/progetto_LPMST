@@ -23,8 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -45,6 +47,7 @@ import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ContentLoginPage(
     viewModel : AppViewModel,
@@ -169,10 +172,12 @@ fun ContentLoginPage(
                 )
             }
 
+            val keyboardController = LocalSoftwareKeyboardController.current
             OutlinedButton(onClick = {
                 emailCorrect = isValidEmail(email)
                 passwordCorrect = isValidPassword(password)
                 if (emailCorrect && passwordCorrect) {
+                    keyboardController?.hide()
                     viewModel.login(email, sha256(password)); }
             },
                 modifier = Modifier

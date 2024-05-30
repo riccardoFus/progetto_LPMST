@@ -48,26 +48,12 @@ import com.example.shelfy.ui.theme.fonts
 @Composable
 fun BarUser(
     viewModel: AppViewModel,
-    navController : NavHostController,
-    modifier : Modifier = Modifier
+    navController : NavHostController
 ){
     Row (
         modifier = Modifier.padding(top = 8.dp)
-
     ) {
         Spacer(modifier = Modifier.width(2.dp))
-        /*
-        Icon(
-            painter = painterResource(id = R.drawable.profile_icon_512x512_w0uaq4yr),
-            contentDescription = "Profilo",
-            tint = BlueText,
-            modifier = Modifier
-                .size(50.dp)
-                .clip(CircleShape)
-                .padding(5.dp)
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        */
         Text(
             text = stringResource(R.string.la_tua_libreria),
             fontFamily = fonts,
@@ -78,6 +64,7 @@ fun BarUser(
         Spacer(modifier = Modifier.width(65.dp))
         var addBook by remember { mutableStateOf(false) }
         var sortBy by remember { mutableStateOf("cre") }
+        // IconButton to add a new readlist
         IconButton(
             onClick = {addBook = true}
         ){
@@ -89,6 +76,7 @@ fun BarUser(
                     .size(28.dp))
 
         }
+        // IconButton to sort readlists in ascending or descending
         IconButton(
             onClick = {viewModel.sortReadlists(sortBy); if(sortBy == "cre") sortBy = "dec" else sortBy = "cre"}
         ){
@@ -100,6 +88,7 @@ fun BarUser(
                     .size(28.dp))
 
         }
+        // IconButton to logout user
         IconButton(onClick = {
             viewModel.logout()
             navController.navigate(Screens.LOGIN_SCREEN)
@@ -112,6 +101,8 @@ fun BarUser(
                     .size(28.dp))
         }
         var readList by remember {mutableStateOf("")}
+        // if IconButton of addReadlist is clicked, it opens a dialog
+        // in this dialog, you can write the name of the new readlist
         if (addBook) {
             Dialog(onDismissRequest = { addBook = false }) {
                 if(addBook){

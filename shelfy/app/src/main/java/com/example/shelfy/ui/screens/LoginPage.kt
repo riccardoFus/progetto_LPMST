@@ -79,13 +79,6 @@ fun LoginPage(
                 .fillMaxHeight()
                 .background(color = BlackPage)
         ) {
-            /*TopBar(
-                modifier = Modifier
-                    .weight(0.9f)
-                    .background(color = BlackBar)
-            )
-
-             */
             Spacer(modifier = Modifier.size(10.dp))
             ContentLoginPage(
                 viewModel = viewModel,
@@ -95,12 +88,4 @@ fun LoginPage(
                     .verticalScroll(rememberScrollState()))
         }
     }
-}
-
-
-@Preview
-@Composable
-fun preview0(){
-    LoginPage(viewModel = AppViewModel(),
-        navController = rememberNavController())
 }

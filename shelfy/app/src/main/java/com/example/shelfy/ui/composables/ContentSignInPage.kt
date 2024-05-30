@@ -22,8 +22,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -44,6 +46,7 @@ import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ContentSignInPage(
     viewModel : AppViewModel,
@@ -267,12 +270,14 @@ fun ContentSignInPage(
                 )
             }
 
+            val keyboardController = LocalSoftwareKeyboardController.current
             OutlinedButton(
                 onClick = {
                     emailCorrect = isValidEmail(email)
                     passwordCorrect = isValidPassword(password)
                     password2Correct = isValidPassword(password2)
                     if (!userEmpty && emailCorrect && passwordCorrect && password == password2) {
+                        keyboardController?.hide()
                         viewModel.signInUser(email, sha256(password), user)
                     }
                 },
@@ -310,6 +315,7 @@ fun ContentSignInPage(
             )
         }
     }
+    // if user is created, it creates a default library
     if(viewModel.loginDone && viewModel.userId != "" && !viewModel.libraryAdded){
         viewModel.addReadlist("Libreria", viewModel.userId)
         navController.navigate(Screens.HOME_SCREEN)

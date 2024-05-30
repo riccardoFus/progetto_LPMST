@@ -30,13 +30,6 @@ fun HomePage(
             .fillMaxHeight()
             .background(color = BlackPage)
     ) {
-        /*TopBar(
-            modifier = Modifier
-                .weight(0.9f)
-                .background(color = BlackBar)
-        )
-
-         */
         Spacer(modifier = Modifier.size(10.dp))
         ContentHomePage(
             viewModel = viewModel,

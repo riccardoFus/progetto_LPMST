@@ -46,13 +46,6 @@ fun OfflinePage(mainActivity : MainActivity){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        /*TopBar(
-            modifier = Modifier
-                .weight(0.9f)
-                .background(color = BlackBar)
-        )
-
-         */
         Spacer(modifier = Modifier.size(10.dp))
         ContentOfflinePage(
             mainActivity = mainActivity,

@@ -28,12 +28,14 @@ import com.example.shelfy.ShelfyApp
 import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
+import com.google.firebase.FirebaseApp
 
 @Composable
 fun ContentOfflinePage(
     mainActivity: MainActivity,
     modifier : Modifier = Modifier
 ){
+    // check if a user is connected online
     val connectivityManager = mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     Column(
         modifier = modifier,
@@ -58,9 +60,11 @@ fun ContentOfflinePage(
                 .fillMaxWidth(),
             textAlign = TextAlign.Center
         )
+        // check if user is returned online or not
         OutlinedButton(onClick = {
             if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
                 mainActivity.setContent {
+                    FirebaseApp.initializeApp(mainActivity)
                     ShelfyApp()
                 }
             }

@@ -32,6 +32,7 @@ fun BottomBar(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceEvenly
     ){
+        // IconButton to navigate to Search Page
         IconButton(onClick = {
             viewModel.booksSearchUiState = Resource.Loading<Books>()
             navController.navigate(Screens.SEARCH_SCREEN)
@@ -45,6 +46,7 @@ fun BottomBar(
                     .size(25.dp)
             )
         }
+        // IconButton to navigate to Home Page
         IconButton(onClick = {
             navController.navigate(Screens.HOME_SCREEN)
         }) {
@@ -58,6 +60,7 @@ fun BottomBar(
             )
         }
 
+        // IconButton to navigate to Profile Page
         IconButton(onClick = {
             navController.navigate(Screens.PROFILE_SCREEN)
         }) {

@@ -32,13 +32,6 @@ fun SearchPage(
             .fillMaxHeight()
             .background(color = BlackPage)
     ) {
-        /*TopBar(
-            modifier = Modifier
-                .weight(0.9f)
-                .background(color = BlackBar)
-        )
-
-         */
         Spacer(modifier = Modifier.size(10.dp))
         ContentSearchPage(
             viewModel = viewModel,
@@ -55,10 +48,4 @@ fun SearchPage(
                 .fillMaxWidth()
         )
     }
-}
-
-@Preview
-@Composable
-fun preview(){
-    SearchPage(viewModel = AppViewModel(), navController = rememberNavController())
 }

@@ -41,17 +41,10 @@ sealed class ConnectionState {
     object Unavailable : ConnectionState()
 }
 
-/**
- * Retrieves the current state of the network connectivity.
- *
- * This function checks all available networks using the provided `ConnectivityManager` and determines
- * if there is any network with internet capability. If at least one network is found with internet
- * capability, the function returns `ConnectionState.Available`; otherwise, it returns `ConnectionState.Unavailable`.
- *
- * @param connectivityManager The `ConnectivityManager` instance used to check the network state.
- * @return `ConnectionState.Available` if there is at least one network with internet capability,
- *         `ConnectionState.Unavailable` otherwise.
- */
+// Retrieves the current state of the network connectivity.
+// This function checks all available networks using the provided `ConnectivityManager` and determines
+// if there is any network with internet capability. If at least one network is found with internet
+// capability, the function returns `ConnectionState.Available`; otherwise, it returns `ConnectionState.Unavailable`.
 fun getCurrentConnectivityState(
     connectivityManager: ConnectivityManager
 ): ConnectionState {
@@ -67,12 +60,10 @@ fun getCurrentConnectivityState(
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /**
-         * Checks the current network connection state and navigates to the appropriate page based on the connectivity:
-         *  - If the connection is available (ON), navigate to the home page if the user is logged in,
-         *  or the login page if the user is not logged in.
-         *  - If the connection is unavailable (OFF), navigate to the offline page.
-         */
+        // Checks the current network connection state and navigates to the appropriate page based on the connectivity:
+        // If the connection is available (ON), navigate to the home page if the user is logged in,
+        // or the login page if the user is not logged in.
+        // If the connection is unavailable (OFF), navigate to the offline page.
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var connection = getCurrentConnectivityState(connectivityManager)
         if(connection == ConnectionState.Available){

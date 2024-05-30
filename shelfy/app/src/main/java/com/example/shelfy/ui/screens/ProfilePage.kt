@@ -57,13 +57,6 @@ fun ProfilePage(
             .background(color = BlackPage),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        /*TopBar(
-            modifier = Modifier
-                .weight(0.9f)
-                .background(color = BlackBar)
-        )
-        
-         */
         Spacer(modifier = Modifier.size(10.dp))
         BarUser(
             viewModel = viewModel,
@@ -84,10 +77,4 @@ fun ProfilePage(
                 .fillMaxWidth()
         )
     }
-}
-
-@Preview
-@Composable
-fun Preview(){
-    ProfilePage(viewModel = AppViewModel(), navController = rememberNavController())
 }

@@ -123,6 +123,7 @@ fun ContentSearchPage(
                     focusedPlaceholderColor = BlueText
                 )
             )
+            // output of the search
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
             ){

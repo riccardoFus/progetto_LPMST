@@ -97,6 +97,7 @@ fun ContentBookPage(
             var review by rememberSaveable { mutableStateOf(0) }
             var showReadlists by remember {mutableStateOf(false)}
 
+            // get the readlist, useful to show readlists in case of "add book in a readlist"
             if(!viewModel.readlistsUpdated) {
                 viewModel.readlistsUpdated = true
                 viewModel.getReadlists()
@@ -165,17 +166,21 @@ fun ContentBookPage(
                     )
                 }
                 Column (modifier = Modifier.padding(top = 11.dp, start = 11.dp)){
+                    // Creates an intent to share the book's info link as plain text
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND
                         putExtra(
                             Intent.EXTRA_TEXT,
-                            viewModel.bookUiState.data?.volumeInfo?.infoLink
+                            stringResource(R.string.ti_consiglio_questo_libro) + viewModel.bookUiState.data?.volumeInfo?.title + "\n"
+                            + stringResource(R.string.ho_usato_shelfy_per_consigliartelo_usalo_anche_tu) +
+                                    stringResource(R.string.il_link_per_il_libro) + viewModel.bookUiState.data?.volumeInfo?.infoLink
                         )
                         type = "text/plain"
                     }
                     val shareIntent = Intent.createChooser(sendIntent, null);
                     val context = LocalContext.current;
 
+                    // boolean to open a dropdown menu with all the functionalities
                     var more by rememberSaveable { mutableStateOf(false) }
                     IconButton(onClick = { more = true }) {
                         Icon(
@@ -196,6 +201,7 @@ fun ContentBookPage(
                             modifier = Modifier
                                 .background(BlackBar)
                         ) {
+                            // DropdownMenuItem to share a book
                             DropdownMenuItem(leadingIcon = {
                                  Icon(
                                     painter = painterResource(id = R.drawable.share_1024x896),
@@ -214,10 +220,11 @@ fun ContentBookPage(
                             )
                             Spacer(modifier = Modifier
                                 .size(10.dp))
+                            // DropdownMenuItem to visualize and modify a note
                             DropdownMenuItem(leadingIcon = {
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_sticky_note_2_24),
-                                    contentDescription = stringResource(R.string.share),
+                                    contentDescription = stringResource(R.string.visualizza_nota),
                                     tint = BlueText,
                                     modifier = Modifier
                                         .weight(1f)
@@ -234,6 +241,7 @@ fun ContentBookPage(
                             )
                             Spacer(modifier = Modifier
                                 .size(10.dp))
+                            // DropdownMenuItem to add a book in the library
                             DropdownMenuItem(leadingIcon = {
                                 Icon(
                                     painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
@@ -277,6 +285,7 @@ fun ContentBookPage(
                             )
                             Spacer(modifier = Modifier
                                 .size(10.dp))
+                            // DropdownMenuItem to add a book in a certain readlist
                             DropdownMenuItem(leadingIcon = {
                                 Icon(
                                     painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
@@ -297,6 +306,7 @@ fun ContentBookPage(
                             )
                             Spacer(modifier = Modifier
                                 .size(10.dp))
+                            // DropdownMenuItem to add a review
                             DropdownMenuItem(leadingIcon = {
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_edit_24),
@@ -325,7 +335,9 @@ fun ContentBookPage(
             testo = note
                 if (noteVisualizer) {
                     var noteAlreadyExists = viewModel.noteAlreadyExists
-                    viewModel.checkNoteAlreadyInserted(viewModel.userId, id!!);
+                    // checks if a given user have already a note about a certain book
+                    viewModel.checkNoteAlreadyInserted(viewModel.userId, id!!)
+                    // dialog that shows the note, useful to change value of the note or only read
                     Dialog(onDismissRequest = { noteVisualizer = false }) {
                         TextField(
                             singleLine = false,
@@ -400,7 +412,10 @@ fun ContentBookPage(
                     }
                 }
 
+            // boolean to extend or not the length of the container that contains the plot
+            // of the book
             var showTrama by rememberSaveable { mutableStateOf(false) }
+            // sometimes, Google gives desc with html tag, in this way remove all the tags
             var text = viewModel.bookUiState.data?.volumeInfo?.description
                 ?: stringResource(id = R.string.trama_non_presente)
             text = text.replace("<p>","")
@@ -434,6 +449,7 @@ fun ContentBookPage(
                 )
             }
 
+            // dropdown menu that shows all the readlist where a user can insert a certain book
             if(showReadlists) {
                 DropdownMenu(
                     expanded = true,
@@ -485,6 +501,7 @@ fun ContentBookPage(
                     .padding(10.dp),
                 contentAlignment = Alignment.TopStart
             ) {
+                // dialog to insert a new review for a certain book
                     if (reviewEnabled) {
                         Dialog(onDismissRequest = { reviewEnabled = false; review = 0 }) {
                             Column(modifier = Modifier
@@ -615,10 +632,10 @@ fun ContentBookPage(
                         }
                     }
             }
-            var currentBookId by rememberSaveable{ mutableStateOf("") }
             var showReviews by rememberSaveable {
                 mutableStateOf(false)
             }
+            // button that shows or not the reviews about a book
             OutlinedButton(onClick = { showReviews = !showReviews },
                 modifier = Modifier
                     .padding(20.dp)
@@ -730,11 +747,7 @@ fun ContentBookPage(
                         )
                     }
                 }
-            }else{
-
             }
-
-
         }
     }
 }

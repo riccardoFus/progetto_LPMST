@@ -74,39 +74,6 @@ fun ContentProfilePage(
         modifier = modifier){
 
         Column(modifier = Modifier.fillMaxWidth()) {
-
-            /*Text(text = "Libreria",
-                fontFamily = fonts,
-                fontSize = 20.sp,
-                color = BlueText,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally))
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(if(viewModel.itemList.isNotEmpty()) 350.dp else 0.dp)
-            ) {
-                items(viewModel.itemList) { item ->
-                    BookCardHomePage(
-                        item = item,
-                        viewModel = viewModel,
-                        navController = navController,
-                        page = "profile",
-                        readlist = "Libreria"
-                        )
-                    }
-                }
-            if(viewModel.itemList.isEmpty()){
-                Text(text = "(Vuota)",
-                    fontFamily = fonts,
-                    fontSize = 11.sp,
-                    color = BlueText,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally))
-            }
-
-             */
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
