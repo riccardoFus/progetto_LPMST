@@ -505,8 +505,8 @@ class AppViewModel : ViewModel(){
 
     // Initialization of the AppViewModel, it creates the book recommendation lists
     init{
-        getBooksRecommendation1("mistero+giallo+thriller+noir+poliziesco")
-        getBooksRecommendation2("avventura+fantasy+fantascienza+storia+azione")
-        getBooksRecommendation3("fantascienza+fantasy+cyberpunk+apocalittico")
+        getBooksRecommendation1("subject:thriller")
+        getBooksRecommendation2("subject:adventure")
+        getBooksRecommendation3("subject:fantasy")
     }
 }

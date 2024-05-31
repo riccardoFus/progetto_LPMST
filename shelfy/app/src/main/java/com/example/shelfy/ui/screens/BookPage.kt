@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -72,13 +73,14 @@ fun BookPage(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(color = BlackPage)
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(BlackBar, BlackPage)
+            ))
     ) {
         Spacer(modifier = Modifier.size(10.dp))
         ContentBookPage(
             viewModel,
             modifier = Modifier
-                .background(color = BlackPage)
                 .weight(10f)
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
@@ -87,7 +89,6 @@ fun BookPage(
             viewModel,
             navController,
             modifier = Modifier
-                .background(color = BlackBar)
                 .fillMaxWidth()
         )
     }

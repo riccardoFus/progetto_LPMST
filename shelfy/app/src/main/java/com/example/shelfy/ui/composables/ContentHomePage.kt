@@ -30,7 +30,7 @@ fun ContentHomePage(
     ){
         Column () {
             Text(
-                text = "Giallo",
+                text = "Thriller",
                 color = BlueText,
                 modifier = Modifier
                     .padding(start = 8.dp, top = 8.dp),

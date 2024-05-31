@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -30,21 +32,21 @@ fun SearchPage(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(color = BlackPage)
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(BlackBar, BlackPage)
+            ))
     ) {
         Spacer(modifier = Modifier.size(10.dp))
         ContentSearchPage(
             viewModel = viewModel,
             navController = navController,
             modifier = Modifier
-                .background(color = BlackPage)
                 .weight(10f)
                 .fillMaxWidth())
         BottomBar(
             viewModel,
             navController,
             modifier = Modifier
-                .background(color = BlackBar)
                 .fillMaxWidth()
         )
     }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.shelfy.ui.AppViewModel
@@ -28,7 +29,9 @@ fun HomePage(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(color = BlackPage)
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(BlackBar, BlackPage)
+            ))
     ) {
         Spacer(modifier = Modifier.size(10.dp))
         ContentHomePage(
@@ -42,7 +45,6 @@ fun HomePage(
             viewModel,
             navController,
             modifier = Modifier
-                .background(color = BlackBar)
                 .fillMaxWidth()
         )
     }
