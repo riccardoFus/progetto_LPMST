@@ -1,5 +1,8 @@
 package com.example.shelfy.ui.screens
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +35,12 @@ fun HomePage(
             .background(brush = Brush.verticalGradient(
                 colors = listOf(BlackBar, BlackPage)
             ))
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            )
     ) {
         Spacer(modifier = Modifier.size(10.dp))
         ContentHomePage(

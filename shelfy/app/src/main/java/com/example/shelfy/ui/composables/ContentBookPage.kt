@@ -3,6 +3,7 @@ package com.example.shelfy.ui.composables
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseInOutBounce
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -74,6 +75,39 @@ import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
+@Composable
+fun AnimatedBox(text: String) {
+    // Define the state variable to manage the visibility of the full text
+    var showTrama by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(BlackBar)
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            )
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = 16.sp,
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .clickable { showTrama = !showTrama },
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = fonts,
+            textAlign = TextAlign.Left,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = if (showTrama) Int.MAX_VALUE else 7
+        )
+    }
+}
 
 @SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition", "ResourceType")
 @Composable
@@ -426,28 +460,7 @@ fun ContentBookPage(
             text = text.replace("</b>", "")
             text = text.replace("<i>", "")
             text = text.replace("</i>", "")
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(BlackBar)
-            ){
-                Text(
-                    text = text, color = WhiteText, fontSize = 16.sp,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .clickable { showTrama = !showTrama }
-                        .animateContentSize(
-                            animationSpec = tween(
-                                durationMillis = 1000,
-                                easing = LinearOutSlowInEasing
-                            )
-                        ),
-                    fontWeight = FontWeight.SemiBold, fontFamily = fonts,
-                    textAlign = TextAlign.Left, overflow = TextOverflow.Ellipsis,
-                    maxLines = if (showTrama) Int.MAX_VALUE else 7
-                )
-            }
+            AnimatedBox(text)
 
             // dropdown menu that shows all the readlist where a user can insert a certain book
             if(showReadlists) {

@@ -82,12 +82,20 @@ fun ContentSearchPage(
                         fontSize = 20.sp
                     )
                 },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.search_outline_1024x1024),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp),
+                        tint = BlueText
+                    )
+                },
                 onValueChange = {
                         newText -> text = newText
                 },
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
-                    .background(BlackBar)
                     .padding(8.dp)
                     .widthIn(400.dp)
                     .onKeyEvent {

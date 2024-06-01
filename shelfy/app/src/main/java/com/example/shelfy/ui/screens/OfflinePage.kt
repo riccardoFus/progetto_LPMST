@@ -3,6 +3,9 @@ package com.example.shelfy.ui.screens
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +48,13 @@ fun OfflinePage(mainActivity : MainActivity){
             .fillMaxSize()
             .background(brush = Brush.verticalGradient(
                 colors = listOf(BlackBar, BlackPage)
-            )),
+            ))
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
