@@ -398,6 +398,21 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    fun deleteReadlist(readlist: String){
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Readlists")
+            .whereEqualTo("name",readlist).get().addOnSuccessListener{documents ->
+            for(document in documents){
+                if(document.get("userId") == userId){
+                    dB.collection("Readlists")
+                        .document(document.id).delete().addOnSuccessListener {
+                            readlistsUpdated = false
+                        }
+                }
+            }
+        }
+    }
+
     // A mutable state variable that holds a list of Item (Book)
     var itemList = mutableStateListOf<Item>()
 
@@ -502,6 +517,7 @@ class AppViewModel : ViewModel(){
             noteAlreadyExists = found
         }
     }
+    var page: String by mutableStateOf("Homepage")
 
     // Initialization of the AppViewModel, it creates the book recommendation lists
     init{

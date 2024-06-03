@@ -81,31 +81,33 @@ fun AnimatedBox(text: String) {
     // Define the state variable to manage the visibility of the full text
     var showTrama by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(BlackBar)
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-                )
-            )
-    ) {
-        Text(
-            text = text,
-            color = Color.White,
-            fontSize = 16.sp,
+    if(text.isNotBlank()){
+        Box(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .clickable { showTrama = !showTrama },
-            fontWeight = FontWeight.SemiBold,
-            fontFamily = fonts,
-            textAlign = TextAlign.Left,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = if (showTrama) Int.MAX_VALUE else 7
-        )
+                .clip(RoundedCornerShape(10.dp))
+                .background(BlackBar)
+                .animateContentSize(
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = LinearOutSlowInEasing
+                    )
+                )
+        ) {
+            Text(
+                text = text,
+                color = Color.White,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .clickable { showTrama = !showTrama },
+                fontWeight = FontWeight.Normal,
+                fontFamily = fonts,
+                textAlign = TextAlign.Left,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = if (showTrama) Int.MAX_VALUE else 7
+            )
+        }
     }
 }
 
@@ -176,7 +178,7 @@ fun ContentBookPage(
                         text = (viewModel.bookUiState.data?.volumeInfo?.title
                             ?: stringResource(id = R.string.no_titolo)),
                         color = BlueText,
-                        fontSize = 25.sp,
+                        fontSize = 30.sp,
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .fillMaxWidth(),
@@ -189,11 +191,11 @@ fun ContentBookPage(
                         text = (viewModel.bookUiState?.data?.volumeInfo?.authors?.toString()?.replace("[", "")?.replace("]", "") ?:
                             stringResource(id = R.string.no_autori)),
                         color = WhiteText,
-                        fontSize = 15.sp,
+                        fontSize = 20.sp,
                         modifier = Modifier
                             .padding(top = 2.dp)
                             .fillMaxWidth(),
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Light,
                         fontFamily = fonts,
                         textAlign = TextAlign.Left,
                         overflow = TextOverflow.Ellipsis
@@ -664,6 +666,7 @@ fun ContentBookPage(
                         .align(Alignment.CenterVertically),
                         fontSize = 20.sp,
                         fontFamily = fonts,  color = WhiteText,
+                        fontWeight = FontWeight.Normal,
                         textAlign = TextAlign.Start)
                 }
             )
@@ -706,15 +709,10 @@ fun ContentBookPage(
                                         modifier = Modifier
                                             .padding(8.dp)
                                     )
-                                    Row() {
-                                        Text(
-                                            text = "Voto:",
-                                            fontFamily = fonts,
-                                            fontSize = 18.sp,
-                                            color = WhiteText,
-                                            modifier = Modifier
-                                                .padding(8.dp)
-                                        )
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                    ) {
                                         for (i in 1..it.stars) {
                                             Icon(painter = painterResource(R.drawable.baseline_star_24),
                                                 contentDescription = "Stelle",
@@ -734,6 +732,7 @@ fun ContentBookPage(
                                                 fontFamily = fonts,
                                                 fontSize = 15.sp,
                                                 color = WhiteText,
+                                                fontWeight = FontWeight.Light,
                                                 modifier = Modifier
                                                     .padding(8.dp)
                                                     .fillMaxSize()

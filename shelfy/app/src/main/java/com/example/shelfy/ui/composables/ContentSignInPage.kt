@@ -53,6 +53,7 @@ fun ContentSignInPage(
     navController : NavHostController,
     modifier : Modifier = Modifier
 ){
+    val maxChar = 15
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -74,7 +75,7 @@ fun ContentSignInPage(
                 OutlinedTextField(
                     value = user,
                     onValueChange = { newText ->
-                        user = newText
+                        user = newText.take(maxChar)
                         userEmpty = user.isBlank()
                     },
                     placeholder = { Text(text = stringResource(R.string.username)) },

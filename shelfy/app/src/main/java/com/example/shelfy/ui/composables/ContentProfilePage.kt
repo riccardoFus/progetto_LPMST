@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -80,14 +81,35 @@ fun ContentProfilePage(
             ) {
                 items(viewModel.readlists) { readlist ->
                     if (readlist.name.length > 0) {
-                        Text(
-                            text = readlist.name,
-                            fontFamily = fonts,
-                            fontSize = 20.sp,
-                            color = BlueText,
-                            textAlign = TextAlign.Justify,
-                            modifier = Modifier.padding(8.dp, bottom = 0.dp)
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = readlist.name,
+                                fontFamily = fonts,
+                                fontSize = 20.sp,
+                                color = BlueText,
+                                textAlign = TextAlign.Justify,
+                                modifier = Modifier
+                                    .padding(8.dp, bottom = 0.dp)
+                                    .weight(1f),
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            if(readlist.name != stringResource(id = R.string.libreria)){
+                                IconButton(onClick = { viewModel.deleteReadlist(readlist.name)
+                                },
+                                    modifier = Modifier) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_close_24),
+                                        contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                        tint = BlueText,
+                                        modifier = Modifier
+                                            .size(35.dp)
+                                            .weight(1f)
+                                    )
+                                }
+                            }
+                        }
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -109,6 +131,7 @@ fun ContentProfilePage(
                                 fontFamily = fonts,
                                 fontSize = 15.sp,
                                 color = Color.White,
+                                fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.padding(start = 20.dp, bottom = 11.dp))
                         }
                     }

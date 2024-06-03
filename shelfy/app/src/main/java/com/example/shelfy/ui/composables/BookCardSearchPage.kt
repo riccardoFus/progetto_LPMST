@@ -80,12 +80,18 @@ fun BookCardSearchPage(
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
-            .fillMaxHeight())
+            .fillMaxHeight()
+            .clickable{
+                viewModel.bookUiState = Resource.Loading<Item>()
+                viewModel.getBook(item?.id.toString())
+                navController.navigate(Screens.VISUALIZER_SCREEN)
+            }
+            )
     {
         Text(
             text = (item?.volumeInfo?.title ?: stringResource(id = R.string.no_titolo)),
             color = WhiteText,
-            fontSize = 15.sp,
+            fontSize = 20.sp,
             modifier = Modifier
                 .padding(top = 2.dp),
             fontWeight = FontWeight.SemiBold,
@@ -97,8 +103,8 @@ fun BookCardSearchPage(
             color = WhiteText,
             fontSize = 13.sp,
             modifier = Modifier
-                .padding(top = 2.dp),
-            fontWeight = FontWeight.SemiBold,
+                .padding(top = 2.dp, bottom = 10.dp),
+            fontWeight = FontWeight.Light,
             fontFamily = fonts,
             maxLines = 2
         )
@@ -108,8 +114,9 @@ fun BookCardSearchPage(
             fontSize = 11.sp,
             modifier = Modifier
                 .padding(top = 2.dp),
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Normal,
             fontFamily = fonts,
-            overflow = TextOverflow.Ellipsis)
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 7)
     }
 }

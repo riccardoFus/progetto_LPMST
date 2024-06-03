@@ -113,9 +113,11 @@ fun ContentSearchPage(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        query = text.replace(" ", "+")
-                        viewModel.getBooksByQuery(query)
-                        keyboardController?.hide()
+                        if(text.isNotBlank()){
+                            query = text.replace(" ", "+")
+                            viewModel.getBooksByQuery(query)
+                            keyboardController?.hide()
+                        }
                     }),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedTextColor = BlueText,

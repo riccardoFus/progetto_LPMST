@@ -52,6 +52,7 @@
     <string name="nascondi_recensioni">Nascondi recensioni</string>
     <string name="visualizza_recensioni">Visualizza recensioni</string>
     <string name="ti_consiglio_questo_libro">"Ti consiglio questo libro: "</string>
-    <string name="ho_usato_shelfy_per_consigliartelo_usalo_anche_tu">"Ho usato Shelfy per consigliartelo, usalo anche tu! \n "</string>
+    <string name="ho_usato_shelfy_per_consigliartelo_usalo_anche_tu">"Ho usato Shelfy per consigliartelo, usalo anche tu! \n"</string>
     <string name="il_link_per_il_libro">"Il link per il libro è: "</string>
+    <string name="rimuovi_da">Rimuovi da %1$s</string>
 </resources>

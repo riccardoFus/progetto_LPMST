@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +37,7 @@ fun ContentHomePage(
                     .padding(start = 8.dp, top = 8.dp),
                 fontSize = 20.sp,
                 fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation1.data?.items ?: emptyList()){ item ->
@@ -63,6 +65,7 @@ fun ContentHomePage(
                     .padding(start = 8.dp),
                 fontSize = 20.sp,
                 fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation2.data?.items ?: emptyList()){ item ->
@@ -90,6 +93,7 @@ fun ContentHomePage(
                     .padding(start = 8.dp),
                 fontSize = 20.sp,
                 fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation3.data?.items ?: emptyList()){ item ->

@@ -31,6 +31,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -59,14 +60,15 @@ fun BarUser(
             fontFamily = fonts,
             fontSize = 24.sp,
             color = BlueText,
-            textAlign = TextAlign.Justify
+            textAlign = TextAlign.Justify,
+            fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.width(65.dp))
-        var addBook by remember { mutableStateOf(false) }
+        var addReadlistNew by remember { mutableStateOf(false) }
         var sortBy by remember { mutableStateOf("cre") }
         // IconButton to add a new readlist
         IconButton(
-            onClick = {addBook = true}
+            onClick = {addReadlistNew = true}
         ){
             Icon(
                 painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
@@ -101,13 +103,15 @@ fun BarUser(
                     .size(28.dp))
         }
         var readList by remember {mutableStateOf("")}
+        val maxChar = 100
         // if IconButton of addReadlist is clicked, it opens a dialog
         // in this dialog, you can write the name of the new readlist
-        if (addBook) {
-            Dialog(onDismissRequest = { addBook = false }) {
-                if(addBook){
+        // in this dialog, you can write the name of the new readlist
+        if (addReadlistNew) {
+            Dialog(onDismissRequest = { addReadlistNew = false }) {
+                if(addReadlistNew){
                     Dialog(
-                        onDismissRequest = { addBook = false}
+                        onDismissRequest = { addReadlistNew = false}
                     ) {
                         OutlinedTextField(
                             singleLine = true,
@@ -120,7 +124,7 @@ fun BarUser(
                                 )
                             },
                             onValueChange = {
-                                    newText -> readList = newText
+                                    newText -> readList = newText.take(maxChar)
                             },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(10.dp))
@@ -135,7 +139,8 @@ fun BarUser(
                             keyboardActions = KeyboardActions(
                                 onDone = {
                                     viewModel.addReadlist(readList, viewModel.userId)
-                                    addBook = false
+                                    addReadlistNew = false
+                                    readList = ""
                                 }),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedTextColor = BlueText,

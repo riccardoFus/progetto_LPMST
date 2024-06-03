@@ -66,6 +66,13 @@ fun BookCardHomePage(
                 } else {
                     BlackBar
                 }
+            )
+            .clickable(
+                onClick = {
+                    viewModel.bookUiState = Resource.Loading<Item>()
+                    viewModel.getBook(item?.id.toString())
+                    navController.navigate(Screens.VISUALIZER_SCREEN)
+                }
             ),
         horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
@@ -87,28 +94,21 @@ fun BookCardHomePage(
                 .build(),
             contentDescription = null,
             modifier = Modifier
-                .height(250.dp)
                 .width(180.dp)
+                .height(250.dp)
                 .clip(
                     RoundedCornerShape(
                         10.dp
                     )
-                )
-                .clickable(
-                    onClick = {
-                        viewModel.bookUiState = Resource.Loading<Item>()
-                        viewModel.getBook(item?.id.toString())
-                        navController.navigate(Screens.VISUALIZER_SCREEN)
-                    }
                 ),
             contentScale = ContentScale.Crop
         )
         Text(
             text = (item?.volumeInfo?.title ?: stringResource(R.string.no_titolo)),
             color = WhiteText,
-            fontSize = 14.sp,
+            fontSize = 15.sp,
             modifier = Modifier.padding(top = 2.dp),
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.ExtraBold,
             fontFamily = fonts,
             textAlign = TextAlign.Center,
             overflow = TextOverflow.Ellipsis,
@@ -118,10 +118,11 @@ fun BookCardHomePage(
             Row {
                 TextButton(onClick = { viewModel.deleteBookFromReadlist(readlist, item.id) }) {
                     Text(
-                        text = "Rimuovi da $readlist",
+                        text = stringResource(R.string.rimuovi_da, readlist),
                         fontFamily = fonts,
                         fontSize = 15.sp,
                         color = BlueText,
+                        fontWeight = FontWeight.Normal,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.weight(1f)
                     )
