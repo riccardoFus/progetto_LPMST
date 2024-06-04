@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
 import com.example.shelfy.data.db.Readlist
 import com.example.shelfy.data.remote.responses.Item
@@ -57,7 +58,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun ContentProfilePage(
     viewModel: AppViewModel,
     navController : NavHostController,
-    modifier : Modifier = Modifier
+    mainActivity : MainActivity,
+    modifier : Modifier = Modifier,
 ){
     if(!viewModel.libraryUpdated) {
         viewModel.itemList.clear()
@@ -121,7 +123,8 @@ fun ContentProfilePage(
                                     viewModel = viewModel,
                                     navController = navController,
                                     page = "profile",
-                                    readlist = readlist.name
+                                    readlist = readlist.name,
+                                    mainActivity = mainActivity
                                 )
                             }
 

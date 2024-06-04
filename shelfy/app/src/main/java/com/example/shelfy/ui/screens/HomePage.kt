@@ -16,17 +16,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.shelfy.MainActivity
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.composables.BottomBar
 import com.example.shelfy.ui.composables.ContentHomePage
-import com.example.shelfy.ui.composables.TopBar
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 
 @Composable
 fun HomePage(
-    viewModel : AppViewModel,
-    navController : NavHostController
+    viewModel: AppViewModel,
+    navController: NavHostController,
+    mainActivity: MainActivity
 ){
     Column(
         modifier = Modifier
@@ -48,7 +49,8 @@ fun HomePage(
             navController = navController,
             modifier = Modifier
                 .weight(10f)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            mainActivity
         )
         BottomBar(
             viewModel,

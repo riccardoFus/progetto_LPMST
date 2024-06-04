@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         if(connection == ConnectionState.Available){
             setContent {
                 FirebaseApp.initializeApp(this)
-                ShelfyApp()
+                ShelfyApp(this)
             }
         }else{
             setContent {
@@ -80,8 +80,8 @@ class MainActivity : ComponentActivity() {
 
 }
 @Composable
-fun ShelfyApp(){
-    NavGraph()
+fun ShelfyApp(mainActivity: MainActivity){
+    NavGraph(mainActivity = mainActivity)
 }
 
 @Composable

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.shelfy.MainActivity
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
@@ -25,6 +26,7 @@ fun ContentHomePage(
     viewModel : AppViewModel,
     navController : NavHostController,
     modifier : Modifier = Modifier,
+    mainActivity: MainActivity
 ){
     Box(
         modifier = modifier
@@ -53,7 +55,8 @@ fun ContentHomePage(
                             viewModel = viewModel,
                             navController = navController,
                             page = "homepage",
-                            readlist = "None"
+                            readlist = "None",
+                            mainActivity = mainActivity
                         )
                     }
                 }
@@ -81,7 +84,8 @@ fun ContentHomePage(
                             viewModel = viewModel,
                             navController = navController,
                             page = "homepage",
-                            readlist = "None"
+                            readlist = "None",
+                            mainActivity = mainActivity
                         )
                     }
                 }
@@ -109,7 +113,8 @@ fun ContentHomePage(
                             viewModel = viewModel,
                             navController = navController,
                             page = "homepage",
-                            readlist = "None"
+                            readlist = "None",
+                            mainActivity = mainActivity
                         )
                     }
                 }

@@ -1,11 +1,15 @@
 package com.example.shelfy.ui.composables
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,19 +34,25 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.shelfy.ConnectionState
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
+import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.isValidEmail
 import com.example.shelfy.ui.isValidPassword
 import com.example.shelfy.ui.sha256
+import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
@@ -52,8 +62,26 @@ import com.example.shelfy.ui.theme.fonts
 fun ContentLoginPage(
     viewModel : AppViewModel,
     navController : NavHostController,
+    mainActivity: MainActivity,
     modifier : Modifier = Modifier
 ){
+    val connectivityManager = mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var showDialog : Boolean by rememberSaveable{ mutableStateOf(false) }
+    if(showDialog){
+        Dialog(onDismissRequest = { showDialog = false}) {
+            Text(
+                text = stringResource(R.string.essere_connessi_ad_internet_per_effettuare_questa_operazione),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -178,7 +206,12 @@ fun ContentLoginPage(
                 passwordCorrect = isValidPassword(password)
                 if (emailCorrect && passwordCorrect) {
                     keyboardController?.hide()
-                    viewModel.login(email, sha256(password)); }
+                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                        viewModel.login(email, sha256(password))
+                    }else {
+                        showDialog = true
+                    }
+                }
             },
                 modifier = Modifier
                     .padding(20.dp)

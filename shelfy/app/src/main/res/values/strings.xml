@@ -55,4 +55,5 @@
     <string name="ho_usato_shelfy_per_consigliartelo_usalo_anche_tu">"Ho usato Shelfy per consigliartelo, usalo anche tu! \n"</string>
     <string name="il_link_per_il_libro">"Il link per il libro è: "</string>
     <string name="rimuovi_da">Rimuovi da %1$s</string>
+    <string name="essere_connessi_ad_internet_per_effettuare_questa_operazione">Essere connessi ad internet per effettuare questa operazione!</string>
 </resources>

@@ -1,16 +1,16 @@
 package com.example.shelfy.ui.composables
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.EaseInOutBounce
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,7 +52,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -63,11 +62,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.shelfy.ConnectionState
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
+import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.ui.AppViewModel
-import com.example.shelfy.ui.isValidEmail
-import com.example.shelfy.ui.isValidPassword
-import com.example.shelfy.ui.sha256
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText
@@ -114,9 +113,27 @@ fun AnimatedBox(text: String) {
 @SuppressLint("SuspiciousIndentation", "CoroutineCreationDuringComposition", "ResourceType")
 @Composable
 fun ContentBookPage(
-    viewModel : AppViewModel,
-    modifier : Modifier = Modifier
+    viewModel: AppViewModel,
+    modifier: Modifier = Modifier,
+    mainActivity: MainActivity
 ){
+    val connectivityManager = mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var showDialog : Boolean by rememberSaveable{ mutableStateOf(false) }
+    if(showDialog){
+        Dialog(onDismissRequest = { showDialog = false}) {
+            Text(
+                text = stringResource(R.string.essere_connessi_ad_internet_per_effettuare_questa_operazione),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
     Box(
         modifier = modifier
     ) {
@@ -270,7 +287,12 @@ fun ContentBookPage(
                                 text = {
                                     Text(text = stringResource(R.string.visualizza_nota), color = WhiteText)},
                                 onClick = {
-                                    noteVisualizer = true; viewModel.getNota(viewModel.userId, id)
+                                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                        noteVisualizer = true
+                                        viewModel.getNota(viewModel.userId, id)
+                                    }else{
+                                        showDialog = true
+                                    }
                                           },
                                 modifier = Modifier
                                     .height(25.dp)
@@ -304,15 +326,19 @@ fun ContentBookPage(
                                     }
                                 },
                                 onClick = {
-                                          viewModel.addToReadlist(
-                                              viewModel.bookUiState.data,
-                                              viewModel.userId,
-                                              libreria
-                                          )
-                                    GlobalScope.launch {
-                                        aggiunto = true
-                                        Thread.sleep(2000)
-                                        aggiunto = false
+                                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                        viewModel.addToReadlist(
+                                            viewModel.bookUiState.data,
+                                            viewModel.userId,
+                                            libreria
+                                        )
+                                        GlobalScope.launch {
+                                            aggiunto = true
+                                            Thread.sleep(2000)
+                                            aggiunto = false
+                                        }
+                                    }else{
+                                        showDialog = true
                                     }
                                 },
                                 modifier = Modifier
@@ -335,7 +361,11 @@ fun ContentBookPage(
                                 text = {
                                     Text(text = stringResource(id = R.string.aggiungi_a_una_readlist), color = WhiteText)},
                                 onClick = {
-                                    showReadlists = true
+                                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                        showReadlists = true
+                                    }else{
+                                        showDialog = true
+                                    }
                                 },
                                 modifier = Modifier
                                     .height(25.dp)
@@ -356,8 +386,12 @@ fun ContentBookPage(
                                 text = {
                                     Text(text = stringResource(id = R.string.aggiungi_una_recensione), color = WhiteText)},
                                 onClick = {
-                                    more = false
-                                    reviewEnabled = true
+                                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                        more = false
+                                        reviewEnabled = true
+                                    }else{
+                                        showDialog = true
+                                    }
                                 },
                                 modifier = Modifier
                                     .height(25.dp)

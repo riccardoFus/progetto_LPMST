@@ -65,7 +65,7 @@ fun ContentOfflinePage(
             if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
                 mainActivity.setContent {
                     FirebaseApp.initializeApp(mainActivity)
-                    ShelfyApp()
+                    ShelfyApp(mainActivity)
                 }
             }
         },

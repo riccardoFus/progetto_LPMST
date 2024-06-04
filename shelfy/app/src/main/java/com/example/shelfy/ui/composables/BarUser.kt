@@ -1,5 +1,7 @@
 package com.example.shelfy.ui.composables
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +42,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.shelfy.ConnectionState
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
+import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlackBar
@@ -49,8 +55,26 @@ import com.example.shelfy.ui.theme.fonts
 @Composable
 fun BarUser(
     viewModel: AppViewModel,
-    navController : NavHostController
+    navController : NavHostController,
+    mainActivity: MainActivity
 ){
+    val connectivityManager = mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var showDialog : Boolean by rememberSaveable{ mutableStateOf(false) }
+    if(showDialog){
+        Dialog(onDismissRequest = { showDialog = false}) {
+            Text(
+                text = stringResource(R.string.essere_connessi_ad_internet_per_effettuare_questa_operazione),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
     Row (
         modifier = Modifier.padding(top = 8.dp)
     ) {
@@ -68,7 +92,13 @@ fun BarUser(
         var sortBy by remember { mutableStateOf("cre") }
         // IconButton to add a new readlist
         IconButton(
-            onClick = {addReadlistNew = true}
+            onClick = {
+                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                    addReadlistNew = true
+                }else {
+                    showDialog = true
+                }
+            }
         ){
             Icon(
                 painter = painterResource(id = R.drawable.add_circle_plus_1024x1024),
