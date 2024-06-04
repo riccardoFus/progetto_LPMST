@@ -72,10 +72,11 @@ fun BookCardHomePage(
                 fontFamily = fonts,
                 modifier = Modifier
                     .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
                     .background(BlackBar)
                     .padding(18.dp),
                 textAlign = TextAlign.Center
-                )
+            )
         }
     }
     Column(
