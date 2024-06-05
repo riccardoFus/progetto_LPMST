@@ -95,8 +95,8 @@ fun BookCardSearchPage(
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = Modifier
-            .width(180.dp)
-            .height(250.dp)
+            .width(125.dp)
+            .height(185.dp)
             .clip(
                 RoundedCornerShape(
                     10.dp

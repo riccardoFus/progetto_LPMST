@@ -128,14 +128,14 @@ fun BookCardHomePage(
                 .build(),
             contentDescription = null,
             modifier = Modifier
-                .width(180.dp)
-                .height(250.dp)
+                .width(125.dp)
+                .height(185.dp)
                 .clip(
                     RoundedCornerShape(
                         10.dp
                     )
                 ),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.FillBounds
         )
         Text(
             text = (item?.volumeInfo?.title ?: stringResource(R.string.no_titolo)),

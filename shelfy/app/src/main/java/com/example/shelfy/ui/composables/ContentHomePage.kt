@@ -46,8 +46,8 @@ fun ContentHomePage(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
+                            .height(240.dp)
+                            .width(150.dp)
                             .padding(8.dp)
                     ) {
                         BookCardHomePage(
@@ -75,8 +75,8 @@ fun ContentHomePage(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
+                            .height(240.dp)
+                            .width(150.dp)
                             .padding(8.dp)
                     ) {
                         BookCardHomePage(
@@ -104,8 +104,37 @@ fun ContentHomePage(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
+                            .height(240.dp)
+                            .width(150.dp)
+                            .padding(8.dp)
+                    ) {
+                        BookCardHomePage(
+                            item = item,
+                            viewModel = viewModel,
+                            navController = navController,
+                            page = "homepage",
+                            readlist = "None",
+                            mainActivity = mainActivity
+                        )
+                    }
+                }
+            }
+            Text(
+                text = "Giallo",
+                color = BlueText,
+                modifier = Modifier
+                    .padding(start = 8.dp),
+                fontSize = 20.sp,
+                fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Justify)
+            LazyRow{
+                items(viewModel.booksUiStateRecommendation4.data?.items ?: emptyList()){ item ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .height(240.dp)
+                            .width(150.dp)
                             .padding(8.dp)
                     ) {
                         BookCardHomePage(

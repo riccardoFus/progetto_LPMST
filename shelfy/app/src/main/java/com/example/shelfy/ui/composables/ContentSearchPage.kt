@@ -176,7 +176,7 @@ fun ContentSearchPage(
                 items(viewModel.booksSearchUiState.data?.items ?: emptyList()){ item ->
                     Row(modifier = Modifier
                         .padding(8.dp)
-                        .height(250.dp)
+                        .height(185.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(BlackBar)) {
                         BookCardSearchPage(item = item, viewModel = viewModel, navController = navController, mainActivity = mainActivity)

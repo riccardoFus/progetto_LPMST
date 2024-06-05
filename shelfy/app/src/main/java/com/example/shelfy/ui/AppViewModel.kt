@@ -86,6 +86,19 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    var booksUiStateRecommendation4 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
+
+    // Function to fetch books by a query
+    private fun getBooksRecommendation4(query : String){
+        // Launch a coroutine in the viewModelScope to perform the network request
+        viewModelScope.launch{
+            // Fetch the books from the API based on the provided query
+            val books = RetrofitInstance.provideBooksApi().getBooks(query)
+            // Update the state to reflect the successful data fetch
+            booksUiStateRecommendation4 = Resource.Success<Books>(books)
+        }
+    }
+
     // A mutable state variable that holds the state of a single book item
     var bookUiState : Resource<Item> by mutableStateOf(Resource.Loading<Item>())
 
@@ -521,8 +534,9 @@ class AppViewModel : ViewModel(){
 
     // Initialization of the AppViewModel, it creates the book recommendation lists
     init{
-        getBooksRecommendation1("subject:thriller")
-        getBooksRecommendation2("subject:adventure")
-        getBooksRecommendation3("subject:fantasy")
+        getBooksRecommendation1("thriller")
+        getBooksRecommendation2("avventura")
+        getBooksRecommendation3("fantastico")
+        getBooksRecommendation4("giallo")
     }
 }
