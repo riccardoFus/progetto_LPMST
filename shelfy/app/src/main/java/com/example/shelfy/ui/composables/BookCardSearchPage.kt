@@ -78,13 +78,13 @@ fun BookCardSearchPage(
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(
-                "https://" + if((item?.volumeInfo?.imageLinks?.large?.length ?: 0) > 0){
+                "https://" + if((item?.volumeInfo?.imageLinks?.large?.isBlank()) != true){
                     item?.volumeInfo?.imageLinks?.large?.substring(7)
-                }else if((item?.volumeInfo?.imageLinks?.small?.length ?: 0) > 0){
+                }else if((item?.volumeInfo?.imageLinks?.small?.isBlank()) != true){
                     item?.volumeInfo?.imageLinks?.small?.substring(7)
-                }else if((item?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) > 0){
+                }else if((item?.volumeInfo?.imageLinks?.thumbnail?.isBlank()) != true){
                     item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
-                }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) > 0){
+                }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.isBlank()) != true){
                     item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)
                 }else{
                     stringResource(R.string.book_image_no_available)

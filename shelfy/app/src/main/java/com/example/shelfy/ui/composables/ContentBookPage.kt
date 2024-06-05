@@ -159,13 +159,13 @@ fun ContentBookPage(
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(
-                        "https://" + if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.length ?: 0) > 0){
+                        "https://" + if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.isBlank()) != true){
                             viewModel.bookUiState.data?.volumeInfo?.imageLinks?.large?.substring(7)
-                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.length ?: 0) > 0){
+                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.isBlank()) != true){
                             viewModel.bookUiState.data?.volumeInfo?.imageLinks?.small?.substring(7)
-                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.length ?: 0) > 0){
+                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.isBlank()) != true){
                             viewModel.bookUiState.data?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
-                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.smallThumbnail?.length ?: 0) > 0){
+                        }else if((viewModel.bookUiState.data?.volumeInfo?.imageLinks?.smallThumbnail?.isBlank()) != true){
                             viewModel.bookUiState.data?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)
                         }else{
                             stringResource(R.string.book_image_no_available)
@@ -226,8 +226,7 @@ fun ContentBookPage(
                         putExtra(
                             Intent.EXTRA_TEXT,
                             stringResource(R.string.ti_consiglio_questo_libro) + viewModel.bookUiState.data?.volumeInfo?.title + "\n"
-                            + stringResource(R.string.ho_usato_shelfy_per_consigliartelo_usalo_anche_tu) +
-                                    stringResource(R.string.il_link_per_il_libro) + viewModel.bookUiState.data?.volumeInfo?.infoLink
+                            + stringResource(R.string.ho_usato_shelfy_per_consigliartelo_usalo_anche_tu)
                         )
                         type = "text/plain"
                     }
