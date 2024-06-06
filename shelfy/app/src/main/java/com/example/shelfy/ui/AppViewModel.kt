@@ -581,15 +581,15 @@ class AppViewModel : ViewModel(){
                     }
             }
             dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
-                    documents ->
-                for(document in documents){
+                    documents2 ->
+                for(document in documents2){
                     dB.collection("Notes")
                         .document(document.id).delete().addOnSuccessListener {
                         }
                 }
                 dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
-                        documents ->
-                    for(document in documents){
+                        documents3 ->
+                    for(document in documents3){
                         dB.collection("Readlists")
                             .document(document.id).delete().addOnSuccessListener {
                             }
