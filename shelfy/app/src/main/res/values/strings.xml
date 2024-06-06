@@ -58,4 +58,5 @@
     <string name="essere_connessi_ad_internet_per_effettuare_questa_operazione">Essere connessi ad internet per effettuare questa operazione!</string>
     <string name="nome_di_readlist_gi_esistente">Nome di readlist già esistente</string>
     <string name="credenziali_inserite_non_corrette">Credenziali inserite non corrette</string>
+    <string name="cancella_account">Cancella account</string>
 </resources>

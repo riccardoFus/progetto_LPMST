@@ -7,12 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.shelfy.data.db.Note
 import com.example.shelfy.data.db.Readlist
 import com.example.shelfy.data.db.Review
 import com.example.shelfy.data.db.User
 import com.example.shelfy.data.remote.responses.Books
 import com.example.shelfy.data.remote.responses.Item
+import com.example.shelfy.navigation.Screens
 import com.example.shelfy.util.Resource
 import com.example.shelfy.util.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
@@ -568,6 +570,43 @@ class AppViewModel : ViewModel(){
             noteAlreadyExists = found
         }
     }
+
+    fun deleteUser(navController : NavHostController) {
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Reviews").whereEqualTo("username", username).get().addOnSuccessListener {
+            documents ->
+            for(document in documents){
+                dB.collection("Reviews")
+                    .document(document.id).delete().addOnSuccessListener {
+                    }
+            }
+            dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
+                    documents ->
+                for(document in documents){
+                    dB.collection("Notes")
+                        .document(document.id).delete().addOnSuccessListener {
+                        }
+                }
+                dB.collection("Readlists").whereEqualTo("userId", userId).get().addOnSuccessListener {
+                        documents ->
+                    for(document in documents){
+                        dB.collection("Readlists")
+                            .document(document.id).delete().addOnSuccessListener {
+                            }
+                    }
+                    dB.collection("Users").document(userId).delete()
+                    FirebaseAuth.getInstance().currentUser?.delete()?.addOnSuccessListener {
+                        userId = ""
+                        username = ""
+                        loginDone = false
+                        FirebaseAuth.getInstance().signOut()
+                        navController.navigate(Screens.LOGIN_SCREEN)
+                    }
+                }
+            }
+        }
+    }
+
     var page: String by mutableStateOf("Homepage")
 
     // Initialization of the AppViewModel, it creates the book recommendation lists
