@@ -54,6 +54,8 @@ fun sha256(input: String): String {
 
 class AppViewModel : ViewModel(){
 
+    var openingDone: Boolean by mutableStateOf(false)
+
     // A mutable state variable that holds the state of the book recommendations 1
     var booksUiStateRecommendation1 : Resource<Books> by mutableStateOf(Resource.Loading<Books>())
 
@@ -135,6 +137,32 @@ class AppViewModel : ViewModel(){
     var loginDone : Boolean by mutableStateOf(false)
     // A mutable state variable that indicates whether the user is already signed in
     var alreadySignedIn : Boolean by mutableStateOf(false)
+    // A mutable state variable that indicates whether the username already exist
+    var alreadyUsernameExist : Boolean by mutableStateOf(false)
+
+
+    // Function to check if a user with a given email already exists in Firebase Firestore
+    private fun checkEmailAlreadyExists(email: String): Boolean{
+        var result by mutableStateOf(false)
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
+            if(documents.isEmpty) result = true
+        }
+
+        return result
+    }
+
+    private fun checkUsernameAlreadyExists(username: String): Boolean{
+        var result by mutableStateOf(false)
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+        dB.collection("Users").whereEqualTo("username", username).get().addOnSuccessListener {documents ->
+            if(documents.isEmpty) result = true
+        }
+
+        return result
+    }
 
     // Function to sign in a user with email and password
     fun signInUser(
@@ -142,25 +170,31 @@ class AppViewModel : ViewModel(){
         password: String,
         username: String = ""
     ){
-        this.username = username
+        var result by mutableStateOf(false)
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-        // Check if the email already exists in the database
-        alreadySignedIn = runBlocking { checkEmailAlreadyExists(email) }
-
-        // If the user is not already signed in, create a new user
-        if (!alreadySignedIn){
-            FirebaseAuth.getInstance()
-                .createUserWithEmailAndPassword(email, password)
-                .addOnSuccessListener{
-                    // Add the user to the database with the provided details
-                    addUser(username, email, password,
-                        FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                    )
-                    // Perform login with the provided email and password
-                    login(email, password)
+        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
+            if(!documents.isEmpty) alreadySignedIn = true
+            if(!result && !alreadySignedIn){
+                dB.collection("Users").whereEqualTo("username", username).get().addOnSuccessListener {documents ->
+                    if(!documents.isEmpty) alreadyUsernameExist = true
+                    if(!result && !alreadyUsernameExist){
+                        this.username = username
+                        FirebaseAuth.getInstance()
+                            .createUserWithEmailAndPassword(email, password)
+                            .addOnSuccessListener{
+                                // Add the user to the database with the provided details
+                                addUser(username, email, password,
+                                    FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                                )
+                                // Perform login with the provided email and password
+                                login(email, password, "SignIn")
+                            }
+                            .addOnFailureListener{
+                            }
+                    }
                 }
-                .addOnFailureListener{
-                }
+            }
         }
     }
 
@@ -173,14 +207,18 @@ class AppViewModel : ViewModel(){
         loginDone = false
     }
 
+    var showDialogLogin : Boolean by mutableStateOf(false)
+
     // Function to authenticate user login using email and password.
-    fun login(email: String, password: String){
+    fun login(email: String, password: String, from: String = ""){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         // Query Firestore to find user with matching email
         dB.collection("Users").whereEqualTo("email", email).get()
             .addOnSuccessListener { documents ->
+                var found : Boolean = false
                 for (document in documents) {
                     if (document.get("password") == password) {
+                        found = true
                         // Sign in with Firebase Authentication
                         FirebaseAuth
                             .getInstance()
@@ -196,10 +234,14 @@ class AppViewModel : ViewModel(){
                                     username = document.get("username").toString()
                                     userId = document.id
                                 }
+                                if(from == "SignIn"){
+                                    addReadlist("Libreria", userId)
+                                }
+                                loginDone = true
                             }
-                        loginDone = true
                     }
                 }
+                if(!found) showDialogLogin = true
             }
     }
 
@@ -315,16 +357,24 @@ class AppViewModel : ViewModel(){
     var libraryUpdated: Boolean by mutableStateOf(false)
 
     // Function to add a readlist for a user in Firebase Firestore
+    var alreadyReadlistExist : Boolean by mutableStateOf(false)
     fun addReadlist(name : String, userId : String){
         val dB : FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReadlist = dB.collection("Readlists")
-        val readlist = Readlist(name = name, userId = userId, emptyList())
-        if (userId != "") {
-            libraryAdded = true
-            dbReadlist.add(readlist)
-                .addOnSuccessListener {}
-                .addOnFailureListener {}
-            readlistsUpdated = false
+        var result by mutableStateOf(false)
+        dbReadlist.whereEqualTo("name", name).whereEqualTo("userId", userId).get().addOnSuccessListener {
+            if(it.documents.isEmpty()) result = true;
+            else alreadyReadlistExist = true
+            if(result){
+                val readlist = Readlist(name = name, userId = userId, emptyList())
+                if (userId != "") {
+                    dbReadlist.add(readlist)
+                        .addOnSuccessListener {
+                            readlistsUpdated = false
+                        }
+                        .addOnFailureListener {}
+                }
+            }
         }
     }
 
@@ -497,18 +547,6 @@ class AppViewModel : ViewModel(){
                 }
             }
         }
-    }
-
-    // Function to check if a user with a given email already exists in Firebase Firestore
-    private fun checkEmailAlreadyExists(email: String): Boolean{
-        var result by mutableStateOf(false)
-        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
-            if(documents.isEmpty) result = true
-        }
-
-        return result
     }
 
     // A mutable state variable that checks if a note already exists in Firebase Firestore, given user

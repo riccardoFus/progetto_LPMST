@@ -80,7 +80,25 @@ fun ContentSignInPage(
                     .clip(RoundedCornerShape(20.dp))
                     .background(BlackBar)
                     .padding(18.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = WhiteText
+            )
+        }
+    }
+    if(viewModel.alreadyUsernameExist || viewModel.alreadySignedIn){
+        Dialog(onDismissRequest = { viewModel.alreadyUsernameExist = false; viewModel.alreadySignedIn = false}) {
+            Text(
+                text = "Username e/o email già presenti",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center,
+                color = WhiteText
             )
         }
     }
@@ -352,8 +370,7 @@ fun ContentSignInPage(
         }
     }
     // if user is created, it creates a default library
-    if(viewModel.loginDone && viewModel.userId != "" && !viewModel.libraryAdded){
-        viewModel.addReadlist("Libreria", viewModel.userId)
+    if(viewModel.loginDone){
         navController.navigate(Screens.HOME_SCREEN)
     }
 }

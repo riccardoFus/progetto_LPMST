@@ -50,6 +50,7 @@ import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
+import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
 @Composable
@@ -72,7 +73,25 @@ fun BarUser(
                     .clip(RoundedCornerShape(20.dp))
                     .background(BlackBar)
                     .padding(18.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = WhiteText
+            )
+        }
+    }
+    if(viewModel.alreadyReadlistExist){
+        Dialog(onDismissRequest = { viewModel.alreadyReadlistExist = false}) {
+            Text(
+                text = stringResource(R.string.nome_di_readlist_gi_esistente),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center,
+                color = WhiteText
             )
         }
     }
@@ -133,8 +152,9 @@ fun BarUser(
                 modifier = Modifier
                     .size(28.dp))
         }
+        val libreria = stringResource(id = R.string.libreria)
         var readList by remember {mutableStateOf("")}
-        val maxChar = 100
+        val maxChar = 25
         // if IconButton of addReadlist is clicked, it opens a dialog
         // in this dialog, you can write the name of the new readlist
         // in this dialog, you can write the name of the new readlist
@@ -169,9 +189,11 @@ fun BarUser(
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(
                                 onDone = {
-                                    viewModel.addReadlist(readList, viewModel.userId)
-                                    addReadlistNew = false
-                                    readList = ""
+                                    if(!readList.isBlank()){
+                                        viewModel.addReadlist(readList, viewModel.userId)
+                                        addReadlistNew = false
+                                        readList = ""
+                                    }
                                 }),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedTextColor = BlueText,

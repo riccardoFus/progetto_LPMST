@@ -36,12 +36,6 @@ fun SearchPage(
             .background(brush = Brush.verticalGradient(
                 colors = listOf(BlackBar, BlackPage)
             ))
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-                )
-            )
     ) {
         Spacer(modifier = Modifier.size(10.dp))
         ContentSearchPage(

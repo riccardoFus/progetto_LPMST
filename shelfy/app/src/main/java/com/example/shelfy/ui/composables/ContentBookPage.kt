@@ -85,12 +85,6 @@ fun AnimatedBox(text: String) {
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .background(BlackBar)
-                .animateContentSize(
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = LinearOutSlowInEasing
-                    )
-                )
         ) {
             Text(
                 text = text,
@@ -131,7 +125,8 @@ fun ContentBookPage(
                     .clip(RoundedCornerShape(20.dp))
                     .background(BlackBar)
                     .padding(18.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = WhiteText
             )
         }
     }
@@ -183,6 +178,7 @@ fun ContentBookPage(
                         )
                     ),
                 contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = R.drawable.content)
             )
             Row(
                 modifier = Modifier

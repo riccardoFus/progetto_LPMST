@@ -71,7 +71,8 @@ fun BookCardSearchPage(
                     .clip(RoundedCornerShape(20.dp))
                     .background(BlackBar)
                     .padding(18.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = WhiteText
             )
         }
     }
@@ -104,25 +105,26 @@ fun BookCardSearchPage(
             )
             .clickable(onClick = {
                 viewModel.bookUiState = Resource.Loading<Item>()
-                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                if (getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
                     viewModel.getBook(item?.id.toString())
                     navController.navigate(Screens.VISUALIZER_SCREEN)
-                }else{
+                } else {
                     showDialog = true
                 }
-            })
+            }),
+        placeholder = painterResource(id = R.drawable.content)
     )
     Column(
         modifier = Modifier
             .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
             .fillMaxHeight()
-            .clickable{
+            .clickable {
                 viewModel.bookUiState = Resource.Loading<Item>()
-                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                if (getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
                     viewModel.getBook(item?.id.toString())
                     navController.navigate(Screens.VISUALIZER_SCREEN)
-                }else{
+                } else {
                     showDialog = true
                 }
             }

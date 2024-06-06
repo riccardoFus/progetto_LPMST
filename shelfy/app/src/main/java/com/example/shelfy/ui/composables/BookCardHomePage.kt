@@ -75,7 +75,8 @@ fun BookCardHomePage(
                     .clip(RoundedCornerShape(20.dp))
                     .background(BlackBar)
                     .padding(18.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = WhiteText
             )
         }
     }
@@ -135,7 +136,8 @@ fun BookCardHomePage(
                         10.dp
                     )
                 ),
-            contentScale = ContentScale.FillBounds
+            contentScale = ContentScale.FillBounds,
+            placeholder = painterResource(id = R.drawable.content)
         )
         Text(
             text = (item?.volumeInfo?.title ?: stringResource(R.string.no_titolo)),

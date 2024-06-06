@@ -48,13 +48,7 @@ fun OfflinePage(mainActivity : MainActivity){
             .fillMaxSize()
             .background(brush = Brush.verticalGradient(
                 colors = listOf(BlackBar, BlackPage)
-            ))
-            .animateContentSize(
-                animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-                )
-            ),
+            )),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){

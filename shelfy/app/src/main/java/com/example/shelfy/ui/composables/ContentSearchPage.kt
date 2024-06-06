@@ -57,6 +57,7 @@ import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.isValidPassword
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
+import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -81,7 +82,8 @@ fun ContentSearchPage(
                     .clip(RoundedCornerShape(20.dp))
                     .background(BlackBar)
                     .padding(18.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = WhiteText
             )
         }
     }

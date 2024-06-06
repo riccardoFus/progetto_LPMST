@@ -115,7 +115,7 @@ fun ContentProfilePage(
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(if (readlist.content.isNotEmpty()) 360.dp else 0.dp)
+                                .height(if (readlist.content.isNotEmpty()) 280.dp else 0.dp)
                         ) {
                             items(readlist.content) { item ->
                                 BookCardHomePage(

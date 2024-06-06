@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
         // If the connection is unavailable (OFF), navigate to the offline page.
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var connection = getCurrentConnectivityState(connectivityManager)
+        var openingDone : Boolean = false
         if(connection == ConnectionState.Available){
             setContent {
                 FirebaseApp.initializeApp(this)
