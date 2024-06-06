@@ -2,21 +2,29 @@ package com.example.shelfy.ui.composables
 
 import android.content.Context
 import android.net.ConnectivityManager
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -30,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -50,6 +59,9 @@ import com.example.shelfy.R
 import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
+import com.example.shelfy.ui.isValidEmail
+import com.example.shelfy.ui.isValidPassword
+import com.example.shelfy.ui.sha256
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
@@ -97,11 +109,12 @@ fun BarUser(
             )
         }
     }
+
     Column {
         Row (
             modifier = Modifier.padding(top = 8.dp)
         ) {
-            Spacer(modifier = Modifier.width(2.dp))
+            Spacer(modifier = Modifier.width(17.dp))
             Text(
                 text = stringResource(R.string.la_tua_libreria),
                 fontFamily = fonts,
@@ -145,15 +158,16 @@ fun BarUser(
             }
             // IconButton to logout user
             IconButton(onClick = {
-                viewModel.logout()
-                navController.navigate(Screens.LOGIN_SCREEN)
+                navController.navigate(Screens.FUNCTION_SCREEN)
+                // viewModel.logout()
+                // navController.navigate(Screens.LOGIN_SCREEN)
             }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_exit_to_app_24),
+                    painter = painterResource(id = R.drawable.baseline_more_vert_24),
                     contentDescription = stringResource(R.string.esci),
                     tint = BlueText,
                     modifier = Modifier
-                        .size(28.dp))
+                        .size(36.dp))
             }
             val libreria = stringResource(id = R.string.libreria)
             var readList by remember {mutableStateOf("")}
@@ -217,19 +231,6 @@ fun BarUser(
                     }
                 }
             }
-        }
-        TextButton(onClick = { viewModel.deleteUser(navController) }) {
-            Text(
-                text = stringResource(R.string.cancella_account),
-                fontFamily = fonts,
-                fontSize = 20.sp,
-                color = BlueText,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(8.dp, bottom = 0.dp)
-                    .weight(1f),
-                fontWeight = FontWeight.SemiBold
-            )
         }
     }
 }

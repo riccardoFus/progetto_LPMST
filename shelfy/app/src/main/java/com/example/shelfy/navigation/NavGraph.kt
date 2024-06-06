@@ -11,6 +11,7 @@ import com.example.shelfy.ui.screens.HomePage
 import com.example.shelfy.ui.screens.ProfilePage
 import com.example.shelfy.ui.screens.SearchPage
 import com.example.shelfy.ui.screens.BookPage
+import com.example.shelfy.ui.screens.FunctionPage
 import com.example.shelfy.ui.screens.LoginPage
 import com.example.shelfy.ui.screens.SignInPage
 
@@ -39,6 +40,9 @@ fun NavGraph(mainActivity: MainActivity, appViewModel: AppViewModel = viewModel(
         }
         composable(Screens.SIGN_IN_SCREEN){
             SignInPage(viewModel = appViewModel, navController = navController, mainActivity = mainActivity)
+        }
+        composable(Screens.FUNCTION_SCREEN){
+            FunctionPage(viewModel = appViewModel, navController = navController, mainActivity = mainActivity)
         }
     }
 }

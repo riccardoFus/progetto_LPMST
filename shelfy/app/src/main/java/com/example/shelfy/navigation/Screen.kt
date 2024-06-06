@@ -13,4 +13,5 @@ object Screens {
     const val VISUALIZER_SCREEN = "VISUALIZER_SCREEN"
     const val LOGIN_SCREEN = "LOGIN_SCREEN"
     const val SIGN_IN_SCREEN = "SIGN_IN_SCREEN"
+    const val FUNCTION_SCREEN = "FUNCTION_SCREEN"
 }
