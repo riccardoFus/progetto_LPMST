@@ -174,7 +174,6 @@ fun BarUser(
             val maxChar = 25
             // if IconButton of addReadlist is clicked, it opens a dialog
             // in this dialog, you can write the name of the new readlist
-            // in this dialog, you can write the name of the new readlist
             if (addReadlistNew) {
                 Dialog(onDismissRequest = { addReadlistNew = false }) {
                     if(addReadlistNew){

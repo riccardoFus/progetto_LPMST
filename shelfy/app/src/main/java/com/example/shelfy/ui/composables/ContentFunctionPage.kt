@@ -37,8 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.shelfy.ConnectionState
 import com.example.shelfy.MainActivity
 import com.example.shelfy.R
+import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlackBar
@@ -110,8 +112,12 @@ fun ContentFunctionPage(
                 }, enabled = false
             )
             OutlinedButton(onClick = {
-                viewModel.logout()
-                navController.navigate(Screens.LOGIN_SCREEN)
+                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                    viewModel.logout()
+                    navController.navigate(Screens.LOGIN_SCREEN)
+                }else {
+                    showDialog = true
+                }
             },
                 modifier = Modifier
                     .padding(10.dp)
@@ -127,7 +133,11 @@ fun ContentFunctionPage(
                 }
             )
             OutlinedButton(onClick = {
-                viewModel.deleteUser(navController)
+                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                    viewModel.deleteUser(navController)
+                }else {
+                    showDialog = true
+                }
             },
                 modifier = Modifier
                     .padding(10.dp)
