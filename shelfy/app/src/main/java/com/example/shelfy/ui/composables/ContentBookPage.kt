@@ -688,6 +688,7 @@ fun ContentBookPage(
                                         // viewModel.reviews.clear()
                                         viewModel.getReviews(viewModel.bookUiState.data!!.id)
                                         review = 0
+                                        charInsertedReview = 0
                                     }
                                 },
                                     modifier = Modifier

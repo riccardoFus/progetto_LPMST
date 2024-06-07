@@ -637,6 +637,7 @@ class AppViewModel : ViewModel(){
                         loginDone = false
                         FirebaseAuth.getInstance().signOut()
                         navController.navigate(Screens.LOGIN_SCREEN)
+                    }.addOnFailureListener {
                     }
                 }
             }
