@@ -24,7 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.math.RoundingMode
 import java.security.MessageDigest
+import java.text.DecimalFormat
 
 
 // Checks if a given email is valid based on a predefined regular expression.
@@ -296,7 +298,9 @@ class AppViewModel : ViewModel(){
                     }
                     // update of the number of reviews and the average vote
                     if(sumReviews != 0) {
-                        numberAndMediaReviews = Pair<Int, Double>(count, sumReviews.toDouble() / count.toDouble())
+                        val df = DecimalFormat("#.##")
+                        df.roundingMode = RoundingMode.FLOOR
+                        numberAndMediaReviews = Pair<Int, Double>(count, df.format(sumReviews.toDouble() / count.toDouble()).toDouble())
                     }else{
                         numberAndMediaReviews = Pair<Int, Double>(0, 0.0)
                     }
@@ -335,9 +339,21 @@ class AppViewModel : ViewModel(){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         val dbReviews  = dB.collection("Reviews")
         val review = Review(id, username, stars, text)
-        dbReviews.add(review)
-            .addOnSuccessListener {}
-            .addOnFailureListener {}
+        dbReviews.whereEqualTo("username", username).whereEqualTo("bookId", id).get().addOnSuccessListener {documents ->
+            if(!documents.isEmpty){
+                for(document in documents){
+                    dbReviews.document(document.id).update("stars", stars).addOnSuccessListener {
+                        dbReviews.document(document.id).update("desc", text).addOnSuccessListener{
+
+                        }
+                    }
+                }
+            }else{
+                dbReviews.add(review)
+                    .addOnSuccessListener {}
+                    .addOnFailureListener {}
+            }
+        }
     }
 
     // Function to add a note in Firebase Firestore
@@ -571,6 +587,26 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    var reviewsAlreadyInserted by mutableStateOf(false)
+    var reviewUser by mutableStateOf(Review())
+    fun checkReviewAlreadyInserted(){
+        var found = false
+        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
+        dB.collection("Reviews").whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { documents ->
+                if(!documents.isEmpty){
+                    for(document in documents){
+                        if(document.get("bookId") == bookUiState.data?.id) {
+                            found = true
+                            reviewUser = document.toObject(Review::class.java)
+                        }
+                    }
+                }
+                reviewsAlreadyInserted = found
+            }
+    }
+
     fun deleteUser(navController : NavHostController) {
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Reviews").whereEqualTo("username", username).get().addOnSuccessListener {
@@ -600,6 +636,7 @@ class AppViewModel : ViewModel(){
                         username = ""
                         loginDone = false
                         FirebaseAuth.getInstance().signOut()
+                        println("Ciao")
                         navController.navigate(Screens.LOGIN_SCREEN)
                     }
                 }

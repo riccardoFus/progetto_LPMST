@@ -101,6 +101,7 @@ fun ContentSearchPage(
             var query by rememberSaveable {
                 mutableStateOf("")
             }
+            var maxChar = 25
             val keyboardController = LocalSoftwareKeyboardController.current
             OutlinedTextField(
                 singleLine = true,
@@ -122,7 +123,7 @@ fun ContentSearchPage(
                     )
                 },
                 onValueChange = {
-                        newText -> text = newText
+                        newText -> text = newText.take(maxChar)
                 },
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))

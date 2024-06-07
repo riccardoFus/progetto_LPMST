@@ -398,6 +398,7 @@ fun ContentBookPage(
             }
             var note = viewModel.note
             var testo by remember{ mutableStateOf("") }
+            var maxChar = 256
             testo = note
                 if (noteVisualizer) {
                     var noteAlreadyExists = viewModel.noteAlreadyExists
@@ -415,7 +416,7 @@ fun ContentBookPage(
                                     fontSize = 20.sp
                                 )
                             },
-                            onValueChange = {newText -> testo = newText},
+                            onValueChange = {newText -> testo = newText.take(maxChar)},
                             textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp, color = WhiteText),
                             modifier = Modifier
                                 .width(450.dp)
@@ -621,7 +622,7 @@ fun ContentBookPage(
                                             fontSize = 20.sp
                                         )
                                                   },
-                                    onValueChange = { newText -> text = newText },
+                                    onValueChange = { newText -> text = newText.take(maxChar) },
                                     textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp, color = WhiteText),
                                     modifier = Modifier
                                         .width(450.dp)
@@ -750,6 +751,14 @@ fun ContentBookPage(
                                                     .size(20.dp)
                                                     .align(Alignment.CenterVertically),
                                                 tint = Color.Yellow)
+                                        }
+                                        for(i in (1..5-it.stars)){
+                                            Icon(painter = painterResource(R.drawable.baseline_star_24),
+                                                contentDescription = "Stelle",
+                                                modifier = Modifier
+                                                    .size(20.dp)
+                                                    .align(Alignment.CenterVertically),
+                                                tint = BlackPage)
                                         }
                                     }
                                     if (it.desc.isNotBlank()) {

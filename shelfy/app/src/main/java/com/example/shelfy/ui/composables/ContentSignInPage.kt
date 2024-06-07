@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -36,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -259,7 +261,8 @@ fun ContentSignInPage(
                         unfocusedPlaceholderColor = BlueText,
                         focusedPlaceholderColor = BlueText
                     ),
-                    visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None
+                    visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
             }
             var password2 by rememberSaveable { mutableStateOf("") }
@@ -316,7 +319,8 @@ fun ContentSignInPage(
                         unfocusedPlaceholderColor = BlueText,
                         focusedPlaceholderColor = BlueText
                     ),
-                    visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
+                    visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
             }
 
