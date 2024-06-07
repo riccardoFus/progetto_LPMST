@@ -148,13 +148,14 @@ fun ContentLoginPage(
             }
 
             var password by rememberSaveable { mutableStateOf("") }
-            var passwordCorrect by remember { mutableStateOf(true) }
-            var passwordPressed by remember { mutableStateOf(false) }
+            var passwordCorrect by rememberSaveable { mutableStateOf(true) }
+            var passwordPressed by rememberSaveable { mutableStateOf(false) }
+            val maxChar = 16
             Box(modifier = Modifier.padding(top = 15.dp)) {
                 OutlinedTextField(
                     value = password,
                     onValueChange = {
-                            newText -> password = newText
+                            newText -> password = newText.take(maxChar)
                         // passwordCorrect = isValidPassword(password)
                     },
                     placeholder = { Text(text = stringResource(R.string.password)) },

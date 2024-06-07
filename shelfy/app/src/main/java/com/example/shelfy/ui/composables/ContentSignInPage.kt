@@ -104,7 +104,7 @@ fun ContentSignInPage(
             )
         }
     }
-    val maxChar = 15
+    val maxChar = 30
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -122,12 +122,25 @@ fun ContentSignInPage(
             )
             var user by rememberSaveable { mutableStateOf("") }
             var userEmpty by rememberSaveable { mutableStateOf(false) }
+            var charInserted by rememberSaveable {
+                mutableStateOf(0)
+            }
             Box() {
                 OutlinedTextField(
                     value = user,
                     onValueChange = { newText ->
                         user = newText.take(maxChar)
+                        charInserted = user.length
                         userEmpty = user.isBlank()
+                    },
+                    trailingIcon = {
+                        Text(text = "" + charInserted + "/" + maxChar,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 18.sp,
+                            fontFamily = fonts,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(end = 4.dp),
+                            color = BlueText)
                     },
                     placeholder = { Text(text = stringResource(R.string.username)) },
                     modifier = Modifier
@@ -209,11 +222,12 @@ fun ContentSignInPage(
             var password by rememberSaveable { mutableStateOf("") }
             var passwordCorrect by rememberSaveable { mutableStateOf(true) }
             var passwordPressed by rememberSaveable { mutableStateOf(false) }
+            var maxCharPassword = 16
             Box(modifier = Modifier.padding(top = 15.dp)) {
                 OutlinedTextField(
                     value = password,
-                    onValueChange = {
-                            newText -> password = newText
+                    onValueChange = { newText ->
+                        password = newText.take(maxCharPassword)
                         // passwordCorrect = isValidPassword(password)
                     },
                     placeholder = { Text(text = stringResource(id = R.string.password)) },
@@ -272,7 +286,7 @@ fun ContentSignInPage(
                 OutlinedTextField(
                     value = password2,
                     onValueChange = { newText ->
-                        password2 = newText
+                        password2 = newText.take(maxCharPassword)
                         // password2Correct = isValidPassword(password2)
                     },
                     placeholder = { Text(text = stringResource(R.string.ripeti_password)) },

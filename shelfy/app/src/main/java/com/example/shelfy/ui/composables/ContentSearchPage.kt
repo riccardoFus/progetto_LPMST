@@ -101,7 +101,7 @@ fun ContentSearchPage(
             var query by rememberSaveable {
                 mutableStateOf("")
             }
-            var maxChar = 25
+            var maxChar = 40
             val keyboardController = LocalSoftwareKeyboardController.current
             OutlinedTextField(
                 singleLine = true,

@@ -631,12 +631,11 @@ class AppViewModel : ViewModel(){
                             }
                     }
                     dB.collection("Users").document(userId).delete()
-                    FirebaseAuth.getInstance().currentUser?.delete()?.addOnSuccessListener {
+                    FirebaseAuth.getInstance().currentUser!!.delete().addOnCompleteListener {
                         userId = ""
                         username = ""
                         loginDone = false
                         FirebaseAuth.getInstance().signOut()
-                        println("Ciao")
                         navController.navigate(Screens.LOGIN_SCREEN)
                     }
                 }

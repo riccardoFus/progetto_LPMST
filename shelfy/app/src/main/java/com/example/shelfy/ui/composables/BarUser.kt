@@ -170,7 +170,10 @@ fun BarUser(
                         .size(36.dp))
             }
             val libreria = stringResource(id = R.string.libreria)
-            var readList by remember {mutableStateOf("")}
+            var readList by rememberSaveable {mutableStateOf("")}
+            var charInserted by rememberSaveable {
+                mutableStateOf(0)
+            }
             val maxChar = 25
             // if IconButton of addReadlist is clicked, it opens a dialog
             // in this dialog, you can write the name of the new readlist
@@ -192,6 +195,7 @@ fun BarUser(
                                 },
                                 onValueChange = {
                                         newText -> readList = newText.take(maxChar)
+                                    charInserted = readList.length
                                 },
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(10.dp))
@@ -209,6 +213,7 @@ fun BarUser(
                                             viewModel.addReadlist(readList, viewModel.userId)
                                             addReadlistNew = false
                                             readList = ""
+                                            charInserted = 0
                                         }
                                     }),
                                 colors = OutlinedTextFieldDefaults.colors(
@@ -223,7 +228,16 @@ fun BarUser(
                                     cursorColor = BlueText,
                                     unfocusedPlaceholderColor = BlueText,
                                     focusedPlaceholderColor = BlueText
-                                )
+                                ),
+                                trailingIcon = {
+                                    Text(text = "" + charInserted + "/" + maxChar,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 18.sp,
+                                        fontFamily = fonts,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(end = 4.dp),
+                                        color = BlueText)
+                                }
                             )
 
                         }

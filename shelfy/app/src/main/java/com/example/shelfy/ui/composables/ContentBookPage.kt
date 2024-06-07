@@ -400,6 +400,9 @@ fun ContentBookPage(
             var testo by remember{ mutableStateOf("") }
             var maxChar = 256
             testo = note
+            var charInsertedNote by rememberSaveable {
+                mutableStateOf(testo.length)
+            }
                 if (noteVisualizer) {
                     var noteAlreadyExists = viewModel.noteAlreadyExists
                     // checks if a given user have already a note about a certain book
@@ -416,7 +419,10 @@ fun ContentBookPage(
                                     fontSize = 20.sp
                                 )
                             },
-                            onValueChange = {newText -> testo = newText.take(maxChar)},
+                            onValueChange = {newText ->
+                                testo = newText.take(maxChar)
+                                charInsertedNote = testo.length
+                                            },
                             textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp, color = WhiteText),
                             modifier = Modifier
                                 .width(450.dp)
@@ -447,6 +453,7 @@ fun ContentBookPage(
                                 Column(modifier = Modifier.fillMaxHeight()) {
                                     IconButton(onClick = {
                                         noteVisualizer = false
+                                        charInsertedNote = note.length
                                     },
                                         modifier = Modifier
                                             .padding(10.dp)) {
@@ -473,6 +480,14 @@ fun ContentBookPage(
                                                 .size(50.dp)
                                         )
                                     }
+                                    Spacer(modifier = Modifier.height(270.dp))
+                                    Text(text = "" + charInsertedNote + "/" + maxChar,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 18.sp,
+                                        fontFamily = fonts,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(end = 4.dp),
+                                        color = BlueText)
                                 }
                             })
 
@@ -540,6 +555,9 @@ fun ContentBookPage(
             var reviews = viewModel.numberAndMediaReviews
             if(id != null) {
                 viewModel.getReviews(id)
+            }
+            var charInsertedReview by rememberSaveable {
+                mutableStateOf(0)
             }
             Box(
                 modifier = Modifier
@@ -622,12 +640,24 @@ fun ContentBookPage(
                                             fontSize = 20.sp
                                         )
                                                   },
-                                    onValueChange = { newText -> text = newText.take(maxChar) },
+                                    onValueChange = { newText ->
+                                        text = newText.take(maxChar)
+                                        charInsertedReview = text.length
+                                                    },
                                     textStyle = TextStyle(fontFamily = fonts, fontSize = 20.sp, color = WhiteText),
                                     modifier = Modifier
                                         .width(450.dp)
                                         .height(175.dp)
                                         .padding(20.dp),
+                                    trailingIcon = {
+                                        Text(text = "" + charInsertedReview + "/" + maxChar,
+                                            fontWeight = FontWeight.SemiBold,
+                                            fontSize = 18.sp,
+                                            fontFamily = fonts,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.padding(end = 4.dp),
+                                            color = BlueText)
+                                    },
                                     shape = RoundedCornerShape(10.dp),
                                     colors = TextFieldDefaults.colors(
                                         unfocusedTextColor = WhiteText,
