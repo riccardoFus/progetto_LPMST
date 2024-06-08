@@ -1,5 +1,7 @@
 package com.example.shelfy.ui.composables
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -37,17 +40,24 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.shelfy.ConnectionState
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
+import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.isValidPassword
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
+import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -55,8 +65,28 @@ import com.example.shelfy.ui.theme.fonts
 fun ContentSearchPage(
     viewModel : AppViewModel,
     navController : NavHostController,
+    mainActivity : MainActivity,
     modifier : Modifier = Modifier
 ){
+    val connectivityManager = mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var showDialog : Boolean by rememberSaveable{ mutableStateOf(false) }
+    if(showDialog){
+        Dialog(onDismissRequest = { showDialog = false}) {
+            Text(
+                text = stringResource(R.string.essere_connessi_ad_internet_per_effettuare_questa_operazione),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center,
+                color = WhiteText
+            )
+        }
+    }
     Box(
         modifier = modifier
     ){
@@ -71,6 +101,7 @@ fun ContentSearchPage(
             var query by rememberSaveable {
                 mutableStateOf("")
             }
+            var maxChar = 40
             val keyboardController = LocalSoftwareKeyboardController.current
             OutlinedTextField(
                 singleLine = true,
@@ -82,17 +113,30 @@ fun ContentSearchPage(
                         fontSize = 20.sp
                     )
                 },
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.search_outline_1024x1024),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp),
+                        tint = BlueText
+                    )
+                },
                 onValueChange = {
-                        newText -> text = newText
+                        newText -> text = newText.take(maxChar)
                 },
                 modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
                     .padding(8.dp)
-                    .clip(RoundedCornerShape(8.dp))
                     .widthIn(400.dp)
                     .onKeyEvent {
                         if (it.key == Key.Enter) {
                             query = text.replace(" ", "+")
-                            viewModel.getBooksByQuery(query)
+                            if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                viewModel.getBooksByQuery(query)
+                            }else{
+                                showDialog = true
+                            }
                             keyboardController?.hide()
                         }
                         true
@@ -104,9 +148,15 @@ fun ContentSearchPage(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(
                     onSearch = {
-                        query = text.replace(" ", "+")
-                        viewModel.getBooksByQuery(query)
-                        keyboardController?.hide()
+                        if(text.isNotBlank()){
+                            query = text.replace(" ", "+")
+                            if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                viewModel.getBooksByQuery(query)
+                            }else{
+                                showDialog = true
+                            }
+                            keyboardController?.hide()
+                        }
                     }),
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedTextColor = BlueText,
@@ -122,16 +172,17 @@ fun ContentSearchPage(
                     focusedPlaceholderColor = BlueText
                 )
             )
+            // output of the search
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
             ){
                 items(viewModel.booksSearchUiState.data?.items ?: emptyList()){ item ->
                     Row(modifier = Modifier
                         .padding(8.dp)
-                        .height(250.dp)
-                        .clip(RoundedCornerShape(8.dp))
+                        .height(185.dp)
+                        .clip(RoundedCornerShape(10.dp))
                         .background(BlackBar)) {
-                        BookCardSearchPage(item = item, viewModel = viewModel, navController = navController)
+                        BookCardSearchPage(item = item, viewModel = viewModel, navController = navController, mainActivity = mainActivity)
                     }
                 }
             }

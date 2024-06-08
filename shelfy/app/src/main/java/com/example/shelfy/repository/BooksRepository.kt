@@ -8,6 +8,8 @@ import com.example.shelfy.util.Resource
 class BooksRepository (
     private val api : BooksApi
 ){
+    // async function to get a list of books from Google Books API
+    // given a certain query
     suspend fun getBooks(query : String): Resource<Books> {
         val response = try{
             api.getBooks(query)
@@ -17,6 +19,8 @@ class BooksRepository (
         return Resource.Success(response)
     }
 
+    // async function to get a book from Google Books API
+    // given a certain id
     suspend fun getBook(id : String) : Resource<Item> {
         val response = try{
             api.getBook(id)

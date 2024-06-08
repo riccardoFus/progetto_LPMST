@@ -1,13 +1,19 @@
 package com.example.shelfy.ui.composables
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -23,34 +29,65 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.shelfy.ConnectionState
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
+import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.isValidEmail
 import com.example.shelfy.ui.isValidPassword
 import com.example.shelfy.ui.sha256
+import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ContentLoginPage(
     viewModel : AppViewModel,
     navController : NavHostController,
+    mainActivity: MainActivity,
     modifier : Modifier = Modifier
 ){
+    val connectivityManager = mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var showDialog : Boolean by rememberSaveable{ mutableStateOf(false) }
+    if(showDialog){
+        Dialog(onDismissRequest = { showDialog = false}) {
+            Text(
+                text = stringResource(R.string.essere_connessi_ad_internet_per_effettuare_questa_operazione),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center,
+                color = WhiteText
+            )
+        }
+    }
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -111,13 +148,14 @@ fun ContentLoginPage(
             }
 
             var password by rememberSaveable { mutableStateOf("") }
-            var passwordCorrect by remember { mutableStateOf(true) }
-            var passwordPressed by remember { mutableStateOf(false) }
+            var passwordCorrect by rememberSaveable { mutableStateOf(true) }
+            var passwordPressed by rememberSaveable { mutableStateOf(false) }
+            val maxChar = 16
             Box(modifier = Modifier.padding(top = 15.dp)) {
                 OutlinedTextField(
                     value = password,
                     onValueChange = {
-                            newText -> password = newText
+                            newText -> password = newText.take(maxChar)
                         // passwordCorrect = isValidPassword(password)
                     },
                     placeholder = { Text(text = stringResource(R.string.password)) },
@@ -165,15 +203,23 @@ fun ContentLoginPage(
                         unfocusedPlaceholderColor = BlueText,
                         focusedPlaceholderColor = BlueText
                     ),
-                    visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None
+                    visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
             }
 
+            val keyboardController = LocalSoftwareKeyboardController.current
             OutlinedButton(onClick = {
                 emailCorrect = isValidEmail(email)
                 passwordCorrect = isValidPassword(password)
                 if (emailCorrect && passwordCorrect) {
-                    viewModel.login(email, sha256(password)); }
+                    keyboardController?.hide()
+                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                        viewModel.login(email, sha256(password))
+                    }else {
+                        showDialog = true
+                    }
+                }
             },
                 modifier = Modifier
                     .padding(20.dp)
@@ -184,7 +230,7 @@ fun ContentLoginPage(
                     Text(text = stringResource(R.string.login), modifier = Modifier
                         .align(Alignment.CenterVertically),
                         fontSize = 20.sp,
-                        fontFamily = fonts,  color = BlueText,
+                        fontFamily = fonts,  color = WhiteText,
                         textAlign = TextAlign.Start)
                 }
             )
@@ -209,4 +255,23 @@ fun ContentLoginPage(
     if(viewModel.loginDone){
         navController.navigate(Screens.HOME_SCREEN)
     }
+
+    if(viewModel.showDialogLogin){
+        Dialog(onDismissRequest = {viewModel.showDialogLogin = false}) {
+            Text(
+                text = stringResource(R.string.credenziali_inserite_non_corrette),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center,
+                color = WhiteText
+            )
+        }
+    }
+
 }

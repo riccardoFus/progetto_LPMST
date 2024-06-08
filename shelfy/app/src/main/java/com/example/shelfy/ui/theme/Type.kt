@@ -8,6 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.shelfy.R
 
+// font used in the app
 val fonts = FontFamily(
     Font(R.font.oswald_bold, weight = FontWeight.Bold),
     Font(R.font.oswald_extralight, weight = FontWeight.ExtraLight),
