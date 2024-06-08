@@ -36,11 +36,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
 import com.example.shelfy.data.db.Readlist
 import com.example.shelfy.data.remote.responses.Item
@@ -56,7 +58,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun ContentProfilePage(
     viewModel: AppViewModel,
     navController : NavHostController,
-    modifier : Modifier = Modifier
+    mainActivity : MainActivity,
+    modifier : Modifier = Modifier,
 ){
     if(!viewModel.libraryUpdated) {
         viewModel.itemList.clear()
@@ -74,57 +77,45 @@ fun ContentProfilePage(
         modifier = modifier){
 
         Column(modifier = Modifier.fillMaxWidth()) {
-
-            /*Text(text = "Libreria",
-                fontFamily = fonts,
-                fontSize = 20.sp,
-                color = BlueText,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally))
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(if(viewModel.itemList.isNotEmpty()) 350.dp else 0.dp)
-            ) {
-                items(viewModel.itemList) { item ->
-                    BookCardHomePage(
-                        item = item,
-                        viewModel = viewModel,
-                        navController = navController,
-                        page = "profile",
-                        readlist = "Libreria"
-                        )
-                    }
-                }
-            if(viewModel.itemList.isEmpty()){
-                Text(text = "(Vuota)",
-                    fontFamily = fonts,
-                    fontSize = 11.sp,
-                    color = BlueText,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally))
-            }
-
-             */
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 items(viewModel.readlists) { readlist ->
                     if (readlist.name.length > 0) {
-                        Text(
-                            text = readlist.name,
-                            fontFamily = fonts,
-                            fontSize = 20.sp,
-                            color = BlueText,
-                            textAlign = TextAlign.Justify,
-                            modifier = Modifier.padding(8.dp, bottom = 0.dp)
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = readlist.name,
+                                fontFamily = fonts,
+                                fontSize = 20.sp,
+                                color = BlueText,
+                                textAlign = TextAlign.Justify,
+                                modifier = Modifier
+                                    .padding(8.dp, bottom = 0.dp)
+                                    .weight(1f),
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            if(readlist.name != stringResource(id = R.string.libreria)){
+                                IconButton(onClick = { viewModel.deleteReadlist(readlist.name)
+                                },
+                                    modifier = Modifier) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_close_24),
+                                        contentDescription = stringResource(R.string.aggiungi_una_nota),
+                                        tint = BlueText,
+                                        modifier = Modifier
+                                            .size(35.dp)
+                                            .weight(1f)
+                                    )
+                                }
+                            }
+                        }
                         LazyRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(if (readlist.content.isNotEmpty()) 360.dp else 0.dp)
+                                .height(if (readlist.content.isNotEmpty()) 280.dp else 0.dp)
                         ) {
                             items(readlist.content) { item ->
                                 BookCardHomePage(
@@ -132,7 +123,8 @@ fun ContentProfilePage(
                                     viewModel = viewModel,
                                     navController = navController,
                                     page = "profile",
-                                    readlist = readlist.name
+                                    readlist = readlist.name,
+                                    mainActivity = mainActivity
                                 )
                             }
 
@@ -142,6 +134,7 @@ fun ContentProfilePage(
                                 fontFamily = fonts,
                                 fontSize = 15.sp,
                                 color = Color.White,
+                                fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.padding(start = 20.dp, bottom = 11.dp))
                         }
                     }

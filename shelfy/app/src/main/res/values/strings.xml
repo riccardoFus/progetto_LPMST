@@ -4,7 +4,7 @@
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
-    <string name="no_titolo">Nessun titolo</string>
+    <string name="no_titolo">Titolo non disponibile</string>
     <string name="no_autori">Autori vari</string>
     <string name="trama_non_presente">Trama non presente</string>
     <string name="formato_email_non_rispettato">Formato email non rispettato</string>
@@ -29,11 +29,11 @@
     <string name="_1_stella">1 stella</string>
     <string name="sign_in">Sign In</string>
     <string name="username">Username</string>
-    <string name="aggiungi_readlist">Aggiungi readlist…</string>
+    <string name="aggiungi_readlist">Nome nuova readlist</string>
     <string name="campo_obbligatorio">Campo obbligatorio</string>
     <string name="ripeti_password">Ripeti password</string>
     <string name="sei_gi_un_utente">Sei già un utente?</string>
-    <string name="la_tua_libreria">Il tuo catalogo</string>
+    <string name="la_tua_libreria">Shelfy personale</string>
     <string name="no_recensioni">Nessuna recensione</string>
     <string name="recensioni">Recensioni</string>
     <string name="book_image_no_available">camo.githubusercontent.com/7ea4539dc770901e26bceecc2fc23f052c5fc367e3f5d3cf6b2ec56d41af0a22/68747470733a2f2f692e696d6775722e636f6d2f32306d7a39774f2e706e67</string>
@@ -45,4 +45,21 @@
     <string name="esci">Esci</string>
     <string name="aggiungi_recensione">Aggiungi recensione</string>
     <string name="nessuna_nota">Nessuna nota</string>
+    <string name="numero_voti">"Numero voti: "</string>
+    <string name="media_voti">", media voti: "</string>
+    <string name="visualizza_nota">Visualizza nota</string>
+    <string name="condividi_libro">Condividi libro</string>
+    <string name="nascondi_recensioni">Nascondi recensioni</string>
+    <string name="visualizza_recensioni">Visualizza recensioni</string>
+    <string name="ti_consiglio_questo_libro">"Ti consiglio questo libro: "</string>
+    <string name="ho_usato_shelfy_per_consigliartelo_usalo_anche_tu">"Ho usato Shelfy per consigliartelo, usalo anche tu!"</string>
+    <string name="il_link_per_il_libro">"Il link per il libro è: "</string>
+    <string name="rimuovi_da">Rimuovi da %1$s</string>
+    <string name="essere_connessi_ad_internet_per_effettuare_questa_operazione">Essere connessi ad internet per effettuare questa operazione!</string>
+    <string name="nome_di_readlist_gi_esistente">Nome di readlist già esistente</string>
+    <string name="credenziali_inserite_non_corrette">Credenziali inserite non corrette</string>
+    <string name="cancella_account">Cancella account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="visualizza_recensioni_personali">Visualizza recensioni personali</string>
+    <string name="visualizza_note_personali">Visualizza note personali</string>
 </resources>

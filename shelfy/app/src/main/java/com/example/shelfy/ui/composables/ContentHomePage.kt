@@ -11,10 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.shelfy.MainActivity
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.fonts
@@ -24,26 +26,28 @@ fun ContentHomePage(
     viewModel : AppViewModel,
     navController : NavHostController,
     modifier : Modifier = Modifier,
+    mainActivity: MainActivity
 ){
     Box(
         modifier = modifier
     ){
         Column () {
             Text(
-                text = "Giallo",
+                text = "Thriller",
                 color = BlueText,
                 modifier = Modifier
                     .padding(start = 8.dp, top = 8.dp),
                 fontSize = 20.sp,
                 fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation1.data?.items ?: emptyList()){ item ->
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
+                            .height(240.dp)
+                            .width(150.dp)
                             .padding(8.dp)
                     ) {
                         BookCardHomePage(
@@ -51,7 +55,8 @@ fun ContentHomePage(
                             viewModel = viewModel,
                             navController = navController,
                             page = "homepage",
-                            readlist = "None"
+                            readlist = "None",
+                            mainActivity = mainActivity
                         )
                     }
                 }
@@ -63,14 +68,15 @@ fun ContentHomePage(
                     .padding(start = 8.dp),
                 fontSize = 20.sp,
                 fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation2.data?.items ?: emptyList()){ item ->
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
+                            .height(240.dp)
+                            .width(150.dp)
                             .padding(8.dp)
                     ) {
                         BookCardHomePage(
@@ -78,7 +84,8 @@ fun ContentHomePage(
                             viewModel = viewModel,
                             navController = navController,
                             page = "homepage",
-                            readlist = "None"
+                            readlist = "None",
+                            mainActivity = mainActivity
                         )
                     }
                 }
@@ -90,14 +97,15 @@ fun ContentHomePage(
                     .padding(start = 8.dp),
                 fontSize = 20.sp,
                 fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Justify)
             LazyRow{
                 items(viewModel.booksUiStateRecommendation3.data?.items ?: emptyList()){ item ->
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .height(300.dp)
-                            .width(200.dp)
+                            .height(240.dp)
+                            .width(150.dp)
                             .padding(8.dp)
                     ) {
                         BookCardHomePage(
@@ -105,7 +113,37 @@ fun ContentHomePage(
                             viewModel = viewModel,
                             navController = navController,
                             page = "homepage",
-                            readlist = "None"
+                            readlist = "None",
+                            mainActivity = mainActivity
+                        )
+                    }
+                }
+            }
+            Text(
+                text = "Giallo",
+                color = BlueText,
+                modifier = Modifier
+                    .padding(start = 8.dp),
+                fontSize = 20.sp,
+                fontFamily = fonts,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Justify)
+            LazyRow{
+                items(viewModel.booksUiStateRecommendation4.data?.items ?: emptyList()){ item ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .height(240.dp)
+                            .width(150.dp)
+                            .padding(8.dp)
+                    ) {
+                        BookCardHomePage(
+                            item = item,
+                            viewModel = viewModel,
+                            navController = navController,
+                            page = "homepage",
+                            readlist = "None",
+                            mainActivity = mainActivity
                         )
                     }
                 }

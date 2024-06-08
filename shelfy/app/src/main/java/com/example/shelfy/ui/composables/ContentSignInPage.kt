@@ -1,13 +1,19 @@
 package com.example.shelfy.ui.composables
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -22,34 +28,83 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.shelfy.ConnectionState
+import com.example.shelfy.MainActivity
 import com.example.shelfy.R
+import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.navigation.Screens
 import com.example.shelfy.ui.AppViewModel
 import com.example.shelfy.ui.isValidEmail
 import com.example.shelfy.ui.isValidPassword
 import com.example.shelfy.ui.sha256
+import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlueText
 import com.example.shelfy.ui.theme.WhiteText
 import com.example.shelfy.ui.theme.fonts
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ContentSignInPage(
     viewModel : AppViewModel,
     navController : NavHostController,
+    mainActivity: MainActivity,
     modifier : Modifier = Modifier
 ){
+    val connectivityManager = mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    var showDialog : Boolean by rememberSaveable{ mutableStateOf(false) }
+    if(showDialog){
+        Dialog(onDismissRequest = { showDialog = false}) {
+            Text(
+                text = stringResource(R.string.essere_connessi_ad_internet_per_effettuare_questa_operazione),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center,
+                color = WhiteText
+            )
+        }
+    }
+    if(viewModel.alreadyUsernameExist || viewModel.alreadySignedIn){
+        Dialog(onDismissRequest = { viewModel.alreadyUsernameExist = false; viewModel.alreadySignedIn = false}) {
+            Text(
+                text = "Username e/o email già presenti",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = fonts,
+                modifier = Modifier
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(BlackBar)
+                    .padding(18.dp),
+                textAlign = TextAlign.Center,
+                color = WhiteText
+            )
+        }
+    }
+    val maxChar = 30
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -67,12 +122,25 @@ fun ContentSignInPage(
             )
             var user by rememberSaveable { mutableStateOf("") }
             var userEmpty by rememberSaveable { mutableStateOf(false) }
+            var charInserted by rememberSaveable {
+                mutableStateOf(0)
+            }
             Box() {
                 OutlinedTextField(
                     value = user,
                     onValueChange = { newText ->
-                        user = newText
+                        user = newText.take(maxChar)
+                        charInserted = user.length
                         userEmpty = user.isBlank()
+                    },
+                    trailingIcon = {
+                        Text(text = "" + charInserted + "/" + maxChar,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 18.sp,
+                            fontFamily = fonts,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(end = 4.dp),
+                            color = BlueText)
                     },
                     placeholder = { Text(text = stringResource(R.string.username)) },
                     modifier = Modifier
@@ -154,11 +222,12 @@ fun ContentSignInPage(
             var password by rememberSaveable { mutableStateOf("") }
             var passwordCorrect by rememberSaveable { mutableStateOf(true) }
             var passwordPressed by rememberSaveable { mutableStateOf(false) }
+            var maxCharPassword = 16
             Box(modifier = Modifier.padding(top = 15.dp)) {
                 OutlinedTextField(
                     value = password,
-                    onValueChange = {
-                            newText -> password = newText
+                    onValueChange = { newText ->
+                        password = newText.take(maxCharPassword)
                         // passwordCorrect = isValidPassword(password)
                     },
                     placeholder = { Text(text = stringResource(id = R.string.password)) },
@@ -206,7 +275,8 @@ fun ContentSignInPage(
                         unfocusedPlaceholderColor = BlueText,
                         focusedPlaceholderColor = BlueText
                     ),
-                    visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None
+                    visualTransformation = if(!passwordPressed) PasswordVisualTransformation() else VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
             }
             var password2 by rememberSaveable { mutableStateOf("") }
@@ -216,7 +286,7 @@ fun ContentSignInPage(
                 OutlinedTextField(
                     value = password2,
                     onValueChange = { newText ->
-                        password2 = newText
+                        password2 = newText.take(maxCharPassword)
                         // password2Correct = isValidPassword(password2)
                     },
                     placeholder = { Text(text = stringResource(R.string.ripeti_password)) },
@@ -263,17 +333,24 @@ fun ContentSignInPage(
                         unfocusedPlaceholderColor = BlueText,
                         focusedPlaceholderColor = BlueText
                     ),
-                    visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None
+                    visualTransformation = if(!password2Pressed) PasswordVisualTransformation() else VisualTransformation.None,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                 )
             }
 
+            val keyboardController = LocalSoftwareKeyboardController.current
             OutlinedButton(
                 onClick = {
                     emailCorrect = isValidEmail(email)
                     passwordCorrect = isValidPassword(password)
                     password2Correct = isValidPassword(password2)
                     if (!userEmpty && emailCorrect && passwordCorrect && password == password2) {
-                        viewModel.signInUser(email, sha256(password), user)
+                        keyboardController?.hide()
+                        if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                            viewModel.signInUser(email, sha256(password), user)
+                        }else{
+                            showDialog = true
+                        }
                     }
                 },
                 modifier = Modifier
@@ -287,7 +364,7 @@ fun ContentSignInPage(
                         fontSize = 20.sp,
                         fontFamily = fonts,
                         textAlign = TextAlign.Center,
-                        color = BlueText
+                        color = WhiteText
                     )
                 },
                 border = BorderStroke(1.dp, BlueText),
@@ -310,8 +387,8 @@ fun ContentSignInPage(
             )
         }
     }
-    if(viewModel.loginDone && viewModel.userId != "" && !viewModel.libraryAdded){
-        viewModel.addReadlist("Libreria", viewModel.userId)
+    // if user is created, it creates a default library
+    if(viewModel.loginDone){
         navController.navigate(Screens.HOME_SCREEN)
     }
 }
