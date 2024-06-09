@@ -35,7 +35,6 @@ import com.example.shelfy.R
 import com.example.shelfy.ShelfyApp
 import com.example.shelfy.getCurrentConnectivityState
 import com.example.shelfy.ui.composables.ContentOfflinePage
-import com.example.shelfy.ui.composables.TopBar
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
 import com.example.shelfy.ui.theme.BlueText

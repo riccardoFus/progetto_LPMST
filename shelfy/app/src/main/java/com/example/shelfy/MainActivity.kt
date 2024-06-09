@@ -28,7 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.shelfy.navigation.NavGraph
-import com.example.shelfy.ui.composables.TopBar
 import com.example.shelfy.ui.screens.OfflinePage
 import com.example.shelfy.ui.theme.BlackBar
 import com.example.shelfy.ui.theme.BlackPage
