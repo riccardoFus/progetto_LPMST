@@ -494,9 +494,6 @@ fun ContentBookPage(
                     }
                 }
 
-            // boolean to extend or not the length of the container that contains the plot
-            // of the book
-            var showTrama by rememberSaveable { mutableStateOf(false) }
             // sometimes, Google gives desc with html tag, in this way remove all the tags
             var text = viewModel.bookUiState.data?.volumeInfo?.description
                 ?: stringResource(id = R.string.trama_non_presente)
@@ -531,8 +528,12 @@ fun ContentBookPage(
                                 .align(Alignment.CenterHorizontally)){
                                 OutlinedButton(
                                     onClick = {
-                                        viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, item.name)
-                                        showReadlists = false
+                                        if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                            viewModel.addToReadlist(viewModel.bookUiState.data, viewModel.userId, item.name)
+                                            showReadlists = false
+                                        }else{
+                                            showDialog = true
+                                        }
                                               },
                                     content = {
                                         Text(
@@ -682,13 +683,17 @@ fun ContentBookPage(
                                     ),
                                 )
                                 OutlinedButton(onClick = {
-                                    reviewEnabled = false
-                                    if (id != null) {
-                                        viewModel.createReviewInFirebase(id, review, text)
-                                        // viewModel.reviews.clear()
-                                        viewModel.getReviews(viewModel.bookUiState.data!!.id)
-                                        review = 0
-                                        charInsertedReview = 0
+                                    if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                                        reviewEnabled = false
+                                        if (id != null) {
+                                            viewModel.createReviewInFirebase(id, review, text)
+                                            // viewModel.reviews.clear()
+                                            viewModel.getReviews(viewModel.bookUiState.data!!.id)
+                                            review = 0
+                                            charInsertedReview = 0
+                                        }
+                                    }else{
+                                        showDialog = true
                                     }
                                 },
                                     modifier = Modifier
@@ -733,7 +738,11 @@ fun ContentBookPage(
                 }
             )
             if(showReviews){
-                viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
+                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                    viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
+                }else{
+                    showDialog = true
+                }
                 if(reviews.first > 0) {
                     Text(
                         text = stringResource(R.string.recensioni),

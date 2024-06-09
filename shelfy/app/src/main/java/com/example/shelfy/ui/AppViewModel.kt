@@ -58,6 +58,7 @@ fun sha256(input: String): String {
 
 class AppViewModel : ViewModel(){
 
+    // A mutable state variable that holds if the "logo opener" has showed or not
     var openingDone: Boolean by mutableStateOf(false)
 
     // A mutable state variable that holds the state of the book recommendations 1
@@ -139,34 +140,10 @@ class AppViewModel : ViewModel(){
     var username: String by mutableStateOf("")
     // A mutable state variable that indicates whether the login is done
     var loginDone : Boolean by mutableStateOf(false)
-    // A mutable state variable that indicates whether the user is already signed in
+    // A mutable state variable that indicates whether the user is already signed in (email check)
     var alreadySignedIn : Boolean by mutableStateOf(false)
     // A mutable state variable that indicates whether the username already exist
     var alreadyUsernameExist : Boolean by mutableStateOf(false)
-
-
-    // Function to check if a user with a given email already exists in Firebase Firestore
-    private fun checkEmailAlreadyExists(email: String): Boolean{
-        var result by mutableStateOf(false)
-        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-        dB.collection("Users").whereEqualTo("email", email).get().addOnSuccessListener {documents ->
-            if(documents.isEmpty) result = true
-        }
-
-        return result
-    }
-
-    private fun checkUsernameAlreadyExists(username: String): Boolean{
-        var result by mutableStateOf(false)
-        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-        dB.collection("Users").whereEqualTo("username", username).get().addOnSuccessListener {documents ->
-            if(documents.isEmpty) result = true
-        }
-
-        return result
-    }
 
     // Function to sign in a user with email and password
     fun signInUser(
@@ -211,6 +188,7 @@ class AppViewModel : ViewModel(){
         loginDone = false
     }
 
+    // A mutable state variable that indicates if an error dialog must be shown
     var showDialogLogin : Boolean by mutableStateOf(false)
 
     // Function to authenticate user login using email and password.
@@ -344,7 +322,6 @@ class AppViewModel : ViewModel(){
                 for(document in documents){
                     dbReviews.document(document.id).update("stars", stars).addOnSuccessListener {
                         dbReviews.document(document.id).update("desc", text).addOnSuccessListener{
-
                         }
                     }
                 }
@@ -367,9 +344,6 @@ class AppViewModel : ViewModel(){
                 .addOnFailureListener {}
         }
     }
-
-    // A mutable state variable that checks if the library is added in Firebase Firestore
-    var libraryAdded : Boolean by mutableStateOf(false)
 
     // A mutable state variable that checks if the library is updated in Firebase Firestore
     var libraryUpdated: Boolean by mutableStateOf(false)
@@ -407,7 +381,6 @@ class AppViewModel : ViewModel(){
                 for(document in documents){
                     if(document.get("name") == readlist) {
                         val readlistDb : Readlist? = document.toObject(Readlist::class.java)
-
                         // check if book is already contained in readlist
                         var contain : Boolean = false
                         if (readlistDb != null) {
@@ -417,7 +390,6 @@ class AppViewModel : ViewModel(){
                                 }
                             }
                         }
-
                         if(!contain){
                             dB.collection("Readlists").document(document.id)
                                 .update("content", FieldValue.arrayUnion(bookId)).addOnSuccessListener {
@@ -479,6 +451,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // Function to delete a readlist
     fun deleteReadlist(readlist: String){
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Readlists")
@@ -589,24 +562,8 @@ class AppViewModel : ViewModel(){
 
     var reviewsAlreadyInserted by mutableStateOf(false)
     var reviewUser by mutableStateOf(Review())
-    fun checkReviewAlreadyInserted(){
-        var found = false
-        val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        dB.collection("Reviews").whereEqualTo("userId", userId)
-            .get()
-            .addOnSuccessListener { documents ->
-                if(!documents.isEmpty){
-                    for(document in documents){
-                        if(document.get("bookId") == bookUiState.data?.id) {
-                            found = true
-                            reviewUser = document.toObject(Review::class.java)
-                        }
-                    }
-                }
-                reviewsAlreadyInserted = found
-            }
-    }
 
+    // Function to delete an user
     fun deleteUser(navController : NavHostController) {
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
         dB.collection("Reviews").whereEqualTo("username", username).get().addOnSuccessListener {
@@ -644,6 +601,7 @@ class AppViewModel : ViewModel(){
         }
     }
 
+    // A mutable state variable that holds the icon of the bar user to show
     var page: String by mutableStateOf("Homepage")
 
     // Initialization of the AppViewModel, it creates the book recommendation lists

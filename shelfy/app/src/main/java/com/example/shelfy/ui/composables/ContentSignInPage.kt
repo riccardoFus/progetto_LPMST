@@ -90,7 +90,7 @@ fun ContentSignInPage(
     if(viewModel.alreadyUsernameExist || viewModel.alreadySignedIn){
         Dialog(onDismissRequest = { viewModel.alreadyUsernameExist = false; viewModel.alreadySignedIn = false}) {
             Text(
-                text = "Username e/o email già presenti",
+                text = stringResource(R.string.username_e_o_email_gi_presenti),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 18.sp,
                 fontFamily = fonts,

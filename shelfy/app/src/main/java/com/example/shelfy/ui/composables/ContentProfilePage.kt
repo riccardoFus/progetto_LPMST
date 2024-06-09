@@ -130,7 +130,7 @@ fun ContentProfilePage(
 
                         }
                         if(readlist.content.isEmpty()){
-                            Text(text = "(Vuota)",
+                            Text(text = stringResource(R.string.vuota),
                                 fontFamily = fonts,
                                 fontSize = 15.sp,
                                 color = Color.White,

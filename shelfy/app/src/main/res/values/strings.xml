@@ -62,4 +62,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="visualizza_recensioni_personali">Visualizza recensioni personali</string>
     <string name="visualizza_note_personali">Visualizza note personali</string>
+    <string name="vuota">(Vuota)</string>
+    <string name="username_e_o_email_gi_presenti">Username e/o email già presenti</string>
 </resources>
