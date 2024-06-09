@@ -738,11 +738,7 @@ fun ContentBookPage(
                 }
             )
             if(showReviews){
-                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
-                    viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
-                }else{
-                    showDialog = true
-                }
+                viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
                 if(reviews.first > 0) {
                     Text(
                         text = stringResource(R.string.recensioni),
