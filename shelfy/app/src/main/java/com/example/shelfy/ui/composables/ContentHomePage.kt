@@ -31,7 +31,7 @@ fun ContentHomePage(
     Box(
         modifier = modifier
     ){
-        Column () {
+        Column {
             Text(
                 text = "Thriller",
                 color = BlueText,

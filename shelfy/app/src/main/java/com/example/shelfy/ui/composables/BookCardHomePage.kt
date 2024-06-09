@@ -102,7 +102,7 @@ fun BookCardHomePage(
                 onClick = {
                     if (getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
                         viewModel.bookUiState = Resource.Loading<Item>()
-                        viewModel.getBook(item?.id.toString())
+                        viewModel.getBook(item.id.toString())
                         navController.navigate(Screens.VISUALIZER_SCREEN)
                     } else {
                         showDialog = true
@@ -113,14 +113,14 @@ fun BookCardHomePage(
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(
-                    "https://" + if((item?.volumeInfo?.imageLinks?.large?.isBlank()) != true){
-                        item?.volumeInfo?.imageLinks?.large?.substring(7)
-                    }else if((item?.volumeInfo?.imageLinks?.small?.isBlank()) != true){
-                        item?.volumeInfo?.imageLinks?.small?.substring(7)
-                    }else if((item?.volumeInfo?.imageLinks?.thumbnail?.isBlank()) != true){
-                        item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
-                    }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.isBlank()) != true){
-                        item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)
+                    "https://" + if((item.volumeInfo?.imageLinks?.large?.isBlank()) != true){
+                        item.volumeInfo?.imageLinks?.large?.substring(7)
+                    }else if((item.volumeInfo.imageLinks.small?.isBlank()) != true){
+                        item.volumeInfo.imageLinks.small?.substring(7)
+                    }else if((item.volumeInfo.imageLinks.thumbnail?.isBlank()) != true){
+                        item.volumeInfo.imageLinks.thumbnail?.substring(7)
+                    }else if((item.volumeInfo.imageLinks.smallThumbnail?.isBlank()) != true){
+                        item.volumeInfo.imageLinks.smallThumbnail?.substring(7)
                     }else{
                         stringResource(R.string.book_image_no_available)
                     }
@@ -140,7 +140,7 @@ fun BookCardHomePage(
             placeholder = painterResource(id = R.drawable.content)
         )
         Text(
-            text = (item?.volumeInfo?.title ?: stringResource(R.string.no_titolo)),
+            text = (item.volumeInfo?.title ?: stringResource(R.string.no_titolo)),
             color = WhiteText,
             fontSize = 15.sp,
             modifier = Modifier.padding(top = 2.dp),

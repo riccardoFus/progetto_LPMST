@@ -125,7 +125,7 @@ fun ContentSignInPage(
             var charInserted by rememberSaveable {
                 mutableStateOf(0)
             }
-            Box() {
+            Box {
                 OutlinedTextField(
                     value = user,
                     onValueChange = { newText ->

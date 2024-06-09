@@ -202,7 +202,7 @@ fun ContentBookPage(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = (viewModel.bookUiState?.data?.volumeInfo?.authors?.toString()?.replace("[", "")?.replace("]", "") ?:
+                        text = (viewModel.bookUiState.data?.volumeInfo?.authors?.toString()?.replace("[", "")?.replace("]", "") ?:
                             stringResource(id = R.string.no_autori)),
                         color = WhiteText,
                         fontSize = 20.sp,
@@ -226,8 +226,8 @@ fun ContentBookPage(
                         )
                         type = "text/plain"
                     }
-                    val shareIntent = Intent.createChooser(sendIntent, null);
-                    val context = LocalContext.current;
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    val context = LocalContext.current
 
                     // boolean to open a dropdown menu with all the functionalities
                     var more by rememberSaveable { mutableStateOf(false) }
@@ -467,9 +467,9 @@ fun ContentBookPage(
                                     IconButton(onClick = {
                                         noteVisualizer = false
                                         if(noteAlreadyExists)
-                                            viewModel.updateNote(viewModel.userId, testo, id!!)
+                                            viewModel.updateNote(viewModel.userId, testo, id)
                                         else
-                                            viewModel.addNote(viewModel.userId, testo, id!!)
+                                            viewModel.addNote(viewModel.userId, testo, id)
                                     },
                                         modifier = Modifier
                                             .padding(10.dp)) {
@@ -761,7 +761,7 @@ fun ContentBookPage(
                         textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis
                     )
 
-                    LazyRow(){
+                    LazyRow {
                         items(viewModel.reviews){
                             Box(modifier = Modifier
                                 .padding(10.dp)

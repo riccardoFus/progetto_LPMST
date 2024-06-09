@@ -355,7 +355,7 @@ class AppViewModel : ViewModel(){
         val dbReadlist = dB.collection("Readlists")
         var result by mutableStateOf(false)
         dbReadlist.whereEqualTo("name", name).whereEqualTo("userId", userId).get().addOnSuccessListener {
-            if(it.documents.isEmpty()) result = true;
+            if(it.documents.isEmpty()) result = true
             else alreadyReadlistExist = true
             if(result){
                 val readlist = Readlist(name = name, userId = userId, emptyList())
@@ -380,7 +380,7 @@ class AppViewModel : ViewModel(){
             documents -> if(!documents.isEmpty){
                 for(document in documents){
                     if(document.get("name") == readlist) {
-                        val readlistDb : Readlist? = document.toObject(Readlist::class.java)
+                        val readlistDb : Readlist = document.toObject(Readlist::class.java)
                         // check if book is already contained in readlist
                         var contain : Boolean = false
                         if (readlistDb != null) {
@@ -506,7 +506,7 @@ class AppViewModel : ViewModel(){
     fun updateNote(userId: String, text: String, bookId: String){
         var id = ""
         val dB: FirebaseFirestore = FirebaseFirestore.getInstance()
-        dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener(){
+        dB.collection("Notes").whereEqualTo("userId", userId).get().addOnSuccessListener {
             documents -> if(!documents.isEmpty){
                 for(document in documents){
                     if(document.get("bookId").toString() == bookId){

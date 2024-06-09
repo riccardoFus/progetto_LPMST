@@ -79,14 +79,14 @@ fun BookCardSearchPage(
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(
-                "https://" + if((item?.volumeInfo?.imageLinks?.large?.isBlank()) != true){
-                    item?.volumeInfo?.imageLinks?.large?.substring(7)
-                }else if((item?.volumeInfo?.imageLinks?.small?.isBlank()) != true){
-                    item?.volumeInfo?.imageLinks?.small?.substring(7)
-                }else if((item?.volumeInfo?.imageLinks?.thumbnail?.isBlank()) != true){
-                    item?.volumeInfo?.imageLinks?.thumbnail?.substring(7)
-                }else if((item?.volumeInfo?.imageLinks?.smallThumbnail?.isBlank()) != true){
-                    item?.volumeInfo?.imageLinks?.smallThumbnail?.substring(7)
+                "https://" + if((item.volumeInfo?.imageLinks?.large?.isBlank()) != true){
+                    item.volumeInfo?.imageLinks?.large?.substring(7)
+                }else if((item.volumeInfo.imageLinks.small?.isBlank()) != true){
+                    item.volumeInfo.imageLinks.small?.substring(7)
+                }else if((item.volumeInfo.imageLinks.thumbnail?.isBlank()) != true){
+                    item.volumeInfo.imageLinks.thumbnail?.substring(7)
+                }else if((item.volumeInfo.imageLinks.smallThumbnail?.isBlank()) != true){
+                    item.volumeInfo.imageLinks.smallThumbnail?.substring(7)
                 }else{
                     stringResource(R.string.book_image_no_available)
                 }
@@ -106,7 +106,7 @@ fun BookCardSearchPage(
             .clickable(onClick = {
                 viewModel.bookUiState = Resource.Loading<Item>()
                 if (getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
-                    viewModel.getBook(item?.id.toString())
+                    viewModel.getBook(item.id.toString())
                     navController.navigate(Screens.VISUALIZER_SCREEN)
                 } else {
                     showDialog = true
@@ -122,7 +122,7 @@ fun BookCardSearchPage(
             .clickable {
                 viewModel.bookUiState = Resource.Loading<Item>()
                 if (getCurrentConnectivityState(connectivityManager) == ConnectionState.Available) {
-                    viewModel.getBook(item?.id.toString())
+                    viewModel.getBook(item.id.toString())
                     navController.navigate(Screens.VISUALIZER_SCREEN)
                 } else {
                     showDialog = true
@@ -131,7 +131,7 @@ fun BookCardSearchPage(
             )
     {
         Text(
-            text = (item?.volumeInfo?.title ?: stringResource(id = R.string.no_titolo)),
+            text = (item.volumeInfo?.title ?: stringResource(id = R.string.no_titolo)),
             color = WhiteText,
             fontSize = 20.sp,
             modifier = Modifier
@@ -140,7 +140,7 @@ fun BookCardSearchPage(
             fontFamily = fonts
         )
         Text(
-            text = (item?.volumeInfo?.authors ?: stringResource(R.string.no_autori)).toString()
+            text = (item.volumeInfo?.authors ?: stringResource(R.string.no_autori)).toString()
                 .replace("[", "").replace("]", ""),
             color = WhiteText,
             fontSize = 13.sp,
@@ -151,7 +151,7 @@ fun BookCardSearchPage(
             maxLines = 2
         )
         Text(
-            text = (item?.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
+            text = (item.volumeInfo?.description ?: stringResource(R.string.trama_non_presente)),
             color = WhiteText,
             fontSize = 11.sp,
             modifier = Modifier
