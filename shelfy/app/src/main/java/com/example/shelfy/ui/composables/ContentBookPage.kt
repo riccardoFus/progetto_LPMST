@@ -738,7 +738,9 @@ fun ContentBookPage(
                 }
             )
             if(showReviews){
-                viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
+                if(getCurrentConnectivityState(connectivityManager) == ConnectionState.Available){
+                    viewModel.getReviewsPlusUser(viewModel.bookUiState.data!!.id)
+                }
                 if(reviews.first > 0) {
                     Text(
                         text = stringResource(R.string.recensioni),
